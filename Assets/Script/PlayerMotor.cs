@@ -66,6 +66,14 @@ public class PlayerMotor : MonoBehaviour
     {
         crouching=!crouching;
         crouchTimer=0f;
+        if (crouching)
+        {
+            speed = 2f;
+        }
+        else
+        {
+            speed = 5f;
+        }
         lerpCrouch=true;
     }
     public void Sprint()
