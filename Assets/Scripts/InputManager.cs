@@ -9,6 +9,13 @@ public class InputManager : MonoBehaviour
     private PlayerInput.OnFootActions onFoot;
     private PlayerMotor motor;
     private PlayerLook look;
+
+    [HideInInspector]
+    public Vector2 input_View;
+
+    [Header("Weapon")]
+    public WeaponController currentWeapon;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -22,7 +29,14 @@ public class InputManager : MonoBehaviour
             => motor.Crouch();
         onFoot.Sprint.performed += ctx
             => motor.Sprint();
+
+        if (currentWeapon)
+        {
+            currentWeapon.Initialize(this);
+        }
     }
+
+
 
     // Update is called once per frame
     void FixedUpdate()
