@@ -30,13 +30,35 @@ public class InputManager : MonoBehaviour
         onFoot.Sprint.performed += ctx
             => motor.Sprint();
 
+        playerinput.Weapon.Fire1Pressed.performed += e => ShootingPressed();
+        playerinput.Weapon.Fire1Released.performed += e => ShootingReleased();
+
+        playerinput.Enable();
+
         if (currentWeapon)
         {
             currentWeapon.Initialize(this);
         }
     }
 
+    #region - Shooting -
+    private void ShootingPressed()
+    {
+        if (currentWeapon)
+        {
+            currentWeapon.isShooting = true;
+        }
+    }
 
+    private void ShootingReleased()
+    {
+        if (currentWeapon)
+        {
+            currentWeapon.isShooting = false;
+        }
+    }
+
+    #endregion
 
     // Update is called once per frame
     void FixedUpdate()
