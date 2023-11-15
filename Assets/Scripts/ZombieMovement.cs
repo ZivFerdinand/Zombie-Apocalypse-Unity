@@ -10,11 +10,14 @@ public class ZombieMovement : MonoBehaviour
     private Transform player;
     public float detectionRadius = 20f;
     public float attackradius = 2f;
-    public float damageAmount = 0.1f;
+    public const float attackCoolDown = 1f;
+    public float attackInterval;
+    public int zombieDamage = 10;
   
     // Start is called before the first frame update
     void Start()
     {
+        attackInterval = attackCoolDown;
         zombie = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -23,11 +26,12 @@ public class ZombieMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(attackInterval > 0) { attackInterval -= Time.deltaTime; }
         if (Vector3.Distance(transform.position, player.position) <= attackradius)
         {
             animator.SetBool("isAttack", true);
             animator.SetBool("isMoving", false);
+
             //Masukin damage player ke sini
             AttackPlayer();
         }
@@ -46,7 +50,12 @@ public class ZombieMovement : MonoBehaviour
     }
     void AttackPlayer()
     {
-        PlayerInventory playerInventory = player.GetComponent<PlayerInventory>();
-        playerInventory.health -= damageAmount;
+        if (attackInterval < 0)
+        {
+            PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
+
+            playerHealth.DamagePlayer(zombieDamage);
+            attackInterval = attackCoolDown;
+        }
     }
 }
