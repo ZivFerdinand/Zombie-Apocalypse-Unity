@@ -8,7 +8,6 @@ using static Model;
 public class WeaponController : MonoBehaviour
 {
     private InputManager inputManager;
-
     [Header("References")]
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
@@ -31,6 +30,8 @@ public class WeaponController : MonoBehaviour
     public WeaponFireType currentFireType;
     [HideInInspector]
     public bool isShooting;
+    public float cooldownLimit = 0.05f;
+    private float cD=0.2f;
 
     public GameObject muzzleEffect;
 
@@ -49,7 +50,10 @@ public class WeaponController : MonoBehaviour
         {
             return;
         }
-
+        if (cD > 0)
+        {
+            cD -= Time.deltaTime;
+        }
         targetWeaponRotation.y += settings.SwayAmount * (settings.SwayXInverted ? -inputManager.input_View.x : inputManager.input_View.x) * Time.deltaTime;
         targetWeaponRotation.x += settings.SwayAmount * (settings.SwayYInverted ? inputManager.input_View.y : -inputManager.input_View.y) * Time.deltaTime;
 
@@ -72,7 +76,6 @@ public class WeaponController : MonoBehaviour
         if (isShooting)
         {
             Shoot();
-
             if (currentFireType == WeaponFireType.SemiAuto)
             {
                 isShooting = false;
@@ -81,8 +84,12 @@ public class WeaponController : MonoBehaviour
     }
     private void Shoot()
     {
-        muzzleEffect.GetComponent<ParticleSystem>().Play();
-        var bullet = Instantiate(bulletPrefab, bulletSpawn);
+        if (cD <= 0)
+        {
+            muzzleEffect.GetComponent<ParticleSystem>().Play();
+            var bullet = Instantiate(bulletPrefab, bulletSpawn);
+            cD = cooldownLimit;
+        }
 
         // Load bullet settings
     }
