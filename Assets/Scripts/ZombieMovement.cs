@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 public class ZombieMovement : MonoBehaviour
@@ -9,6 +10,7 @@ public class ZombieMovement : MonoBehaviour
     private Transform player;
     public float detectionRadius = 20f;
     public float attackradius = 2f;
+    public float damageAmount = 0.1f;
   
     // Start is called before the first frame update
     void Start()
@@ -27,6 +29,7 @@ public class ZombieMovement : MonoBehaviour
             animator.SetBool("isAttack", true);
             animator.SetBool("isMoving", false);
             //Masukin damage player ke sini
+            AttackPlayer();
         }
         else if(Vector3.Distance(transform.position, player.position) <= detectionRadius)
         {
@@ -40,5 +43,10 @@ public class ZombieMovement : MonoBehaviour
             animator.SetBool("isAttack", false);
         }
 
+    }
+    void AttackPlayer()
+    {
+        PlayerInventory playerInventory = player.GetComponent<PlayerInventory>();
+        playerInventory.health -= damageAmount;
     }
 }
