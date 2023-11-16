@@ -13,7 +13,7 @@ public class SpawnerScript : MonoBehaviour
         checkpoints = new List<GameObject>();
         for(int i=0;i<transform.childCount;i++)
         {
-            checkpoints.Add(transform.GetChild(i).gameObject);
+            checkpoints.Add(transform.GetChild(i).GetComponent<Transform>().gameObject);
         }
         touchedIndex = -1;
     }
@@ -25,8 +25,8 @@ public class SpawnerScript : MonoBehaviour
         if(touchedIndex > 0)
         {
             Debug.Log(checkpoints.Count);
-            //checkpoints[touchedIndex].GetComponent<ChildCheckpoints>().spawnZombies();
-            Instantiate(zombiePrefab, checkpoints[touchedIndex].GetComponent<GameObject>().transform.position, Quaternion.identity);
+            checkpoints[touchedIndex].GetComponent<ChildCheckpoints>().spawnZombies();
+            //Instantiate(zombiePrefab, checkpoints[touchedIndex].GetComponent<GameObject>().transform.position, Quaternion.identity);
             touchedIndex = -1;
         }
     }
