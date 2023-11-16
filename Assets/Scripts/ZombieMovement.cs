@@ -13,10 +13,12 @@ public class ZombieMovement : MonoBehaviour
     public const float attackCoolDown = 1f;
     public float attackInterval;
     public int zombieDamage = 10;
+    private float moveCD = -1f;
   
     // Start is called before the first frame update
     void Start()
     {
+        moveCD = -1f;
         attackInterval = attackCoolDown;
         zombie = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
@@ -43,6 +45,16 @@ public class ZombieMovement : MonoBehaviour
         }
         else
         {
+            if (moveCD < 0f)
+            {
+                zombie.SetDestination(new Vector3(Random.Range(-100f, 100f) + transform.position.x, transform.position.y, Random.Range(-100f, 100f) + transform.position.z));
+                moveCD = Random.Range(10f, 15f);
+            }
+            else
+            {
+                moveCD -= Time.deltaTime;
+            }
+
             animator.SetBool("isMoving", false);
             animator.SetBool("isAttack", false);
         }
