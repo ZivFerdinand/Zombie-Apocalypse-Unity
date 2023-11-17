@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 public class ZombieMovement : MonoBehaviour
 {
+    public GameObject particle;
     private NavMeshAgent zombie;
     private Animator animator;
     private Transform player;
@@ -14,6 +15,8 @@ public class ZombieMovement : MonoBehaviour
     public float attackInterval;
     public int zombieDamage = 10;
     private float moveCD = -1f;
+    private float timeToDestroy = 3.5f;
+    private float zombHealth = 2f;
   
     // Start is called before the first frame update
     void Start()
@@ -23,16 +26,45 @@ public class ZombieMovement : MonoBehaviour
         zombie = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        particle.SetActive(false);
     }
-
+    public void decreaseHealth()
+    {
+        zombHealth--;
+    }
     // Update is called once per frame
     void Update()
     {
+        
         if(attackInterval > 0) { attackInterval -= Time.deltaTime; }
-        if (Vector3.Distance(transform.position, player.position) <= attackradius)
+        if (zombHealth < 0f)
+        {
+
+            animator.SetBool("isAttack", false);
+            animator.SetBool("isMoving", false);
+            animator.SetBool("isDead", true);
+            timeToDestroy-=Time.deltaTime;
+            if (particle.activeInHierarchy == false)
+                particle.SetActive(true);
+            if (timeToDestroy < 0)
+            {
+                transform.position = new Vector3(transform.position.x, transform.position.y - 2f * Time.deltaTime, transform.position.z);
+                zombie.GetComponent<NavMeshAgent>().enabled = false;
+                //zombie.SetDestination(new Vector3(transform.position.x, transform.position.y + 5f * Time.deltaTime, transform.position.z));
+            }
+            else
+            {
+                zombie.SetDestination(transform.position);
+
+            }
+            if (transform.position.y < 0)
+                Destroy(this.gameObject);
+        }
+        else if (Vector3.Distance(transform.position, player.position) <= attackradius)
         {
             animator.SetBool("isAttack", true);
             animator.SetBool("isMoving", false);
+            animator.SetBool("isDead", false);
 
             //Masukin damage player ke sini
             AttackPlayer();
@@ -42,6 +74,7 @@ public class ZombieMovement : MonoBehaviour
             zombie.SetDestination(player.position);
             animator.SetBool("isMoving", true);
             animator.SetBool("isAttack", false);
+            animator.SetBool("isDead", false);
         }
         else
         {
@@ -57,6 +90,7 @@ public class ZombieMovement : MonoBehaviour
 
             animator.SetBool("isMoving", false);
             animator.SetBool("isAttack", false);
+            animator.SetBool("isDead", false);
         }
 
     }
