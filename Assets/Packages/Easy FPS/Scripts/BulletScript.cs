@@ -29,7 +29,6 @@ public class BulletScript : MonoBehaviour {
 					Destroy(gameObject);
 				}
 				if(hit.transform.tag == "Zombie"){
-					Debug.Log("Hit");
 					Instantiate(bloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
 					hit.transform.GetComponentInParent<ZombieMovement>().decreaseHealth();
 					Destroy(gameObject);
