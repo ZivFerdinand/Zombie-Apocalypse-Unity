@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class SpawnerScript : MonoBehaviour
 {
-    public GameObject zombiePrefab;
+    [HideInInspector]
+    public GameObject[] zombiePrefabs;
+    
+    public Transform zombieClone;
+
     private List<GameObject> checkpoints;
     private int touchedIndex;
     private int lastTouchedIndex;
@@ -12,21 +16,22 @@ public class SpawnerScript : MonoBehaviour
     void Start()
     {
         checkpoints = new List<GameObject>();
-        for(int i=0;i<transform.childCount;i++)
+        zombiePrefabs = Resources.LoadAll<GameObject>("Zombies");
+        touchedIndex = lastTouchedIndex = -1;
+        for (int i = 0; i < transform.childCount; i++)
         {
             checkpoints.Add(transform.GetChild(i).GetComponent<Transform>().gameObject);
         }
-        touchedIndex =lastTouchedIndex = -1;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(touchedIndex > 0 && lastTouchedIndex != touchedIndex)
         {
             if (touchedIndex >= checkpoints.Count) { touchedIndex = 0; }
-            checkpoints[touchedIndex].GetComponent<ChildCheckpoints>().spawnZombies();
-            //Instantiate(zombiePrefab, checkpoints[touchedIndex].GetComponent<GameObject>().transform.position, Quaternion.identity);
+
+            checkpoints[touchedIndex].GetComponent<ChildCheckpoints>().spawnZombies(zombiePrefabs, zombieClone);
+            
             lastTouchedIndex = touchedIndex;
             touchedIndex = -1;
         }

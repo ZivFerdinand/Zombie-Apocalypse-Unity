@@ -4,27 +4,15 @@ using UnityEngine;
 
 public class ChildCheckpoints : MonoBehaviour
 {
-    public GameObject zombiePrefab;
-    // Start is called before the first frame update
-    void Start()
+    public void spawnZombies(GameObject[] zombiePrefabs, Transform parent)
     {
-        zombiePrefab = GetComponentInParent<SpawnerScript>().zombiePrefab;
-    }
+        Instantiate(zombiePrefabs[2], transform.position, Quaternion.identity).transform.SetParent(parent); 
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    public void spawnZombies()
-    {
-        Instantiate(zombiePrefab, transform.position, Quaternion.identity); 
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
         {
-            Debug.Log("Test");
             GetComponentInParent<SpawnerScript>().setTouched(gameObject.name);
         }
     }

@@ -17,19 +17,17 @@ public class PlayerHealth : MonoBehaviour
 
     private float durationTimer;
 
-    // Start is called before the first frame update
+
     void Start()
     {
         currentHealth = maxHealth;
         overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (overlay.color.a > 0)
         {
-            // kalau sekarat, overlay tetap ada
             if (currentHealth < 30)
             {
                 return;
