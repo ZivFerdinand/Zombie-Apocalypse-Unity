@@ -25,11 +25,15 @@ public class SpawnerScript : MonoBehaviour
 
     void Update()
     {
-        if(touchedIndex > 0 && lastTouchedIndex != touchedIndex)
+        if (touchedIndex > 0 && lastTouchedIndex != touchedIndex)
         {
             if (touchedIndex >= checkpoints.Count) { touchedIndex = 0; }
 
             checkpoints[touchedIndex].GetComponent<ChildCheckpoints>().spawnZombies(zombiePrefabs, zombieClone);
+
+            int reflect = touchedIndex - 2;
+            if (reflect < 0) reflect += checkpoints.Count - 1;
+            checkpoints[reflect].GetComponent<ChildCheckpoints>().spawnZombies(zombiePrefabs, zombieClone);
             lastTouchedIndex = touchedIndex;
 
             touchedIndex = -1;
