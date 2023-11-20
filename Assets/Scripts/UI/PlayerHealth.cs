@@ -14,6 +14,8 @@ public class PlayerHealth : MonoBehaviour
     public Image overlay;
     public float duration;
     public float fadeSpeed;
+    private float dmgSpeed = 1f;
+    private float updtDmg;
 
     private float durationTimer;
 
@@ -22,10 +24,31 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth = maxHealth;
         overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0);
+        updtDmg = fadeSpeed;
     }
 
     void Update()
     {
+        if(currentHealth < 30)
+        {
+            float tempAlpha = overlay.color.a;
+            tempAlpha += Time.deltaTime * updtDmg;
+            overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, tempAlpha);
+
+            if(overlay.color.a > 1 || overlay.color.a < 0)
+            {
+                if (overlay.color.a < 0)
+                {
+                    overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0);
+                    updtDmg = dmgSpeed;
+                }
+                else
+                {
+                    overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 1);
+                    updtDmg = -dmgSpeed;
+                }
+            }
+        }
         if (overlay.color.a > 0)
         {
             if (currentHealth < 30)
