@@ -212,7 +212,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4803014352389650695, guid: 22d21178f8069b04b8c4f4057cb67029, type: 3}
       propertyPath: m_Name
-      value: ZombieStart (1)
+      value: ZombieCl 2
       objectReference: {fileID: 0}
     - target: {fileID: 8429865231615740692, guid: 22d21178f8069b04b8c4f4057cb67029, type: 3}
       propertyPath: m_LocalScale.x
@@ -1599,7 +1599,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4803014352389650695, guid: 22d21178f8069b04b8c4f4057cb67029, type: 3}
       propertyPath: m_Name
-      value: ZombieStart (2)
+      value: ZombieCl 3
       objectReference: {fileID: 0}
     - target: {fileID: 8429865231615740692, guid: 22d21178f8069b04b8c4f4057cb67029, type: 3}
       propertyPath: m_LocalScale.x
@@ -1978,7 +1978,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4803014352389650695, guid: 22d21178f8069b04b8c4f4057cb67029, type: 3}
       propertyPath: m_Name
-      value: ZombieStart
+      value: ZombieCl 1
       objectReference: {fileID: 0}
     - target: {fileID: 8429865231615740692, guid: 22d21178f8069b04b8c4f4057cb67029, type: 3}
       propertyPath: m_LocalScale.x

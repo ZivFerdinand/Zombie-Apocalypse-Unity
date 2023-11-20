@@ -93,7 +93,7 @@ public class ZombieMovement : MonoBehaviour
         {
             PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
 
-            playerHealth.DamagePlayer(zombieDamage);
+            playerHealth.damagePlayer(zombieDamage);
             attackInterval = attackCoolDown;
         }
     }
