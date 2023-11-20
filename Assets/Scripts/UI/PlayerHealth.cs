@@ -77,7 +77,7 @@ public class PlayerHealth : MonoBehaviour
 
         healthBar.SetHealth(currentHealth);
         durationTimer = 0;
-        overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0.75f);
+        overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0.55f);
     }
     public void HealPlayer(int heal)
     {
