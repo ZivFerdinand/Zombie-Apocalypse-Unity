@@ -8,7 +8,7 @@ public class HealthBar : MonoBehaviour
 {
     private Slider healthSlider;
     public PlayerHealth playerHealth;
-    public int currHp;
+    public float currHp;
 
     private void Start()
     {
@@ -20,7 +20,7 @@ public class HealthBar : MonoBehaviour
     {
         healthSlider.value = Mathf.Lerp(healthSlider.value, currHp, 5f * Time.deltaTime);
     }
-    public void SetHealth(int hp)
+    public void SetHealth(float hp)
     {
         currHp = hp;
     }

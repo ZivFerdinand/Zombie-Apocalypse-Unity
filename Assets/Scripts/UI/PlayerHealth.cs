@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class PlayerHealth : MonoBehaviour
 {
     [Header("Health Bar")]
-    public int currentHealth;
+    public float currentHealth;
     public int maxHealth = 100;
     public HealthBar healthBar;
 
@@ -29,6 +29,7 @@ public class PlayerHealth : MonoBehaviour
 
     void Update()
     {
+        healPlayer(Time.deltaTime);
         if(currentHealth < 30)
         {
             float tempAlpha = overlay.color.a;
@@ -66,7 +67,7 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    public void DamagePlayer(int damage)
+    public void damagePlayer(int damage)
     {
         currentHealth -= damage;
 
@@ -79,7 +80,7 @@ public class PlayerHealth : MonoBehaviour
         durationTimer = 0;
         overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0.55f);
     }
-    public void HealPlayer(int heal)
+    public void healPlayer(float heal)
     {
         currentHealth += heal;
 

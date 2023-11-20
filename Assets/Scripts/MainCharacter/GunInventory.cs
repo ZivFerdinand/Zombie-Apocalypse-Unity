@@ -49,7 +49,7 @@ public class GunInventory : MonoBehaviour {
 	void Update(){
 
 		switchWeaponCooldown += 1 * Time.deltaTime;
-		if(switchWeaponCooldown > 1.2f && Input.GetKey(KeyCode.LeftShift) == false){
+		if(!ZombieApocalypse.DatabaseStatus.isPaused && switchWeaponCooldown > 1.2f && Input.GetKey(KeyCode.LeftShift) == false){
 			Create_Weapon();
 		}
 
@@ -83,7 +83,7 @@ public class GunInventory : MonoBehaviour {
 		/*
 		 * Scrolling wheel waepons changing
 		 */
-		if(Input.GetKeyDown(KeyCode.UpArrow) || Input.GetAxis("Mouse ScrollWheel") > 0){
+		if(!ZombieApocalypse.DatabaseStatus.isPaused && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetAxis("Mouse ScrollWheel") > 0)){
 			switchWeaponCooldown = 0;
 
 			currentGunCounter++;
@@ -92,7 +92,7 @@ public class GunInventory : MonoBehaviour {
 			}
 			StartCoroutine("Spawn",currentGunCounter);
 		}
-		if(Input.GetKeyDown(KeyCode.DownArrow) || Input.GetAxis("Mouse ScrollWheel") < 0){
+		if(!ZombieApocalypse.DatabaseStatus.isPaused && (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetAxis("Mouse ScrollWheel") < 0)){
 			switchWeaponCooldown = 0;
 
 			currentGunCounter--;
@@ -105,12 +105,12 @@ public class GunInventory : MonoBehaviour {
 		/*
 		 * Keypad numbers
 		 */
-		if(Input.GetKeyDown(KeyCode.Alpha1) && currentGunCounter != 0){
+		if(!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetKeyDown(KeyCode.Alpha1) && currentGunCounter != 0){
 			switchWeaponCooldown = 0;
 			currentGunCounter = 0;
 			StartCoroutine("Spawn",currentGunCounter);
 		}
-		if(Input.GetKeyDown(KeyCode.Alpha2) && currentGunCounter != 1){
+		if(!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetKeyDown(KeyCode.Alpha2) && currentGunCounter != 1){
 			switchWeaponCooldown = 0;
 			currentGunCounter = 1;
 			StartCoroutine("Spawn",currentGunCounter);

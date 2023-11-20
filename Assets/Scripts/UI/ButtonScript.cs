@@ -5,13 +5,11 @@ using UnityEngine;
 public class ButtonScript : MonoBehaviour
 {
     public GameObject pauseUI;
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
-    }
+        ZombieApocalypse.DatabaseStatus.isPaused = (Time.timeScale == 0);
 
-    // Update is called once per frame
+    }
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
@@ -27,7 +25,7 @@ public class ButtonScript : MonoBehaviour
     private void pauseUpdate()
     {
         Time.timeScale = (Time.timeScale == 0) ? 1 : 0;
-
+        ZombieApocalypse.DatabaseStatus.isPaused = (Time.timeScale == 0);
         pauseUI.SetActive(Time.timeScale == 0);
     }
 }
