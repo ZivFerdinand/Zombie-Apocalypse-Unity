@@ -7,7 +7,7 @@ public class PlayerHealth : MonoBehaviour
 {
     [Header("Health Bar")]
     public float currentHealth;
-    public int maxHealth = 100;
+    [HideInInspector] public int maxHealth = 100;
     public HealthBar healthBar;
 
     [Header("Damage Overlay")]
@@ -28,38 +28,32 @@ public class PlayerHealth : MonoBehaviour
 
         healthBarSlider.maxValue = maxHealth;
         healthBarSlider.value = maxHealth;
-        SetHealthBarColor();
     }
 
     void Update()
     {
-        healPlayer(Time.deltaTime);
+        SetHealthBarColor();
+        healPlayer(Time.deltaTime * 0.5f);
+
         if(currentHealth < 30)
         {
             float tempAlpha = overlay.color.a;
             tempAlpha += Time.deltaTime * updtDmg;
             overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, tempAlpha);
 
-            if(overlay.color.a > 1 || overlay.color.a < 0)
+            if (overlay.color.a < 0)
             {
-                if (overlay.color.a < 0)
-                {
-                    overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0);
-                    updtDmg = dmgSpeed;
-                }
-                else
-                {
-                    overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 1);
-                    updtDmg = -dmgSpeed;
-                }
+                overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0);
+                updtDmg = dmgSpeed;
+            }
+            else if (overlay.color.a > 1)
+            {
+                overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 1);
+                updtDmg = -dmgSpeed;
             }
         }
-        if (overlay.color.a > 0)
+        if (overlay.color.a > 0 && currentHealth >= 30)
         {
-            if (currentHealth < 30)
-            {
-                return;
-            }
             durationTimer += Time.deltaTime;
             if (durationTimer > duration)
             {
@@ -74,25 +68,16 @@ public class PlayerHealth : MonoBehaviour
     public void damagePlayer(int damage)
     {
         currentHealth -= damage;
-
-        if (currentHealth < 0)
-        {
-            currentHealth = 0;
-        }
+        currentHealth = Mathf.Max(0, currentHealth);
 
         healthBar.SetHealth(currentHealth);
         durationTimer = 0;
         overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0.55f);
-        SetHealthBarColor();
     }
     public void healPlayer(float heal)
     {
         currentHealth += heal;
-
-        if (currentHealth > 100)
-        {
-            currentHealth = 100;
-        }
+        currentHealth = Mathf.Min(100, currentHealth);
 
         healthBar.SetHealth(currentHealth);
     }
