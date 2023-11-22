@@ -1239,16 +1239,11 @@ MonoBehaviour:
   - {fileID: 199458, guid: 4aa4c63f0f9d6a84dbaeed6b9caeca80, type: 3}
   muzzelSpawn: {fileID: 193726}
   reloadChangeBulletsTime: 1.5
-  HUD_bullets: {fileID: 0}
-  horizontal_crosshair: {fileID: 2800000, guid: e1aa4c90445944348a112c3b7fa4b318, type: 3}
-  vertical_crosshair: {fileID: 2800000, guid: 3f8b669e9880644cbb903f67bbc9f824, type: 3}
-  top_pos_crosshair: {x: -1.8, y: -12}
-  bottom_pos_crosshair: {x: -1.8, y: -8}
-  left_pos_crosshair: {x: -8, y: -1.525}
-  right_pos_crosshair: {x: -5.5, y: -1.525}
-  size_crosshair_vertical: {x: 3, y: 20}
-  size_crosshair_horizontal: {x: 13, y: 3}
-  expandValues_crosshair: {x: 0, y: 0}
+  HUD_bullets_left: {fileID: 0}
+  HUD_bullets_right: {fileID: 0}
+  dotCrosshair: {fileID: 2800000, guid: 82432e0dac4a37b4095a238575c7e59e, type: 3}
+  pos_crosshair: {x: 0, y: 0}
+  size_crosshair: {x: 4, y: 6}
   handsAnimator: {fileID: 9596676}
   reloadAnimationName: Player_Reload
   aimingAnimationName: Player_AImpose

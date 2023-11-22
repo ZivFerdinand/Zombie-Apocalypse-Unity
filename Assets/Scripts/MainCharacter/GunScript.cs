@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using TMPro;
+using System;
 //using UnityStandardAssets.ImageEffects;
 
 public enum GunStyles{
@@ -158,26 +159,23 @@ public class GunScript : MonoBehaviour {
 	 */
 	void CrossHairExpansionWhenWalking(){
 
-		if(!ZombieApocalypse.DatabaseStatus.isPaused && player.GetComponent<Rigidbody>().velocity.magnitude > 1 && Input.GetAxis("Fire1") == 0){//ifnot shooting
+        if (player.GetComponent<Rigidbody>().velocity.magnitude > 1 && Input.GetAxis("Fire1") == 0)
+        {//ifnot shooting
 
-			expandValues_crosshair += new Vector2(20, 40) * Time.deltaTime;
-			if(player.GetComponent<PlayerMovementScript>().maxSpeed < runningSpeed){ //not running
-				expandValues_crosshair = new Vector2(Mathf.Clamp(expandValues_crosshair.x, 0, 10), Mathf.Clamp(expandValues_crosshair.y,0,20));
-				fadeout_value = Mathf.Lerp(fadeout_value, 1, Time.deltaTime * 2);
-			}
-			else{//running
-				fadeout_value = Mathf.Lerp(fadeout_value, 0, Time.deltaTime * 10);
-				expandValues_crosshair = new Vector2(Mathf.Clamp(expandValues_crosshair.x, 0, 20), Mathf.Clamp(expandValues_crosshair.y,0,40));
-			}
-		}
-		else{//if shooting
-			expandValues_crosshair = Vector2.Lerp(expandValues_crosshair, Vector2.zero, Time.deltaTime * 5);
-			expandValues_crosshair = new Vector2(Mathf.Clamp(expandValues_crosshair.x, 0, 10), Mathf.Clamp(expandValues_crosshair.y,0,20));
-			fadeout_value = Mathf.Lerp(fadeout_value, 1, Time.deltaTime * 2);
+            expandValues_crosshair += new Vector2(10, 20) * Time.deltaTime;
+            if (player.GetComponent<PlayerMovementScript>().maxSpeed < runningSpeed)
+            { //not running
+                expandValues_crosshair = new Vector2(Mathf.Clamp(expandValues_crosshair.x, 0, 3), Mathf.Clamp(expandValues_crosshair.y, 0, 6));
+                fadeout_value = Mathf.Lerp(fadeout_value, 1, Time.deltaTime * 2);
+            }
+            else
+            {//running
+                fadeout_value = Mathf.Lerp(fadeout_value, 0, Time.deltaTime * 10);
+                expandValues_crosshair = new Vector2(Mathf.Clamp(expandValues_crosshair.x, 0, 5), Mathf.Clamp(expandValues_crosshair.y, 0, 10));
+            }
+        }
 
-		}
-
-	}
+    }
 
 	/* 
 	 * Changes the max speed that player is allowed to go.
@@ -318,12 +316,12 @@ public class GunScript : MonoBehaviour {
 	 */
 	public void RecoilMath(){
 		currentRecoilZPos -= recoilAmount_z;
-		currentRecoilXPos -= (Random.value - 0.5f) * recoilAmount_x;
-		currentRecoilYPos -= (Random.value - 0.5f) * recoilAmount_y;
+		currentRecoilXPos -= (UnityEngine.Random.value - 0.5f) * recoilAmount_x;
+		currentRecoilYPos -= (UnityEngine.Random.value - 0.5f) * recoilAmount_y;
 		mls.wantedCameraXRotation -= Mathf.Abs(currentRecoilYPos * gunPrecision);
 		mls.wantedYRotation -= (currentRecoilXPos * gunPrecision);		 
 
-		expandValues_crosshair += new Vector2(6,12);
+		//expandValues_crosshair += new Vector2(6,12);
 
 	}
 
@@ -424,7 +422,7 @@ public class GunScript : MonoBehaviour {
 
 			if(bulletsInTheGun > 0){
 
-				int randomNumberForMuzzelFlash = Random.Range(0,5);
+				int randomNumberForMuzzelFlash = UnityEngine.Random.Range(0,5);
 				if (bullet)
 					Instantiate (bullet, bulletSpawnPlace.transform.position, bulletSpawnPlace.transform.rotation);
 				else
@@ -547,23 +545,18 @@ public class GunScript : MonoBehaviour {
 
 
 	[Header("Crosshair properties")]
-	public Texture horizontal_crosshair, vertical_crosshair;
-	public Vector2 top_pos_crosshair, bottom_pos_crosshair, left_pos_crosshair, right_pos_crosshair;
-	public Vector2 size_crosshair_vertical = new Vector2(1,1), size_crosshair_horizontal = new Vector2(1,1);
-	[HideInInspector]
-	public Vector2 expandValues_crosshair;
+	public Texture dotCrosshair;
+	public Vector2 pos_crosshair;
+	public Vector2 size_crosshair = new Vector2(1,1);
 	private float fadeout_value = 1;
-	/*
+    public Vector2 expandValues_crosshair;
+    /*
 	 * Drawing the crossHair.
 	 */
-	void DrawCrosshair(){
+    void DrawCrosshair(){
 		GUI.color = new Color(GUI.color.r, GUI.color.g, GUI.color.b, fadeout_value);
 		if(!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetAxis("Fire2") == 0){//if not aiming draw
-			GUI.DrawTexture(new Rect(vec2(left_pos_crosshair).x + position_x(-expandValues_crosshair.x) + Screen.width/2,Screen.height/2 + vec2(left_pos_crosshair).y, vec2(size_crosshair_horizontal).x, vec2(size_crosshair_horizontal).y), vertical_crosshair);//left
-			GUI.DrawTexture(new Rect(vec2(right_pos_crosshair).x + position_x(expandValues_crosshair.x) + Screen.width/2,Screen.height/2 + vec2(right_pos_crosshair).y, vec2(size_crosshair_horizontal).x, vec2(size_crosshair_horizontal).y), vertical_crosshair);//right
-
-			GUI.DrawTexture(new Rect(vec2(top_pos_crosshair).x + Screen.width/2,Screen.height/2 + vec2(top_pos_crosshair).y + position_y(-expandValues_crosshair.y), vec2(size_crosshair_vertical).x, vec2(size_crosshair_vertical).y ), horizontal_crosshair);//top
-			GUI.DrawTexture(new Rect(vec2(bottom_pos_crosshair).x + Screen.width/2,Screen.height/2 +vec2(bottom_pos_crosshair).y + position_y(expandValues_crosshair.y), vec2(size_crosshair_vertical).x, vec2(size_crosshair_vertical).y), horizontal_crosshair);//bottom
+			GUI.DrawTexture(new Rect(Screen.width/2 - vec2(size_crosshair).x/2, Screen.height/2 - vec2(size_crosshair).y/2, vec2(size_crosshair).x, vec2(size_crosshair).y), dotCrosshair);
 		}
 
 	}
