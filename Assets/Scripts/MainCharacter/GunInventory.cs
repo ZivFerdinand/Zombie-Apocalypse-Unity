@@ -190,7 +190,8 @@ public class GunInventory : MonoBehaviour {
 	[Header("GUI Gun preview variables")]
 	[Tooltip("Weapon icons style to pick.")]
 	public MenuStyle menuStyle = MenuStyle.horizontal;
-	[Tooltip("Spacing between icons.")]
+    // public MenuStyle menuStyle = MenuStyle.vertical;
+    [Tooltip("Spacing between icons.")]
 	public int spacing = 10;
 	[Tooltip("Begin position in percetanges of screen.")]
 	public Vector2 beginPosition;

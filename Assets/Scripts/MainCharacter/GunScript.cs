@@ -514,21 +514,37 @@ public class GunScript : MonoBehaviour {
 	 * And drawing CrossHair from here.
 	 */
 	[Tooltip("HUD bullets to display bullet count on screen. Will be find under name 'HUD_bullets' in scene.")]
-	public TextMeshProUGUI HUD_bullets;
-	void OnGUI(){
-		if(!HUD_bullets){
+	public TextMeshProUGUI HUD_bullets_left;
+    public TextMeshProUGUI HUD_bullets_right;
+    void OnGUI(){
+		if(!HUD_bullets_left){
 			try{
-				HUD_bullets = GameObject.Find("HUD_bullets").GetComponent<TextMeshProUGUI>();
+				HUD_bullets_left = GameObject.Find("HUD_bullets_left").GetComponent<TextMeshProUGUI>();
 			}
 			catch(System.Exception ex){
 				print("Couldnt find the HUD_Bullets ->" + ex.StackTrace.ToString());
 			}
 		}
-		if(mls && HUD_bullets)
-			HUD_bullets.text = bulletsIHave.ToString() + " - " + bulletsInTheGun.ToString();
+		if(mls && HUD_bullets_left)
+			HUD_bullets_left.text = bulletsIHave.ToString();
 
-		DrawCrosshair();
+        if (!HUD_bullets_right)
+        {
+            try
+            {
+                HUD_bullets_right = GameObject.Find("HUD_bullets_right").GetComponent<TextMeshProUGUI>();
+            }
+            catch (System.Exception ex)
+            {
+                print("Couldnt find the HUD_Bullets ->" + ex.StackTrace.ToString());
+            }
+        }
+        if (mls && HUD_bullets_right)
+            HUD_bullets_right.text = bulletsInTheGun.ToString();
+
+        DrawCrosshair();
 	}
+
 
 	[Header("Crosshair properties")]
 	public Texture horizontal_crosshair, vertical_crosshair;
