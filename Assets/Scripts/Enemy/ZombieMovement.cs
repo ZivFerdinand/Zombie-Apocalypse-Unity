@@ -19,7 +19,10 @@ public class ZombieMovement : MonoBehaviour
     private float moveCD = -1f;
     private float timeToDestroy = 3.5f;
     private float zombieHealth = 2f;
-  
+
+    public PlayerScore playerScoreScript;
+
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -100,5 +103,6 @@ public class ZombieMovement : MonoBehaviour
     public void decreaseHealth()
     {
         zombieHealth--;
+        if (zombieHealth < 0f) playerScoreScript.IncreaseScore(10);
     }
 }

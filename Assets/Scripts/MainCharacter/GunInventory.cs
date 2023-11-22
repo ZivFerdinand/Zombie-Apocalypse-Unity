@@ -20,6 +20,8 @@ public class GunInventory : MonoBehaviour {
 	[HideInInspector]
 	public float switchWeaponCooldown;
 
+	public WeaponSelection weaponSelection;
+
 	/*
 	 * Calling the method that will update the icons of our guns if we carry any upon start.
 	 * Also will spawn a weapon upon start.
@@ -109,11 +111,15 @@ public class GunInventory : MonoBehaviour {
 			switchWeaponCooldown = 0;
 			currentGunCounter = 0;
 			StartCoroutine("Spawn",currentGunCounter);
+
+			weaponSelection.SelectSniper();
 		}
 		if(!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetKeyDown(KeyCode.Alpha2) && currentGunCounter != 1){
 			switchWeaponCooldown = 0;
 			currentGunCounter = 1;
 			StartCoroutine("Spawn",currentGunCounter);
+
+			weaponSelection.SelectAutomaticRifle();
 		}
 
 	}
@@ -204,7 +210,7 @@ public class GunInventory : MonoBehaviour {
 	 */
 	void DrawCorrespondingImage(int _number){
 
-		string deleteCloneFromName = currentGun.name.Substring(0,currentGun.name.Length - 7);
+		/*string deleteCloneFromName = currentGun.name.Substring(0,currentGun.name.Length - 7);
 
 		if(menuStyle == MenuStyle.horizontal){
 			if(deleteCloneFromName == gunsIHave[_number]){
@@ -229,7 +235,7 @@ public class GunInventory : MonoBehaviour {
 					vec2(size).x - 20, vec2(size).y- 20),//size
 					icons[_number]);
 			}
-		}
+		}*/
 
 
 

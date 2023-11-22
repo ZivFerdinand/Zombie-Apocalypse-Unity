@@ -10,25 +10,30 @@ public class WeaponSelection : MonoBehaviour
     public TextMeshProUGUI weaponNameText;
 
     public float scaleSpeed = 5f; // Adjust the speed of scaling
+    public float weaponNameDisplayDuration = 1.0f; // Duration to display the weapon name
 
     private Vector3 originalScale;
+    private Coroutine weaponNameCoroutine;
 
     void Start()
     {
+        weaponNameText.gameObject.SetActive(false);
         // Store the original scale of the icons
         originalScale = automaticRifleIcon.localScale;
     }
 
     public void SelectAutomaticRifle()
     {
+        Debug.Log("Selecting Automatic Rifle");
         ScaleUpIconSmoothly(automaticRifleIcon);
         SetWeaponName("Automatic Rifle");
     }
 
     public void SelectSniper()
     {
+        Debug.Log("Selecting Sniper");
         ScaleUpIconSmoothly(sniperIcon);
-        SetWeaponName("Sniper");
+        SetWeaponName("Single-Shot Rifle");
     }
 
     void ScaleUpIconSmoothly(Transform icon)
@@ -39,6 +44,9 @@ public class WeaponSelection : MonoBehaviour
 
         // Scale up the selected icon smoothly using Lerp
         StartCoroutine(ScaleOverTime(icon, originalScale, new Vector3(1.2f, 1.2f, 1.2f), scaleSpeed));
+
+        // Show the weapon name temporarily
+        ShowWeaponNameTemporarily();
     }
 
     void ResetIconScale(Transform icon)
@@ -61,5 +69,20 @@ public class WeaponSelection : MonoBehaviour
     void SetWeaponName(string weaponName)
     {
         weaponNameText.text = weaponName;
+    }
+
+    void ShowWeaponNameTemporarily()
+    {
+        if (weaponNameCoroutine != null)
+            StopCoroutine(weaponNameCoroutine);
+
+        weaponNameCoroutine = StartCoroutine(ShowWeaponName());
+    }
+
+    IEnumerator ShowWeaponName()
+    {
+        weaponNameText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(weaponNameDisplayDuration);
+        weaponNameText.gameObject.SetActive(false);
     }
 }
