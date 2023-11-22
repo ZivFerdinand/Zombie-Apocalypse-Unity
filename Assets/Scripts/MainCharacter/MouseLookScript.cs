@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine.SceneManagement;
 
 public class MouseLookScript : MonoBehaviour {
 
@@ -10,8 +10,8 @@ public class MouseLookScript : MonoBehaviour {
 	 * Hiding the cursor.
 	 */
 	void Awake(){
-		Cursor.lockState = CursorLockMode.Locked;
-		myCamera = GameObject.FindGameObjectWithTag("MainCamera").transform;
+        
+        myCamera = GameObject.FindGameObjectWithTag("MainCamera").transform;
 	}
 
 	/*
@@ -19,8 +19,11 @@ public class MouseLookScript : MonoBehaviour {
 	* Triggering the headbob camera omvement if player is faster than 1 of speed
 	*/
 	void  Update(){
-
-		MouseInputMovement();
+        if (!ZombieApocalypse.DatabaseStatus.isPaused)
+            Cursor.lockState = CursorLockMode.Locked;
+        else
+            Cursor.lockState = CursorLockMode.None;
+        MouseInputMovement();
 
 		if (Input.GetKeyDown (KeyCode.L)) {
 			Cursor.lockState = CursorLockMode.Locked;

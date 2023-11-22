@@ -8,6 +8,7 @@ public class StartUIController : MonoBehaviour
     
     public void onClickChangeScene(string name)
     {
+
         if (name == "PlayButton")
             SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
