@@ -58,7 +58,11 @@ namespace DigitalRuby.PyroParticles
             dir = ProjectileColliderObject.transform.rotation * dir;
             ProjectileColliderObject.GetComponent<Rigidbody>().velocity = dir;
         }
-
+        public void SetForwardDirection(Vector3 forwardDirection)
+        {
+            // Set the forward direction of the projectile
+            transform.forward = forwardDirection;
+        }
         protected override void Start()
         {
             base.Start();

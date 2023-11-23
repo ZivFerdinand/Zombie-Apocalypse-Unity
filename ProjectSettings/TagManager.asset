@@ -10,11 +10,12 @@ TagManager:
   - Dummie
   - Weapon
   - Zombie
+  - Fire
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - FireLayer
   - Water
   - UI
   - 

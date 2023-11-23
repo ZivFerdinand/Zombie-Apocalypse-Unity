@@ -6,10 +6,14 @@ public class MouseLookScript : MonoBehaviour {
 
 	[HideInInspector]
 	public Transform myCamera;
-	/*
+    /*
 	 * Hiding the cursor.
 	 */
-	void Awake(){
+    public Vector3 GetCameraForward()
+    {
+        return myCamera.forward;
+    }
+    void Awake(){
         
         myCamera = GameObject.FindGameObjectWithTag("MainCamera").transform;
 	}
