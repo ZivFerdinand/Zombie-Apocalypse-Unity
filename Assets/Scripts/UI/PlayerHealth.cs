@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerHealth : MonoBehaviour
 {
     [Header("Health Bar")]
     public float currentHealth;
     [HideInInspector] public int maxHealth = 100;
-    public HealthBar healthBar;
 
     [Header("Damage Overlay")]
     public Image overlay;
@@ -17,22 +17,19 @@ public class PlayerHealth : MonoBehaviour
     private float dmgSpeed = 1f;
     private float updtDmg;
 
+    public TextMeshProUGUI healthStatus;
     private float durationTimer;
-    public Slider healthBarSlider;
 
     void Start()
     {
         currentHealth = maxHealth;
         overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0);
         updtDmg = fadeSpeed;
-
-        healthBarSlider.maxValue = maxHealth;
-        healthBarSlider.value = maxHealth;
     }
 
     void Update()
     {
-        SetHealthBarColor();
+        healthStatus.text = ((int) currentHealth).ToString();
         healPlayer(Time.deltaTime * 0.5f);
 
         if(currentHealth < 30)
@@ -70,7 +67,7 @@ public class PlayerHealth : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Max(0, currentHealth);
 
-        healthBar.SetHealth(currentHealth);
+
         durationTimer = 0;
         overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0.55f);
     }
@@ -78,24 +75,5 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth += heal;
         currentHealth = Mathf.Min(100, currentHealth);
-
-        healthBar.SetHealth(currentHealth);
-    }
-
-    void SetHealthBarColor()
-    {
-        float normalizedHealth = currentHealth / maxHealth;
-
-        // Change color based on health percentage
-        if (normalizedHealth > 0.5f)
-        {
-            // Green to Yellow transition
-            healthBarSlider.fillRect.GetComponent<Image>().color = Color.Lerp(Color.yellow, Color.green, (normalizedHealth - 0.5f) * 2f);
-        }
-        else
-        {
-            // Yellow to Red transition
-            healthBarSlider.fillRect.GetComponent<Image>().color = Color.Lerp(Color.red, Color.yellow, normalizedHealth * 2f);
-        }
     }
 }

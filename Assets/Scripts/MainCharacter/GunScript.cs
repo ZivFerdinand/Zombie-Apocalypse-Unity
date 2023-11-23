@@ -26,6 +26,7 @@ public class GunScript : MonoBehaviour {
 	public float bulletsIHave = 20;
 	[Tooltip("Preset value to tell with how much bullets will our waepon spawn inside rifle.")]
 	public float bulletsInTheGun = 5;
+	private float bulletsI;
 	[Tooltip("Preset value to tell how much bullets can one magazine carry.")]
 	public float amountOfBulletsPerLoad = 5;
 
@@ -39,6 +40,7 @@ public class GunScript : MonoBehaviour {
     private void Start()
     {
 		crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
+		bulletsI = bulletsInTheGun;
     }
 
     /*
@@ -549,7 +551,7 @@ public class GunScript : MonoBehaviour {
 			}
 		}
 		if(mls && HUD_bullets_left)
-			HUD_bullets_left.text = bulletsIHave.ToString();
+			HUD_bullets_left.text = bulletsInTheGun.ToString();
 
         if (!HUD_bullets_right)
         {
@@ -563,7 +565,7 @@ public class GunScript : MonoBehaviour {
             }
         }
         if (mls && HUD_bullets_right)
-            HUD_bullets_right.text = bulletsInTheGun.ToString();
+            HUD_bullets_right.text = ((int) (bulletsIHave / bulletsI)).ToString();
 
         DrawCrosshair();
 	}

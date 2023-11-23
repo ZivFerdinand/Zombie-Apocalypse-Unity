@@ -93,6 +93,7 @@ public class GunInventory : MonoBehaviour {
 				currentGunCounter = 0;
 			}
 			StartCoroutine("Spawn",currentGunCounter);
+			weaponSelection.SelectWeaponChange();
 		}
 		if(!ZombieApocalypse.DatabaseStatus.isPaused && (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetAxis("Mouse ScrollWheel") < 0)){
 			switchWeaponCooldown = 0;
@@ -102,6 +103,7 @@ public class GunInventory : MonoBehaviour {
 				currentGunCounter = gunsIHave.Count-1;
 			}
 			StartCoroutine("Spawn",currentGunCounter);
+			weaponSelection.SelectWeaponChange();
 		}
 
 		/*
@@ -112,14 +114,14 @@ public class GunInventory : MonoBehaviour {
 			currentGunCounter = 0;
 			StartCoroutine("Spawn",currentGunCounter);
 
-			weaponSelection.SelectSniper();
+			weaponSelection.SelectWeaponChange();
 		}
 		if(!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetKeyDown(KeyCode.Alpha2) && currentGunCounter != 1){
 			switchWeaponCooldown = 0;
 			currentGunCounter = 1;
 			StartCoroutine("Spawn",currentGunCounter);
 
-			weaponSelection.SelectAutomaticRifle();
+			weaponSelection.SelectWeaponChange();
 		}
 
 	}

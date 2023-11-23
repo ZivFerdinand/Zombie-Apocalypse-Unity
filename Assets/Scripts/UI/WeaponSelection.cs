@@ -2,87 +2,90 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WeaponSelection : MonoBehaviour
 {
-    public Transform automaticRifleIcon;
-    public Transform sniperIcon;
-    public TextMeshProUGUI weaponNameText;
+    public GameObject automaticRifleIcon;
+    public GameObject sniperIcon;
+
+    public GameObject autoImage;
+    public GameObject sniperImage;
+
+    public TextMeshProUGUI automaticText;
+    public TextMeshProUGUI sniperText;
 
     public float scaleSpeed = 5f; // Adjust the speed of scaling
     public float weaponNameDisplayDuration = 1.0f; // Duration to display the weapon name
 
-    private Vector3 originalScale;
-    private Coroutine weaponNameCoroutine;
-
+    private bool currentA = true;
     void Start()
     {
-        weaponNameText.gameObject.SetActive(false);
-        // Store the original scale of the icons
-        originalScale = automaticRifleIcon.localScale;
+        SelectWeaponChange();
     }
 
     public void SelectAutomaticRifle()
     {
         Debug.Log("Selecting Automatic Rifle");
-        ScaleUpIconSmoothly(automaticRifleIcon);
-        SetWeaponName("Automatic Rifle");
+        LeanTween.scale(sniperImage, new Vector3(1.2f, 1.2f, 1.2f), 0.25f).setEaseInBack();
+        LeanTween.scale(autoImage, new Vector3(1f, 1f, 1f), 0.25f).setEaseInBack();
+        LeanTween.moveX(sniperIcon, sniperIcon.transform.position.x + 10, 0.1f).setEaseInBounce().setOnComplete(() => LeanTween.moveX(sniperIcon, sniperIcon.transform.position.x - 10, 0.2f).setEaseOutBounce());
+        StartCoroutine(Fade(1, 0, sniperText, 2)); 
+        StartCoroutine(Fade(1, 0.5f, autoImage, 1));
+        StartCoroutine(Fade(0.5f, 1, sniperImage, 1));
     }
 
-    public void SelectSniper()
+    public void SelectWeaponChange()
     {
-        Debug.Log("Selecting Sniper");
-        ScaleUpIconSmoothly(sniperIcon);
-        SetWeaponName("Single-Shot Rifle");
-    }
-
-    void ScaleUpIconSmoothly(Transform icon)
-    {
-        // Reset the scale of both icons
-        ResetIconScale(automaticRifleIcon);
-        ResetIconScale(sniperIcon);
-
-        // Scale up the selected icon smoothly using Lerp
-        StartCoroutine(ScaleOverTime(icon, originalScale, new Vector3(1.2f, 1.2f, 1.2f), scaleSpeed));
-
-        // Show the weapon name temporarily
-        ShowWeaponNameTemporarily();
-    }
-
-    void ResetIconScale(Transform icon)
-    {
-        // Reset the scale of the icons
-        icon.localScale = originalScale;
-    }
-
-    IEnumerator ScaleOverTime(Transform objectToScale, Vector3 startScale, Vector3 endScale, float duration)
-    {
-        float startTime = Time.time;
-        while (Time.time < startTime + duration)
+        if (currentA)
         {
-            objectToScale.localScale = Vector3.Lerp(startScale, endScale, (Time.time - startTime) / duration);
-            yield return null;
+            Debug.Log("Selecting Sniper");
+            LeanTween.scale(autoImage, new Vector3(1.2f, 1.2f, 1.2f), 0.25f).setEaseInBack();
+            LeanTween.scale(sniperImage, new Vector3(1f, 1f, 1f), 0.25f).setEaseInBack();
+            LeanTween.moveX(automaticRifleIcon, automaticRifleIcon.transform.position.x + 10, 0.1f).setEaseInBounce().setOnComplete(() => LeanTween.moveX(automaticRifleIcon, automaticRifleIcon.transform.position.x - 10, 0.2f).setEaseOutBounce());
+            StartCoroutine(Fade(1, 0, automaticText, 2));
+            StartCoroutine(Fade(1, 0.5f, sniperImage, 1));
+            StartCoroutine(Fade(0.5f, 1, autoImage, 1));
+            currentA = !currentA;
         }
-        objectToScale.localScale = endScale;
+        else
+        {
+            Debug.Log("Selecting Automatic Rifle");
+            LeanTween.scale(sniperImage, new Vector3(1.2f, 1.2f, 1.2f), 0.5f).setEaseInBack();
+            LeanTween.scale(autoImage, new Vector3(1f, 1f, 1f), 0.5f).setEaseInBack();
+            LeanTween.moveX(sniperIcon, sniperIcon.transform.position.x + 10, 0.1f).setEaseInBounce().setOnComplete(() => LeanTween.moveX(sniperIcon, sniperIcon.transform.position.x - 10, 0.2f).setEaseOutBounce());
+            StartCoroutine(Fade(1, 0, sniperText, 2));
+            StartCoroutine(Fade(1, 0.5f, autoImage, 1));
+            StartCoroutine(Fade(0.5f, 1, sniperImage, 1));
+            currentA = !currentA;
+        }
     }
+    private float m_timerCurrent;
+    public AnimationCurve m_smoothCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0f, 0f), new Keyframe(1f, 1f) });
+    private readonly WaitForSeconds m_skipFrame = new WaitForSeconds(0.01f);
 
-    void SetWeaponName(string weaponName)
+    private IEnumerator Fade(float start, float end, TextMeshProUGUI text, float fadeDuration)
     {
-        weaponNameText.text = weaponName;
+        m_timerCurrent = 0f;
+
+        while (m_timerCurrent <= fadeDuration)
+        {
+            m_timerCurrent += Time.deltaTime;
+            Color c = text.color;
+            text.color = new Color(c.r, c.g, c.b, Mathf.Lerp(start, end, m_smoothCurve.Evaluate(m_timerCurrent / fadeDuration)));
+            yield return m_skipFrame;
+        }
     }
-
-    void ShowWeaponNameTemporarily()
+    private IEnumerator Fade(float start, float end, GameObject icon, float fadeDuration)
     {
-        if (weaponNameCoroutine != null)
-            StopCoroutine(weaponNameCoroutine);
+        m_timerCurrent = 0f;
 
-        weaponNameCoroutine = StartCoroutine(ShowWeaponName());
-    }
-
-    IEnumerator ShowWeaponName()
-    {
-        weaponNameText.gameObject.SetActive(true);
-        yield return new WaitForSeconds(weaponNameDisplayDuration);
-        weaponNameText.gameObject.SetActive(false);
+        while (m_timerCurrent <= fadeDuration)
+        {
+            m_timerCurrent += Time.deltaTime;
+            Color c = icon.GetComponent<Image>().color;
+            icon.GetComponent<Image>().color = new Color(c.r, c.g, c.b, Mathf.Lerp(start, end, m_smoothCurve.Evaluate(m_timerCurrent / fadeDuration)));
+            yield return m_skipFrame;
+        }
     }
 }
