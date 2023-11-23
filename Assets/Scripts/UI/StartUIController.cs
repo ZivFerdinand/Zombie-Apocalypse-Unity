@@ -57,15 +57,6 @@ public class StartUIController : MonoBehaviour
 
         }
     }
-    private IEnumerator FadeInOut()
-    {
-        float start = 0f;
-        float end = 1f;
-
-        yield return StartCoroutine(Fade(start, end)); // Fade in.
-        yield return new WaitForSeconds(1); // Stay
-        yield return StartCoroutine(Fade(end, start)); // Fade out.
-    }
 
     private float m_timerCurrent;
     private float m_fadeDuration = 1f;

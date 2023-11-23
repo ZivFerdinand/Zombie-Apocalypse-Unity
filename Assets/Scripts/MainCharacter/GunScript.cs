@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using TMPro;
+using UnityEngine.UI;
 using System;
 //using UnityStandardAssets.ImageEffects;
 
@@ -34,10 +35,16 @@ public class GunScript : MonoBehaviour {
 
 	private PlayerMovementScript pmS;
 
-	/*
+
+    private void Start()
+    {
+		crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
+    }
+
+    /*
 	 * Collection the variables upon awake that we need.
 	 */
-	void Awake(){
+    void Awake(){
 		mls = GameObject.FindGameObjectWithTag("Player").GetComponent<MouseLookScript>();
 		player = mls.transform;
 		mainCamera = mls.myCamera;
@@ -94,7 +101,7 @@ public class GunScript : MonoBehaviour {
 
 		Sprint(); //iff we have the gun you sprint from here, if we are gunless then its called from movement script
 
-		CrossHairExpansionWhenWalking();
+		CrossHairFadeout();
 
 
 	}
@@ -155,31 +162,51 @@ public class GunScript : MonoBehaviour {
 	/*
 	 * Used to expand position of the crosshair or make it dissapear when running
 	 */
-	void CrossHairExpansionWhenWalking(){
-
-        if (player.GetComponent<Rigidbody>().velocity.magnitude > 1 && Input.GetAxis("Fire1") == 0)
+	void CrossHairFadeout(){
+        if (!ZombieApocalypse.DatabaseStatus.isPaused && player.GetComponent<Rigidbody>().velocity.magnitude > 1 && Input.GetAxis("Fire1") == 0)
         {//ifnot shooting
 
-            expandValues_crosshair += new Vector2(10, 20) * Time.deltaTime;
-            if (player.GetComponent<PlayerMovementScript>().maxSpeed < runningSpeed)
+			if (player.GetComponent<PlayerMovementScript>().maxSpeed < runningSpeed)
             { //not running
-                expandValues_crosshair = new Vector2(Mathf.Clamp(expandValues_crosshair.x, 0, 3), Mathf.Clamp(expandValues_crosshair.y, 0, 6));
-                fadeout_value = Mathf.Lerp(fadeout_value, 1, Time.deltaTime * 2);
+				if (crosshair.color.a == 0)
+				{
+					StartCoroutine(Fade(0, 1f));
+				}
             }
             else
             {//running
-                fadeout_value = Mathf.Lerp(fadeout_value, 0, Time.deltaTime * 10);
-                expandValues_crosshair = new Vector2(Mathf.Clamp(expandValues_crosshair.x, 0, 5), Mathf.Clamp(expandValues_crosshair.y, 0, 10));
+                if (crosshair.color.a == 1)
+				{
+                    StartCoroutine(Fade(1f, 0));
+
+				}
             }
         }
-
     }
 
-	/* 
+    private float m_timerCurrent;
+    private float m_fadeDuration = 0.25f;
+    public AnimationCurve m_smoothCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0f, 0f), new Keyframe(1f, 1f) });
+    private readonly WaitForSeconds m_skipFrame = new WaitForSeconds(0.01f);
+
+    private IEnumerator Fade(float start, float end)
+    {
+        m_timerCurrent = 0f;
+
+        while (m_timerCurrent <= m_fadeDuration)
+        {
+            m_timerCurrent += Time.deltaTime;
+            Color c = crosshair.GetComponent<Image>().color;
+            crosshair.color = new Color(c.r, c.g, c.b, Mathf.Lerp(start, end, m_smoothCurve.Evaluate(m_timerCurrent / m_fadeDuration)));
+            yield return m_skipFrame;
+        }
+    }
+
+    /* 
 	 * Changes the max speed that player is allowed to go.
 	 * Also max speed is connected to the animator which will trigger the run animation.
 	 */
-	void Sprint(){// Running();  so i can find it with CTRL + F
+    void Sprint(){// Running();  so i can find it with CTRL + F
 		if (Input.GetAxis ("Vertical") > 0 && Input.GetAxisRaw ("Fire2") == 0 && meeleAttack == false && Input.GetAxisRaw ("Fire1") == 0) {
 			if (!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetKey (KeyCode.LeftShift)) {
 					pmS.maxSpeed = runningSpeed;
@@ -543,42 +570,20 @@ public class GunScript : MonoBehaviour {
 
 
 	[Header("Crosshair properties")]
-	public Texture dotCrosshair;
-	public Vector2 pos_crosshair;
-	public Vector2 size_crosshair = new Vector2(1,1);
-	private float fadeout_value = 1;
-    public Vector2 expandValues_crosshair;
+	private Image crosshair;
     /*
 	 * Drawing the crossHair.
 	 */
     void DrawCrosshair(){
-		GUI.color = new Color(GUI.color.r, GUI.color.g, GUI.color.b, fadeout_value);
 		if(!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetAxis("Fire2") == 0){//if not aiming draw
-			GUI.DrawTexture(new Rect(Screen.width/2 - vec2(size_crosshair).x/2, Screen.height/2 - vec2(size_crosshair).y/2, vec2(size_crosshair).x, vec2(size_crosshair).y), dotCrosshair);
+            crosshair.gameObject.SetActive(true);
+            //GUI.DrawTexture(new Rect(Screen.width/2 - vec2(size_crosshair).x/2, Screen.height/2 - vec2(size_crosshair).y/2, vec2(size_crosshair).x, vec2(size_crosshair).y), dotCrosshair);
 		}
-
+		else
+		{
+			crosshair.gameObject.SetActive(false);
+		}
 	}
-
-	//#####		RETURN THE SIZE AND POSITION for GUI images ##################
-	private float position_x(float var){
-		return Screen.width * var / 100;
-	}
-	private float position_y(float var)
-	{
-		return Screen.height * var / 100;
-	}
-	private float size_x(float var)
-	{
-		return Screen.width * var / 100;
-	}
-	private float size_y(float var)
-	{
-		return Screen.height * var / 100;
-	}
-	private Vector2 vec2(Vector2 _vec2){
-		return new Vector2(Screen.width * _vec2.x / 100, Screen.height * _vec2.y / 100);
-	}
-	//#
 
 	public Animator handsAnimator;
 	/*
