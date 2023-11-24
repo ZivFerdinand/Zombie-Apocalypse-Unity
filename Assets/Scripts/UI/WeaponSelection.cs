@@ -19,44 +19,44 @@ public class WeaponSelection : MonoBehaviour
     public float weaponNameDisplayDuration = 1.0f; // Duration to display the weapon name
 
     private bool currentA = true;
-    void Start()
+    void Awake()
     {
+        currentA = true;
         SelectWeaponChange();
     }
 
-    public void SelectAutomaticRifle()
+    private void Update()
     {
-        Debug.Log("Selecting Automatic Rifle");
-        LeanTween.scale(sniperImage, new Vector3(1.2f, 1.2f, 1.2f), 0.25f).setEaseInBack();
-        LeanTween.scale(autoImage, new Vector3(1f, 1f, 1f), 0.25f).setEaseInBack();
-        LeanTween.moveX(sniperIcon, sniperIcon.transform.position.x + 10, 0.1f).setEaseInBounce().setOnComplete(() => LeanTween.moveX(sniperIcon, sniperIcon.transform.position.x - 10, 0.2f).setEaseOutBounce());
-        StartCoroutine(Fade(1, 0, sniperText, 2)); 
-        StartCoroutine(Fade(1, 0.5f, autoImage, 1));
-        StartCoroutine(Fade(0.5f, 1, sniperImage, 1));
-    }
 
+    }
     public void SelectWeaponChange()
     {
         if (currentA)
         {
-            Debug.Log("Selecting Sniper");
             LeanTween.scale(autoImage, new Vector3(1.2f, 1.2f, 1.2f), 0.25f).setEaseInBack();
+            StartCoroutine(Fade(0.5f, 1, automaticRifleIcon, 0.5f));
+            StartCoroutine(Fade(1, 0.5f, sniperIcon, 0.5f));
             LeanTween.scale(sniperImage, new Vector3(1f, 1f, 1f), 0.25f).setEaseInBack();
             LeanTween.moveX(automaticRifleIcon, automaticRifleIcon.transform.position.x + 10, 0.1f).setEaseInBounce().setOnComplete(() => LeanTween.moveX(automaticRifleIcon, automaticRifleIcon.transform.position.x - 10, 0.2f).setEaseOutBounce());
-            StartCoroutine(Fade(1, 0, automaticText, 2));
-            StartCoroutine(Fade(1, 0.5f, sniperImage, 1));
-            StartCoroutine(Fade(0.5f, 1, autoImage, 1));
+            
+            StartCoroutine(Fade(1, 0, sniperText, 2));
+            StartCoroutine(Fade(0, 1, automaticText, 2));
+            StartCoroutine(Fade(1, 0.5f, sniperImage, 0.5f));
+            StartCoroutine(Fade(0.5f, 1, autoImage, 0.5f));
             currentA = !currentA;
         }
         else
         {
-            Debug.Log("Selecting Automatic Rifle");
-            LeanTween.scale(sniperImage, new Vector3(1.2f, 1.2f, 1.2f), 0.5f).setEaseInBack();
-            LeanTween.scale(autoImage, new Vector3(1f, 1f, 1f), 0.5f).setEaseInBack();
+            LeanTween.scale(sniperImage, new Vector3(1.2f, 1.2f, 1.2f), 0.25f).setEaseInBack();
+            StartCoroutine(Fade(0.5f, 1, sniperIcon, 0.5f));
+            StartCoroutine(Fade(1, 0.5f, automaticRifleIcon, 0.5f));
+            LeanTween.scale(autoImage, new Vector3(1f, 1f, 1f), 0.25f).setEaseInBack();
             LeanTween.moveX(sniperIcon, sniperIcon.transform.position.x + 10, 0.1f).setEaseInBounce().setOnComplete(() => LeanTween.moveX(sniperIcon, sniperIcon.transform.position.x - 10, 0.2f).setEaseOutBounce());
-            StartCoroutine(Fade(1, 0, sniperText, 2));
-            StartCoroutine(Fade(1, 0.5f, autoImage, 1));
-            StartCoroutine(Fade(0.5f, 1, sniperImage, 1));
+
+            StartCoroutine(Fade(1, 0, automaticText, 2));
+            StartCoroutine(Fade(0, 1, sniperText, 2));
+            StartCoroutine(Fade(1, 0.5f, autoImage, 0.5f));
+            StartCoroutine(Fade(0.5f, 1, sniperImage, 0.5f));
             currentA = !currentA;
         }
     }
@@ -70,6 +70,10 @@ public class WeaponSelection : MonoBehaviour
 
         while (m_timerCurrent <= fadeDuration)
         {
+            if (!currentA)
+                sniperText.color = new Color(255, 255, 255, 0);
+            else
+                automaticText.color = new Color(255, 255, 255, 0);  
             m_timerCurrent += Time.deltaTime;
             Color c = text.color;
             text.color = new Color(c.r, c.g, c.b, Mathf.Lerp(start, end, m_smoothCurve.Evaluate(m_timerCurrent / fadeDuration)));
@@ -82,6 +86,10 @@ public class WeaponSelection : MonoBehaviour
 
         while (m_timerCurrent <= fadeDuration)
         {
+            if (!currentA)
+                sniperText.color = new Color(255, 255, 255, 0);
+            else
+                automaticText.color = new Color(255, 255, 255, 0);
             m_timerCurrent += Time.deltaTime;
             Color c = icon.GetComponent<Image>().color;
             icon.GetComponent<Image>().color = new Color(c.r, c.g, c.b, Mathf.Lerp(start, end, m_smoothCurve.Evaluate(m_timerCurrent / fadeDuration)));
