@@ -18,6 +18,17 @@ namespace ZombieApocalypse
                 return (temp == 1) ? true : false;
             }
         }
-        
+        public static int gameMode
+        {
+            set
+            {
+
+            }
+            get
+            {
+                // Default is Normal
+                return gameMode;
+            }
+        }
     }
 }

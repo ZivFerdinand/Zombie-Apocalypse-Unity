@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 
 public class StartUIController : MonoBehaviour
 {
     public GameObject mainSc, creditSc;
+    public GameObject playButt, normButt, hardButt;
     public GameObject overlay;
+    public GameObject loadingCircle;
     private Vector2 creditScInitPos;
     private bool creditScActive;
     private List<Vector2> mainScChildInitPos;
+    private bool isLoading = false;
     public void Start()
     {
         creditScInitPos = creditSc.transform.position;
@@ -21,9 +25,16 @@ public class StartUIController : MonoBehaviour
         {
             mainScChildInitPos.Add(mainSc.transform.GetChild(i).transform.localPosition);
         }
+        normButt.SetActive(false);
+        hardButt.SetActive(false);
+        loadingCircle.SetActive(false);
     }
     public void Update()
     {
+        if(isLoading)
+        {
+            loadingCircle.transform.localEulerAngles = new Vector3(0, 0, loadingCircle.transform.localEulerAngles.z+50f*Time.deltaTime);
+        }
         if(creditScActive)
         {
             creditScActive = false;
@@ -32,7 +43,7 @@ public class StartUIController : MonoBehaviour
                 creditSc.transform.position = creditScInitPos;
                 for (int i = 0; i < mainSc.transform.childCount; i++)
                 {
-                    LeanTween.moveLocal(mainSc.transform.GetChild(i).gameObject, mainScChildInitPos[i], 1).setEaseOutBack();
+                    LeanTween.moveLocal(mainSc.transform.GetChild(i).gameObject, mainScChildInitPos[i], 0.5f).setEaseOutBack();
                 }
                 creditSc.SetActive(false);
                 StartCoroutine(Fade(0.5f, 0));
@@ -41,20 +52,37 @@ public class StartUIController : MonoBehaviour
     }
     public void onButtonClick(string name)
     {
-        if (name == "PlayButton")
-            SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
-        if (name == "CreditsButton")
+        if (!isLoading)
         {
-            StartCoroutine(Fade(0, 0.5f));
-            creditSc.SetActive(true);
-            for (int i = 0; i < mainSc.transform.childCount; i++)
+            if (name == "PlayButton")
             {
-                LeanTween.moveLocal(mainSc.transform.GetChild(i).gameObject, new Vector2(0, -1500), 1).setEaseInBack().setOnComplete(() => { creditScActive = true; });
+                playButt.SetActive(false);
+                normButt.SetActive(true);
+                hardButt.SetActive(true);
+                //SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
             }
-        }
-        if (name == "OptionsButton")
-        {
+            if (name == "NormalButton")
+            {
+                StartCoroutine(OnLoadScene(0));
 
+            }
+            if (name == "HardButton")
+            {
+                StartCoroutine(OnLoadScene(1));
+            }
+            if (name == "CreditsButton")
+            {
+                StartCoroutine(Fade(0, 0.5f));
+                creditSc.SetActive(true);
+                for (int i = 0; i < mainSc.transform.childCount; i++)
+                {
+                    LeanTween.moveLocal(mainSc.transform.GetChild(i).gameObject, new Vector2(0, -1500), 0.5f).setEaseInBack().setOnComplete(() => { creditScActive = true; });
+                }
+            }
+            if (name == "OptionsButton")
+            {
+
+            }
         }
     }
 
@@ -74,6 +102,15 @@ public class StartUIController : MonoBehaviour
             overlay.GetComponent<Image>().color = new Color(c.r, c.g, c.b, Mathf.Lerp(start, end, m_smoothCurve.Evaluate(m_timerCurrent / m_fadeDuration)));
             yield return m_skipFrame;
         }
-    }
 
+    }
+    private IEnumerator OnLoadScene(int diff)
+    {
+        isLoading = true;
+        loadingCircle.SetActive(true);
+        StartCoroutine(Fade(0, 1));
+        yield return new WaitForSeconds(1);
+        ZombieApocalypse.DatabaseStatus.gameMode = diff;
+        SceneManager.LoadSceneAsync("GameScene", LoadSceneMode.Single);
+    }
 }
