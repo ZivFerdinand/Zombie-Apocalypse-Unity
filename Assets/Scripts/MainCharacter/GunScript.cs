@@ -245,7 +245,7 @@ public class GunScript : MonoBehaviour {
 	void MeeleAttack(){	
 
 		if(!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetKeyDown(KeyCode.Q) && !meeleAttack){			
-			StartCoroutine("AnimationMeeleAttack");
+			// StartCoroutine("AnimationMeeleAttack");
 		}
 	}
 	/*

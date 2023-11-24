@@ -6,9 +6,9 @@ using UnityEngine;
 public class PlayerScore : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
-    private int score = 0;
+    public static int score = 0;
 
-    void Start()
+    void Update()
     {
         UpdateScoreText();
     }
@@ -22,6 +22,6 @@ public class PlayerScore : MonoBehaviour
 
     void UpdateScoreText()
     {
-        scoreText.text = score.ToString();
+        scoreText.text = "Score: " + score.ToString();
     }
 }

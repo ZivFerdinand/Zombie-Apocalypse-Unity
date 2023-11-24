@@ -12,7 +12,7 @@ public class SkillScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -23,6 +23,10 @@ public class SkillScript : MonoBehaviour
     private void UpdateEffect()
     {
         if (Input.GetKeyDown(KeyCode.E))
+        {
+            StartCurrent();
+        }
+        else if (Input.GetKeyDown(KeyCode.Q))
         {
             StartCurrent();
         }
@@ -81,7 +85,7 @@ public class SkillScript : MonoBehaviour
             // Set the forward direction of the projectile based on the camera's rotation
             projectileScript.SetForwardDirection(cameraForward);
         }
-        
+
         currentPrefabObject.transform.position = pos;
         currentPrefabObject.transform.rotation = rotation;
 
@@ -112,7 +116,7 @@ public class SkillScript : MonoBehaviour
         {
             currentPrefabIndex = 0;
         }
- //UpdateUI();
+        //UpdateUI();
     }
 
     public void PreviousPrefab()

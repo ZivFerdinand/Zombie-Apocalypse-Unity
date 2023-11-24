@@ -22,7 +22,7 @@ public class MouseLookScript : MonoBehaviour {
 	* Locking the mouse if pressing L.
 	* Triggering the headbob camera omvement if player is faster than 1 of speed
 	*/
-	void  Update(){
+	void Update(){
         if (!ZombieApocalypse.DatabaseStatus.isPaused)
             Cursor.lockState = CursorLockMode.Locked;
         else

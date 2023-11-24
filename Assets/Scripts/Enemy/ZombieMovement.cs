@@ -21,7 +21,7 @@ public class ZombieMovement : MonoBehaviour
     private float zombieHealth = 2f;
 
     public PlayerScore playerScoreScript;
-
+    private int scoreFlag = 0;
 
     void Start()
     {
@@ -30,7 +30,7 @@ public class ZombieMovement : MonoBehaviour
         zombieAnimation = GetComponent<Animator>();
         dieParticleEffect.SetActive(false);
     }
-    
+
     void Update()
     {
         attackInterval -= (attackInterval > 0) ? Time.deltaTime : 0;
@@ -45,7 +45,10 @@ public class ZombieMovement : MonoBehaviour
             dieParticleEffect.SetActive(true);
 
             if (transform.position.y < 0)
+            {
                 Destroy(this.gameObject);
+                scoreFlag = 0;
+            }
 
             if (timeToDestroy < 0)
             {
@@ -63,7 +66,7 @@ public class ZombieMovement : MonoBehaviour
 
             AttackPlayer();
         }
-        else if(Vector3.Distance(transform.position, player.position) <= detectionRadius)
+        else if (Vector3.Distance(transform.position, player.position) <= detectionRadius)
         {
             zombieAnimation.SetBool("isMoving", true);
             zombieAnimation.SetBool("isAttack", false);
@@ -103,6 +106,10 @@ public class ZombieMovement : MonoBehaviour
     public void decreaseHealth()
     {
         zombieHealth--;
-        if (zombieHealth < 0f) playerScoreScript.IncreaseScore(10);
+        if (zombieHealth < 0f && scoreFlag == 0)
+        {
+            PlayerScore.score += 10;
+            scoreFlag = 1;
+        }
     }
 }
