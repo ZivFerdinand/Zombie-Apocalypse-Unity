@@ -5739,11 +5739,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dieParticleEffect: {fileID: 554982076304843603}
-  player: {fileID: 479812, guid: c391f12a928274acab8576bb6030641d, type: 3}
-  detectionRadius: 20
-  attackradius: 2
-  attackInterval: 0
-  zombieDamage: 10
+  playerScoreScript: {fileID: 0}
+  lootModel:
+  - {fileID: 146310, guid: f244d85ca954f4336a1a7595053efbfc, type: 3}
+  - {fileID: 197236, guid: 4fc855fb7bf094a0891967175e5bdb17, type: 3}
+  - {fileID: 173500, guid: fb5a9652227c545d98a413cd73b80b69, type: 3}
+  dropChance: 20
 --- !u!1 &4956532458698703312
 GameObject:
   m_ObjectHideFlags: 0

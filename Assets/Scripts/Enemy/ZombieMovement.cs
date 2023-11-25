@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 public class ZombieMovement : MonoBehaviour
@@ -23,8 +24,9 @@ public class ZombieMovement : MonoBehaviour
     public PlayerScore playerScoreScript;
     private int scoreFlag = 0;
 
-    public GameObject lootModel;
+    public GameObject[] lootModel;
     public int dropChance;
+    private bool dropped = false;
 
     void Start()
     {
@@ -96,7 +98,6 @@ public class ZombieMovement : MonoBehaviour
             else
                 moveCD -= Time.deltaTime;
         }
-
     }
     void AttackPlayer()
     {
@@ -118,10 +119,21 @@ public class ZombieMovement : MonoBehaviour
         }
     }
 
+    
     public void dropLoot()
     {
-        Vector3 position = transform.position;
-        GameObject loot = Instantiate(lootModel, position + new Vector3(0.0f, 1.0f, 0.0f), Quaternion.identity);
-        loot.SetActive(true);
+
+        if (!dropped)
+        {
+            int random = Random.Range(1, 101); //random dropchance
+            if (random <= dropChance)
+            {
+                Vector3 position = transform.position; //enemy position
+                GameObject loot = Instantiate(lootModel[Random.Range(0, 3)], position + new Vector3(1.0f, 1.0f, 0.0f), Quaternion.identity);
+                loot.SetActive(true);
+                Destroy(loot, 15f);
+            }
+            dropped = true;
+        }
     }
 }
