@@ -434,7 +434,7 @@ public class GunScript : MonoBehaviour {
 		hitMarker.Play();
 	}
 
-	[Tooltip("Array of muzzel flashes, randmly one will appear after each bullet.")]
+    [Tooltip("Array of muzzel flashes, randmly one will appear after each bullet.")]
 	public GameObject[] muzzelFlash;
 	[Tooltip("Place on the gun where muzzel flash will appear.")]
 	public GameObject muzzelSpawn;
@@ -465,7 +465,7 @@ public class GunScript : MonoBehaviour {
 
 				waitTillNextFire = 1;
 				bulletsInTheGun -= 1;
-			}
+            }
 				
 			else{
 				//if(!aiming)
@@ -601,7 +601,7 @@ public class GunScript : MonoBehaviour {
 			handsAnimator.SetFloat("walkSpeed",pmS.currentSpeed);
 			handsAnimator.SetBool("aiming", Input.GetButton("Fire2"));
 			handsAnimator.SetInteger("maxSpeed", pmS.maxSpeed);
-			if(!ZombieApocalypse.DatabaseStatus.isPaused &&  Input.GetKeyDown(KeyCode.R) && pmS.maxSpeed < 5 && !reloading && !meeleAttack/* && !aiming*/){
+			if(!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetKeyDown(KeyCode.R) && pmS.maxSpeed < 5 && !reloading && !meeleAttack/* && !aiming*/){
 				StartCoroutine("Reload_Animation");
 			}
 		}

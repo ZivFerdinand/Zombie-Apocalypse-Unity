@@ -22,11 +22,11 @@ public class GunInventory : MonoBehaviour {
 
 	public WeaponSelection weaponSelection;
 
-	/*
+    /*
 	 * Calling the method that will update the icons of our guns if we carry any upon start.
 	 * Also will spawn a weapon upon start.
 	 */
-	void Awake(){
+    void Awake(){
 		StartCoroutine("UpdateIconsFromResources");
 
 		StartCoroutine ("SpawnWeaponUponStart");//to start with a gun
@@ -51,21 +51,21 @@ public class GunInventory : MonoBehaviour {
 	void Update(){
 
 		switchWeaponCooldown += 1 * Time.deltaTime;
-		if(!ZombieApocalypse.DatabaseStatus.isPaused && switchWeaponCooldown > 1.2f && Input.GetKey(KeyCode.LeftShift) == false){
+		if (!ZombieApocalypse.DatabaseStatus.isPaused && switchWeaponCooldown > 1.2f && Input.GetKey(KeyCode.LeftShift) == false)
+		{
 			Create_Weapon();
 		}
-
 	}
 
 
-	/*
+    /*
 	 * Grabing the icons from the Resources/Weapo_Icons/ -> gun name of the image.
 	 * (!!!!!!!1!READ IMPORTANT) 
 	 * the weapon image to respond the weapon must have the same name as the WEAPON  with the extension _img.
 	 * So if the gun prefab is called "Sniper_Piper" the corresponding image must be located in the location form previous,
 	 * with the name "Sniper_Piper_img".
 	 */
-	IEnumerator UpdateIconsFromResources(){
+    IEnumerator UpdateIconsFromResources(){
 		yield return new WaitForEndOfFrame ();
 
 		icons = new Texture[gunsIHave.Count];
@@ -130,15 +130,19 @@ public class GunInventory : MonoBehaviour {
 	 * This method is called from Create_Weapon() upon pressing arrow up/down or scrolling the mouse wheel,
 	 * It will check if we carry a gun and destroy it, and its then going to load a gun prefab from our Resources Folder.
 	 */
-	IEnumerator Spawn(int _redniBroj){
+	IEnumerator Spawn(int _redniBroj)
+	{
 		if (weaponChanging)
-			weaponChanging.Play ();
+			weaponChanging.Play();
 		else
-			print ("Missing Weapon Changing music clip.");
-		if(currentGun){
-			if(currentGun.name.Contains("Gun")){
+			print("Missing Weapon Changing music clip.");
 
-				currentHAndsAnimator.SetBool("changingWeapon", true);
+		if (currentGun)
+		{
+			if (currentGun.name.Contains("Gun"))
+			{
+                Debug.Log("Gun");
+                currentHAndsAnimator.SetBool("changingWeapon", true);
 
 				yield return new WaitForSeconds(0.8f);//0.8 time to change waepon, but since there is no change weapon animation there is no need to wait fo weapon taken down
 				Destroy(currentGun);
@@ -147,7 +151,9 @@ public class GunInventory : MonoBehaviour {
 				currentGun = (GameObject) Instantiate(resource, transform.position, /*gameObject.transform.rotation*/Quaternion.identity);
 				AssignHandsAnimator(currentGun);
 			}
-			else if(currentGun.name.Contains("Sword")){
+			else if (currentGun.name.Contains("Sword"))
+			{
+				Debug.Log("Sword");
 				currentHAndsAnimator.SetBool("changingWeapon", true);
 				yield return new WaitForSeconds(0.25f);//0.5f
 
@@ -161,7 +167,8 @@ public class GunInventory : MonoBehaviour {
 				AssignHandsAnimator(currentGun);
 			}
 		}
-		else{
+		else
+		{
 			GameObject resource = (GameObject) Resources.Load(gunsIHave[_redniBroj].ToString());
 			currentGun = (GameObject) Instantiate(resource, transform.position, /*gameObject.transform.rotation*/Quaternion.identity);
 
