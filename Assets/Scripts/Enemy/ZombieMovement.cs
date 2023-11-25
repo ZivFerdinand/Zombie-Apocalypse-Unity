@@ -23,6 +23,9 @@ public class ZombieMovement : MonoBehaviour
     public PlayerScore playerScoreScript;
     private int scoreFlag = 0;
 
+    public GameObject lootModel;
+    public int dropChance;
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -43,6 +46,7 @@ public class ZombieMovement : MonoBehaviour
             timeToDestroy -= Time.deltaTime;
 
             dieParticleEffect.SetActive(true);
+            dropLoot();
 
             if (transform.position.y < 0)
             {
@@ -57,6 +61,7 @@ public class ZombieMovement : MonoBehaviour
             }
             else
                 zombieMeshAgent.SetDestination(transform.position);
+
         }
         else if (Vector3.Distance(transform.position, player.position) <= attackradius)
         {
@@ -111,5 +116,12 @@ public class ZombieMovement : MonoBehaviour
             PlayerScore.score += 10;
             scoreFlag = 1;
         }
+    }
+
+    public void dropLoot()
+    {
+        Vector3 position = transform.position;
+        GameObject loot = Instantiate(lootModel, position + new Vector3(0.0f, 1.0f, 0.0f), Quaternion.identity);
+        loot.SetActive(true);
     }
 }
