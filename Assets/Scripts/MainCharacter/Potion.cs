@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Potion : MonoBehaviour
 {
-    public AudioSource source;
 
     private void Update()
     {
@@ -14,18 +13,12 @@ public class Potion : MonoBehaviour
     {
         PlayerInventory playerInventory = other.GetComponent<PlayerInventory>();
 
-        if (playerInventory != null)
+        if (playerInventory != null && other.gameObject.tag == "Player")
         {
             playerInventory.PotionCollected();
-            source.Play();
-            StartCoroutine(SelfDestruct());
+
+            Destroy(gameObject);
         }
     }
 
-    IEnumerator SelfDestruct()
-    {
-        yield return new WaitForSeconds(0.6f);
-        Destroy(gameObject);
-        Destroy(source);
-    }
 }

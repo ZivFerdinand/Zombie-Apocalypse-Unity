@@ -22,7 +22,7 @@ public class ZombieDemo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(transform.position.x >= 15)
+        if(transform.position.x >= 20)
         {
             resetPosition();
         }
@@ -30,11 +30,11 @@ public class ZombieDemo : MonoBehaviour
     void resetPosition()
     {
         speed = Random.Range(1f, 3f);
-        transform.position = new Vector3(-15f, -1.8f, transform.position.z);
+        transform.position = new Vector3(-20f, -1.8f, transform.position.z);
         setDes();
     }
     void setDes()
     {
-        navMeshAgent.SetDestination(new Vector3(16, transform.position.y, transform.position.z));
+        navMeshAgent.SetDestination(new Vector3(22, transform.position.y, transform.position.z));
     }
 }

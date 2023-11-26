@@ -324,7 +324,15 @@ public class PlayerMovementScript : MonoBehaviour {
 			}
 		} 
 	}
-	private GameObject myBloodEffect;
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Potion")
+        {
+			_pickPotion.Play();
+        }
+    }
+    
+    private GameObject myBloodEffect;
 
 
 	[Header("Player SOUNDS")]
@@ -338,5 +346,6 @@ public class PlayerMovementScript : MonoBehaviour {
 	public AudioSource _walkSound;
 	[Tooltip("Run Sound player makes.")]
 	public AudioSource _runSound;
+	public AudioSource _pickPotion;
 }
 

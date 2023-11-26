@@ -244,10 +244,10 @@ public class GunScript : MonoBehaviour {
 	*/
 	void MeeleAttack(){	
 
-		if(!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetKeyDown(KeyCode.Q) && !meeleAttack){			
-			// StartCoroutine("AnimationMeeleAttack");
-		}
-	}
+		if(!ZombieApocalypse.DatabaseStatus.isPaused && (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.E)) && !meeleAttack){
+            StartCoroutine("AnimationMeeleAttack");
+        }
+    }
 	/*
 	* Sets meele animation to play.
 	*/

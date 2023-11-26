@@ -19,10 +19,9 @@ public class WeaponSelection : MonoBehaviour
     public float weaponNameDisplayDuration = 1.0f; // Duration to display the weapon name
 
     private bool currentA = true;
-    void Awake()
+    void Start()
     {
-        currentA = true;
-        SelectWeaponChange();
+        currentA = false;
     }
 
     private void Update()
@@ -41,8 +40,8 @@ public class WeaponSelection : MonoBehaviour
             
             StartCoroutine(Fade(1, 0, sniperText, 2));
             StartCoroutine(Fade(0, 1, automaticText, 2));
-            StartCoroutine(Fade(1, 0.5f, sniperImage, 0.5f));
             StartCoroutine(Fade(0.5f, 1, autoImage, 0.5f));
+            StartCoroutine(Fade(1, 0.5f, sniperImage, 0.5f));
             currentA = !currentA;
         }
         else

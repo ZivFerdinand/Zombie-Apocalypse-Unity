@@ -2,23 +2,53 @@ using DigitalRuby.PyroParticles;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+
 
 public class SkillScript : MonoBehaviour
 {
     public GameObject[] Prefabs;
+    public GameObject customCrosshair;
+    public TextMeshProUGUI skillTimeText;
     private GameObject currentPrefabObject;
     private FireBaseScript currentPrefabScript;
     private int currentPrefabIndex;
 
-    // Start is called before the first frame update
+    private const float initAimingTime = 5f;
+    private float aimingTimeLeft;
+    private bool isAimingSkill;
     void Start()
     {
-
+        isAimingSkill = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        customCrosshair.SetActive(isAimingSkill);
+        if (isAimingSkill)
+        {
+            aimingTimeLeft -= Time.deltaTime / 0.25f;
+            if(aimingTimeLeft > 0)
+            {
+                skillTimeText.text = aimingTimeLeft.ToString("F2") + "s";
+            }
+            else
+            {
+                skillTimeText.text = "";
+            }
+        }
+        else
+        {
+            skillTimeText.text = "";
+        }
+        if(aimingTimeLeft < 0 && isAimingSkill)
+        {
+            StartCurrent();
+        }
+        if(Input.GetKeyDown(KeyCode.Escape) && !ZombieApocalypse.DatabaseStatus.isPaused && isAimingSkill)
+        {
+            StartCurrent();
+        }
         UpdateEffect();
     }
 
@@ -26,11 +56,20 @@ public class SkillScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            StartCurrent();
+            SetAiming();
         }
-        else if (Input.GetKeyDown(KeyCode.Q))
+        else if(Input.GetKeyUp(KeyCode.E) && isAimingSkill)
         {
             StartCurrent();
+        }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            SetAiming();
+        }
+        else if (Input.GetKeyUp(KeyCode.Q) && isAimingSkill)
+        {
+            StartCurrent();
+
         }
         else if (Input.GetKeyDown(KeyCode.Plus) || Input.GetKeyDown(KeyCode.KeypadPlus))
         {
@@ -90,8 +129,16 @@ public class SkillScript : MonoBehaviour
         currentPrefabObject.transform.rotation = rotation;
     }
 
+    public void SetAiming()
+    {
+        isAimingSkill = true;
+        Time.timeScale = 0.25f;
+        aimingTimeLeft = initAimingTime;
+    }
     public void StartCurrent()
     {
+        Time.timeScale = 1f;
+        isAimingSkill = false;
         StopCurrent();
         BeginEffect();
     }

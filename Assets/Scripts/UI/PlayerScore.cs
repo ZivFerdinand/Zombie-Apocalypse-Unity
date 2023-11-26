@@ -22,6 +22,6 @@ public class PlayerScore : MonoBehaviour
 
     void UpdateScoreText()
     {
-        scoreText.text = "Score: " + score.ToString();
+        scoreText.text = score.ToString("D10");
     }
 }
