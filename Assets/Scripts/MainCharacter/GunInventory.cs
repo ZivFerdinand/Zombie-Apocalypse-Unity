@@ -59,7 +59,7 @@ public class GunInventory : MonoBehaviour
             AssignHandsAnimator(currentGun);
 
             currentGunCounter = index;
-            weaponSelection.SelectWeaponChange();
+            //weaponSelection.SelectWeaponChange();
         }
     }
 
