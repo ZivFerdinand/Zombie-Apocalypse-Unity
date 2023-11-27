@@ -16,11 +16,31 @@ namespace DigitalRuby.PyroParticles
     /// </summary>
     public class FireCollisionForwardScript : MonoBehaviour
     {
+        private SkillScript skillScript;
         public ICollisionHandler CollisionHandler;
-
+        private void Start()
+        {
+            skillScript = GameObject.FindGameObjectWithTag("Player").GetComponent<SkillScript>();   
+        }
         public void OnCollisionEnter(Collision col)
         {
             CollisionHandler.HandleCollision(gameObject, col);
+            
+                if (col.gameObject.tag == "Zombie")
+                {
+                if (col.gameObject.GetComponent<ZombieMovement>() != null)
+                {
+                    if (skillScript.currentPrefabIndex==0)
+                    {
+
+                        col.gameObject.GetComponent<ZombieMovement>().decreaseHealth(3);
+                    }
+                    else
+                    {
+                        col.gameObject.GetComponent<ZombieMovement>().slowSpeed();
+                    }
+                }   
+                }
         }
     }
 }

@@ -5724,8 +5724,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.0174687, y: 2.502987, z: 0.92132795}
+  m_Center: {x: 0.008733591, y: 0.75148743, z: -0.03933748}
 --- !u!114 &6684376608827670095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5739,7 +5739,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dieParticleEffect: {fileID: 554982076304843603}
-  playerScoreScript: {fileID: 0}
   lootModel:
   - {fileID: 146310, guid: f244d85ca954f4336a1a7595053efbfc, type: 3}
   - {fileID: 197236, guid: 4fc855fb7bf094a0891967175e5bdb17, type: 3}
@@ -5903,7 +5902,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1.5538452, y: 0.6195049, z: 1.9223609}
   m_Center: {x: 0.059625268, y: -0.07798764, z: 0.9143176}
@@ -6370,7 +6369,7 @@ GameObject:
   - component: {fileID: 6201095571783922607}
   m_Layer: 0
   m_Name: Base HumanPelvis
-  m_TagString: Untagged
+  m_TagString: Zombie
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

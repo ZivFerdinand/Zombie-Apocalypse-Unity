@@ -12,10 +12,10 @@ public class SkillScript : MonoBehaviour
     public GameObject[] Prefabs;
     public GameObject customCrosshair;
     public TextMeshProUGUI skillTimeText;
+    public int currentPrefabIndex;
 
     private GameObject currentPrefabObject;
     private FireBaseScript currentPrefabScript;
-    private int currentPrefabIndex;
     
     private float aimingTimeLeft;
     private bool isAimingSkill;
@@ -83,6 +83,7 @@ public class SkillScript : MonoBehaviour
         {
             PreviousPrefab();
         }
+
     }
 
     private void BeginEffect()
@@ -93,7 +94,7 @@ public class SkillScript : MonoBehaviour
         Quaternion rotation = Quaternion.identity;
         currentPrefabObject = GameObject.Instantiate(Prefabs[currentPrefabIndex]);
         currentPrefabScript = currentPrefabObject.GetComponent<FireConstantBaseScript>();
-
+        
         if (currentPrefabScript == null)
         {
             // temporary effect, like a fireball

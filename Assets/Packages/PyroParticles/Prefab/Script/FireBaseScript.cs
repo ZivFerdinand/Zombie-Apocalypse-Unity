@@ -83,7 +83,7 @@ namespace DigitalRuby.PyroParticles
             int fireLayer = UnityEngine.LayerMask.NameToLayer("FireLayer");
             UnityEngine.Physics.IgnoreLayerCollision(fireLayer, fireLayer);
         }
-
+        
         protected virtual void Start()
         {
             if (AudioSource != null)
@@ -162,6 +162,7 @@ namespace DigitalRuby.PyroParticles
                 if (r != null)
                 {
                     r.AddExplosionForce(force, pos, radius);
+                    Debug.Log("meledak");
                 }
             }
         }
@@ -206,5 +207,6 @@ namespace DigitalRuby.PyroParticles
             get;
             private set;
         }
+        
     }
 }

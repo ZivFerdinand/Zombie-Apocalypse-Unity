@@ -81,7 +81,10 @@ public class ZombieMovement : MonoBehaviour
             setWalkAround();
         }
     }
-
+    public void slowSpeed()
+    {
+        zombieMeshAgent.speed = 0.2f;
+    }
     public void decreaseHealth(int amount)
     {
         zombieHealth -= amount;
