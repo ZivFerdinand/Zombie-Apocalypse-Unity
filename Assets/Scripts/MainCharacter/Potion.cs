@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Potion : MonoBehaviour
 {
-
     private void Update()
     {
         transform.localRotation = Quaternion.Euler(-60f, Time.time * 100f, 0);

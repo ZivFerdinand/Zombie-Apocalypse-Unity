@@ -122,7 +122,7 @@ public class GunScript : MonoBehaviour {
 		 * Changing some values if we are aiming, like sensitity, zoom racion and position of the waepon.
 		 */
 		//if aiming
-		if(!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetAxis("Fire2") != 0 && !reloading && !meeleAttack){
+		if(!ZombieApocalypse.GameStatus.isPaused && Input.GetAxis("Fire2") != 0 && !reloading && !meeleAttack){
 			gunPrecision = gunPrecision_aiming;
 			recoilAmount_x = recoilAmount_x_;
 			recoilAmount_y = recoilAmount_y_;
@@ -165,42 +165,23 @@ public class GunScript : MonoBehaviour {
 	 * Used to expand position of the crosshair or make it dissapear when running
 	 */
 	void CrossHairFadeout(){
-        if (!ZombieApocalypse.DatabaseStatus.isPaused && player.GetComponent<Rigidbody>().velocity.magnitude > 1 && Input.GetAxis("Fire1") == 0)
+        if (!ZombieApocalypse.GameStatus.isPaused && player.GetComponent<Rigidbody>().velocity.magnitude > 1 && Input.GetAxis("Fire1") == 0)
         {//ifnot shooting
 
 			if (player.GetComponent<PlayerMovementScript>().maxSpeed < runningSpeed)
             { //not running
 				if (crosshair.color.a == 0)
 				{
-					StartCoroutine(Fade(0, 1f));
+					StartCoroutine(CustomFadeAnimator.Fade(crosshair, 0, 1, 0.25f));
 				}
             }
             else
             {//running
                 if (crosshair.color.a == 1)
 				{
-                    StartCoroutine(Fade(1f, 0));
-
+					StartCoroutine(CustomFadeAnimator.Fade(crosshair, 1, 0, 0.25f));
 				}
             }
-        }
-    }
-
-    private float m_timerCurrent;
-    private float m_fadeDuration = 0.25f;
-    public AnimationCurve m_smoothCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0f, 0f), new Keyframe(1f, 1f) });
-    private readonly WaitForSeconds m_skipFrame = new WaitForSeconds(0.01f);
-
-    private IEnumerator Fade(float start, float end)
-    {
-        m_timerCurrent = 0f;
-
-        while (m_timerCurrent <= m_fadeDuration)
-        {
-            m_timerCurrent += Time.deltaTime;
-            Color c = crosshair.GetComponent<Image>().color;
-            crosshair.color = new Color(c.r, c.g, c.b, Mathf.Lerp(start, end, m_smoothCurve.Evaluate(m_timerCurrent / m_fadeDuration)));
-            yield return m_skipFrame;
         }
     }
 
@@ -210,7 +191,7 @@ public class GunScript : MonoBehaviour {
 	 */
     void Sprint(){// Running();  so i can find it with CTRL + F
 		if (Input.GetAxis ("Vertical") > 0 && Input.GetAxisRaw ("Fire2") == 0 && meeleAttack == false && Input.GetAxisRaw ("Fire1") == 0) {
-			if (!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetKey (KeyCode.LeftShift)) {
+			if (!ZombieApocalypse.GameStatus.isPaused && Input.GetKey (KeyCode.LeftShift)) {
 					pmS.maxSpeed = runningSpeed;
 			}
 			else
@@ -244,7 +225,7 @@ public class GunScript : MonoBehaviour {
 	*/
 	void MeeleAttack(){	
 
-		if(!ZombieApocalypse.DatabaseStatus.isPaused && (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.E)) && !meeleAttack){
+		if(!ZombieApocalypse.GameStatus.isPaused && (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.E)) && !meeleAttack){
             StartCoroutine("AnimationMeeleAttack");
         }
     }
@@ -364,7 +345,7 @@ public class GunScript : MonoBehaviour {
 	 */
 	void Shooting(){
 
-		if (!ZombieApocalypse.DatabaseStatus.isPaused && !meeleAttack) {
+		if (!ZombieApocalypse.GameStatus.isPaused && !meeleAttack) {
 			if (currentStyle == GunStyles.nonautomatic) {
 				if (Input.GetButtonDown ("Fire1")) {
 					ShootMethod ();
@@ -577,7 +558,7 @@ public class GunScript : MonoBehaviour {
 	 * Drawing the crossHair.
 	 */
     void DrawCrosshair(){
-		if(!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetAxis("Fire2") == 0){//if not aiming draw
+		if(!ZombieApocalypse.GameStatus.isPaused && Input.GetAxis("Fire2") == 0){//if not aiming draw
             crosshair.gameObject.SetActive(true);
             //GUI.DrawTexture(new Rect(Screen.width/2 - vec2(size_crosshair).x/2, Screen.height/2 - vec2(size_crosshair).y/2, vec2(size_crosshair).x, vec2(size_crosshair).y), dotCrosshair);
 		}
@@ -601,7 +582,7 @@ public class GunScript : MonoBehaviour {
 			handsAnimator.SetFloat("walkSpeed",pmS.currentSpeed);
 			handsAnimator.SetBool("aiming", Input.GetButton("Fire2"));
 			handsAnimator.SetInteger("maxSpeed", pmS.maxSpeed);
-			if(!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetKeyDown(KeyCode.R) && pmS.maxSpeed < 5 && !reloading && !meeleAttack/* && !aiming*/){
+			if(!ZombieApocalypse.GameStatus.isPaused && Input.GetKeyDown(KeyCode.R) && pmS.maxSpeed < 5 && !reloading && !meeleAttack/* && !aiming*/){
 				StartCoroutine("Reload_Animation");
 			}
 		}

@@ -6,22 +6,13 @@ using UnityEngine;
 public class PlayerScore : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
-    public static int score = 0;
 
-    void Update()
+    private void Update()
     {
         UpdateScoreText();
     }
-
-    // Call this method when the player kills a zombie to increase the score
-    public void IncreaseScore(int amount)
+    private void UpdateScoreText()
     {
-        score += amount;
-        UpdateScoreText();
-    }
-
-    void UpdateScoreText()
-    {
-        scoreText.text = score.ToString("D10");
+        scoreText.text = ZombieApocalypse.GameData.gameScore.ToString("D10");
     }
 }

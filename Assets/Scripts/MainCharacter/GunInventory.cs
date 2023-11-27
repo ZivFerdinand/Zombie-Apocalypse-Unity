@@ -67,7 +67,7 @@ public class GunInventory : MonoBehaviour
     {
         switchWeaponCooldown += 1 * Time.deltaTime;
 
-        if (!ZombieApocalypse.DatabaseStatus.isPaused && switchWeaponCooldown > 1.2f && !Input.GetKey(KeyCode.LeftShift))
+        if (!ZombieApocalypse.GameStatus.isPaused && switchWeaponCooldown > 1.2f && !Input.GetKey(KeyCode.LeftShift))
         {
             ChangeWeapon();
         }
@@ -75,12 +75,11 @@ public class GunInventory : MonoBehaviour
 
     void ChangeWeapon()
     {
-        if (!ZombieApocalypse.DatabaseStatus.isPaused)
+        if (!ZombieApocalypse.GameStatus.isPaused)
         {
             if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetAxis("Mouse ScrollWheel") > 0)
             {
                 switchWeaponCooldown = 0;
-                // currentGunCounter = (currentGunCounter + 1) % gunsIHave.Count;
                 currentGunCounter++;
                 if (currentGunCounter > gunsIHave.Count - 1)
                 {
@@ -94,7 +93,6 @@ public class GunInventory : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetAxis("Mouse ScrollWheel") < 0)
             {
                 switchWeaponCooldown = 0;
-                // currentGunCounter = (currentGunCounter - 1 + gunsIHave.Count) % gunsIHave.Count;
                 currentGunCounter--;
                 if (currentGunCounter < 0)
                 {

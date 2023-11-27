@@ -4,58 +4,55 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+
 public class ZombieMovement : MonoBehaviour
 {
+    public GameObject dieParticleEffect;
+    public GameObject[] lootModel;
+    public int dropChance;
+
     private const float detectionRadius = 20f;
-    private float attackradius = 2f;
+    private const float attackradius = 2f;
     private const float attackCoolDown = 1f;
     private const int zombieDamage = 10;
 
-    public GameObject dieParticleEffect;
     private Transform player;
+    private PlayerHealth playerHealth;
     private NavMeshAgent zombieMeshAgent;
     private Animator zombieAnimation;
 
     private float attackInterval = 1f;
-    private float moveCD = -1f;
+    private float moveCooldown = -1f;
     private float timeToDestroy = 3.5f;
     private float zombieHealth = 2f;
+    private bool scoreAndLootFlag = false;
 
-    public PlayerScore playerScoreScript;
-    private int scoreFlag = 0;
 
-    public GameObject[] lootModel;
-    public int dropChance;
-    private bool dropped = false;
-
-    void Start()
+    private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        playerHealth = player.GetComponent<PlayerHealth>();
         zombieMeshAgent = GetComponent<NavMeshAgent>();
         zombieAnimation = GetComponent<Animator>();
+
         dieParticleEffect.SetActive(false);
     }
 
-    void Update()
+    private void Update()
     {
         attackInterval -= (attackInterval > 0) ? Time.deltaTime : 0;
-        if (zombieHealth < 0f)
+
+        float zombiePlayerDistance = Vector3.Distance(transform.position, player.position);
+        if (transform.position.y < 0)
         {
-            zombieAnimation.SetBool("isAttack", false);
-            zombieAnimation.SetBool("isMoving", false);
-            zombieAnimation.SetBool("isDead", true);
+            Destroy(gameObject);
+        }
+        else if (zombieHealth < 0f)
+        {
+            setAttackMovingDead(false, false, true);
 
             timeToDestroy -= Time.deltaTime;
-
-            dieParticleEffect.SetActive(true);
-            dropLoot();
-
-            if (transform.position.y < 0)
-            {
-                Destroy(this.gameObject);
-                scoreFlag = 0;
-            }
-
             if (timeToDestroy < 0)
             {
                 transform.position = new Vector3(transform.position.x, transform.position.y - 1.5f * Time.deltaTime, transform.position.z);
@@ -65,75 +62,77 @@ public class ZombieMovement : MonoBehaviour
                 zombieMeshAgent.SetDestination(transform.position);
 
         }
-        else if (Vector3.Distance(transform.position, player.position) <= attackradius)
+        else if (zombiePlayerDistance <= attackradius)
         {
-            zombieAnimation.SetBool("isAttack", true);
-            zombieAnimation.SetBool("isMoving", false);
-            zombieAnimation.SetBool("isDead", false);
+            setAttackMovingDead(true, false, false);
 
-            AttackPlayer();
+            attackPlayer();
         }
-        else if (Vector3.Distance(transform.position, player.position) <= detectionRadius)
+        else if (zombiePlayerDistance <= detectionRadius)
         {
-            zombieAnimation.SetBool("isMoving", true);
-            zombieAnimation.SetBool("isAttack", false);
-            zombieAnimation.SetBool("isDead", false);
+            setAttackMovingDead(false, true, false);
 
             zombieMeshAgent.SetDestination(player.position);
         }
         else
         {
-            zombieAnimation.SetBool("isMoving", false);
-            zombieAnimation.SetBool("isAttack", false);
-            zombieAnimation.SetBool("isDead", false);
+            setAttackMovingDead(false, false, false);
 
-            if (moveCD < 0f)
-            {
-                float randX = Random.Range(-100f, 100f);
-                float randZ = Random.Range(-100f, 100f);
-
-                zombieMeshAgent.SetDestination(new Vector3(randX + transform.position.x, transform.position.y, randZ + transform.position.z));
-                moveCD = Random.Range(10f, 15f);
-            }
-            else
-                moveCD -= Time.deltaTime;
+            setWalkAround();
         }
     }
-    void AttackPlayer()
+
+    public void decreaseHealth(int amount)
+    {
+        zombieHealth -= amount;
+
+        if (zombieHealth < 0f && !scoreAndLootFlag)
+        {
+            dieParticleEffect.SetActive(true);
+            dropLoot();
+
+            ZombieApocalypse.GameData.gameScore += 10;
+            scoreAndLootFlag = true;
+        }
+    }
+    private void setWalkAround()
+    {
+        if (moveCooldown < 0f)
+        {
+            float randX = Random.Range(-100f, 100f);
+            float randZ = Random.Range(-100f, 100f);
+
+            zombieMeshAgent.SetDestination(new Vector3(randX + transform.position.x, transform.position.y, randZ + transform.position.z));
+
+            moveCooldown = Random.Range(10f, 15f);
+        }
+        else
+            moveCooldown -= Time.deltaTime;
+    }
+    private void attackPlayer()
     {
         if (attackInterval < 0)
         {
-            PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
-
             playerHealth.damagePlayer(zombieDamage);
             attackInterval = attackCoolDown;
         }
     }
-    public void decreaseHealth()
+    private void dropLoot()
     {
-        zombieHealth--;
-        if (zombieHealth < 0f && scoreFlag == 0)
+        int random = Random.Range(1, 101); 
+        if (random <= dropChance)
         {
-            PlayerScore.score += 10;
-            scoreFlag = 1;
+            GameObject loot = Instantiate(lootModel[Random.Range(0, lootModel.Length)], 
+                                            transform.position + new Vector3(1.0f, 1.0f, 0.0f), 
+                                            Quaternion.identity);
+            loot.SetActive(true);
+            Destroy(loot, 15f);
         }
     }
-
-    
-    public void dropLoot()
+    private void setAttackMovingDead(bool a, bool b, bool c)
     {
-
-        if (!dropped)
-        {
-            int random = Random.Range(1, 101); //random dropchance
-            if (random <= dropChance)
-            {
-                Vector3 position = transform.position; //enemy position
-                GameObject loot = Instantiate(lootModel[Random.Range(0, 3)], position + new Vector3(1.0f, 1.0f, 0.0f), Quaternion.identity);
-                loot.SetActive(true);
-                Destroy(loot, 15f);
-            }
-            dropped = true;
-        }
+        zombieAnimation.SetBool("isAttack", a);
+        zombieAnimation.SetBool("isMoving", b);
+        zombieAnimation.SetBool("isDead", c);
     }
 }

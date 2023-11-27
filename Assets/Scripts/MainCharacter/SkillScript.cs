@@ -7,14 +7,16 @@ using TMPro;
 
 public class SkillScript : MonoBehaviour
 {
+    private const float initAimingTime = 5f;
+
     public GameObject[] Prefabs;
     public GameObject customCrosshair;
     public TextMeshProUGUI skillTimeText;
+
     private GameObject currentPrefabObject;
     private FireBaseScript currentPrefabScript;
     private int currentPrefabIndex;
-
-    private const float initAimingTime = 5f;
+    
     private float aimingTimeLeft;
     private bool isAimingSkill;
     void Start()
@@ -45,7 +47,7 @@ public class SkillScript : MonoBehaviour
         {
             StartCurrent();
         }
-        if(Input.GetKeyDown(KeyCode.Escape) && !ZombieApocalypse.DatabaseStatus.isPaused && isAimingSkill)
+        if(Input.GetKeyDown(KeyCode.Escape) && !ZombieApocalypse.GameStatus.isPaused && isAimingSkill)
         {
             StartCurrent();
         }
@@ -56,6 +58,7 @@ public class SkillScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
+            currentPrefabIndex = 0;
             SetAiming();
         }
         else if(Input.GetKeyUp(KeyCode.E) && isAimingSkill)
@@ -64,6 +67,7 @@ public class SkillScript : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Q))
         {
+            currentPrefabIndex = 1;
             SetAiming();
         }
         else if (Input.GetKeyUp(KeyCode.Q) && isAimingSkill)

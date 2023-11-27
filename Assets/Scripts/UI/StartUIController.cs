@@ -8,46 +8,56 @@ using TMPro;
 
 public class StartUIController : MonoBehaviour
 {
+    private const float loadingRotateSpeed = 50f;
     public GameObject mainSc, creditSc;
     public GameObject playButt, normButt, hardButt;
     public GameObject overlay;
     public GameObject loadingCircle;
-    private Vector2 creditScInitPos;
-    private bool creditScActive;
+
     private List<Vector2> mainScChildInitPos;
-    private bool isLoading = false;
-    public void Start()
+    private Vector2 creditScInitPos;
+
+    private bool creditScActive;
+    private bool isLoading;
+
+    private void Start()
     {
         creditScInitPos = creditSc.transform.position;
+        isLoading = false;
         creditScActive = false;
         mainScChildInitPos = new List<Vector2>();
-        for (int i = 0; i < mainSc.transform.childCount; i++)
+
+        foreach (Transform child in mainSc.transform)
         {
-            mainScChildInitPos.Add(mainSc.transform.GetChild(i).transform.localPosition);
+            mainScChildInitPos.Add(child.localPosition);
         }
+
         normButt.SetActive(false);
         hardButt.SetActive(false);
         loadingCircle.SetActive(false);
     }
-    public void Update()
+    private void Update()
     {
         if(isLoading)
-        {
-            loadingCircle.transform.localEulerAngles = new Vector3(0, 0, loadingCircle.transform.localEulerAngles.z+50f*Time.deltaTime);
-        }
+            loadingCircle.transform.localEulerAngles += new Vector3(0, 0, loadingRotateSpeed * Time.deltaTime);
+
         if(creditScActive)
         {
             creditScActive = false;
-            LeanTween.moveLocal(creditSc, new Vector2(0, 1870), 15f).setOnComplete(() => 
+            LeanTween.moveLocal(creditSc, new Vector2(0, 1870), 15f)
+            .setOnComplete(() =>
             {
                 creditSc.transform.position = creditScInitPos;
-                for (int i = 0; i < mainSc.transform.childCount; i++)
+
+                foreach (Transform child in mainSc.transform)
                 {
-                    LeanTween.moveLocal(mainSc.transform.GetChild(i).gameObject, mainScChildInitPos[i], 0.5f).setEaseOutBack();
+                    LeanTween.moveLocal(child.gameObject, mainScChildInitPos[child.GetSiblingIndex()], 0.5f).setEaseOutBack();
                 }
+
                 creditSc.SetActive(false);
-                StartCoroutine(Fade(0.5f, 0));
+                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0.5f, 0, 1));
             });
+
         }
     }
     public void onButtonClick(string name)
@@ -59,7 +69,6 @@ public class StartUIController : MonoBehaviour
                 playButt.SetActive(false);
                 normButt.SetActive(true);
                 hardButt.SetActive(true);
-                //SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
             }
             if (name == "NormalButton")
             {
@@ -72,12 +81,14 @@ public class StartUIController : MonoBehaviour
             }
             if (name == "CreditsButton")
             {
-                StartCoroutine(Fade(0, 0.5f));
+                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0f, 0.5f, 1));
                 creditSc.SetActive(true);
-                for (int i = 0; i < mainSc.transform.childCount; i++)
+
+                foreach (Transform child in mainSc.transform)
                 {
-                    LeanTween.moveLocal(mainSc.transform.GetChild(i).gameObject, new Vector2(0, -1500), 0.5f).setEaseInBack().setOnComplete(() => { creditScActive = true; });
+                    LeanTween.moveLocal(child.gameObject, new Vector2(0, -1500), 0.5f).setEaseInBack().setOnComplete(() => creditScActive = true);
                 }
+
             }
             if (name == "OptionsButton")
             {
@@ -86,31 +97,18 @@ public class StartUIController : MonoBehaviour
         }
     }
 
-    private float m_timerCurrent;
-    private float m_fadeDuration = 1f;
-    public AnimationCurve m_smoothCurve = new AnimationCurve(new Keyframe[] { new Keyframe(0f, 0f), new Keyframe(1f, 1f) });
-    private readonly WaitForSeconds m_skipFrame = new WaitForSeconds(0.01f);
-
-    private IEnumerator Fade(float start, float end)
-    {
-        m_timerCurrent = 0f;
-
-        while (m_timerCurrent <= m_fadeDuration)
-        {
-            m_timerCurrent += Time.deltaTime;
-            Color c = overlay.GetComponent<Image>().color;
-            overlay.GetComponent<Image>().color = new Color(c.r, c.g, c.b, Mathf.Lerp(start, end, m_smoothCurve.Evaluate(m_timerCurrent / m_fadeDuration)));
-            yield return m_skipFrame;
-        }
-
-    }
     private IEnumerator OnLoadScene(int diff)
     {
+        ZombieApocalypse.GameData.gameScore = 0;
+        ZombieApocalypse.GameStatus.gameMode = diff;
+        StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0, 1, 1));
+
         isLoading = true;
-        loadingCircle.SetActive(true);
-        StartCoroutine(Fade(0, 1));
+        loadingCircle.SetActive(isLoading);
+
         yield return new WaitForSeconds(1);
-        ZombieApocalypse.DatabaseStatus.gameMode = diff;
+
+
         SceneManager.LoadSceneAsync("GameScene", LoadSceneMode.Single);
     }
 }

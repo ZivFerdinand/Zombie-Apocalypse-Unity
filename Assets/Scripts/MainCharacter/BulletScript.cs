@@ -18,7 +18,7 @@ public class BulletScript : MonoBehaviour {
 	/*
 	* Uppon bullet creation with this script attatched,
 	* bullet creates a raycast which searches for corresponding tags.
-	* If raycast finds somethig it will create a decal of corresponding tag.
+	* If raycast finds something it will create a decal of corresponding tag.
 	*/
 	void Update () {
 
@@ -30,7 +30,7 @@ public class BulletScript : MonoBehaviour {
 				}
 				if(hit.transform.tag == "Zombie"){
 					Instantiate(bloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
-					hit.transform.GetComponentInParent<ZombieMovement>().decreaseHealth();
+					hit.transform.GetComponentInParent<ZombieMovement>().decreaseHealth(1);
 					Destroy(gameObject);
 				}
 			}		
