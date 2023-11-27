@@ -26,7 +26,7 @@ public class ZombieMovement : MonoBehaviour
     private float timeToDestroy = 3.5f;
     private float zombieHealth = 2f;
     private bool scoreAndLootFlag = false;
-
+    private float skillCD;
 
     private void Start()
     {
@@ -71,8 +71,9 @@ public class ZombieMovement : MonoBehaviour
         else if (zombiePlayerDistance <= detectionRadius)
         {
             setAttackMovingDead(false, true, false);
-
+           
             zombieMeshAgent.SetDestination(player.position);
+            
         }
         else
         {
@@ -80,10 +81,20 @@ public class ZombieMovement : MonoBehaviour
 
             setWalkAround();
         }
+        skillCD -= Time.deltaTime;
+        if (skillCD < 0)
+        {
+            zombieMeshAgent.speed = 0.5f;
+        }
+        else
+        {
+            zombieMeshAgent.speed = 0.1f;
+        }
     }
     public void slowSpeed()
     {
-        zombieMeshAgent.speed = 0.2f;
+        zombieMeshAgent.speed = 0.1f;
+        skillCD = 5f;
     }
     public void decreaseHealth(int amount)
     {
