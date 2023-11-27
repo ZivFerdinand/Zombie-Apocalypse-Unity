@@ -28,6 +28,8 @@ public class ZombieMovement : MonoBehaviour
     private bool scoreAndLootFlag = false;
     private float skillCD;
 
+    public GameObject FloatingTextPrefab;
+
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -91,6 +93,12 @@ public class ZombieMovement : MonoBehaviour
             zombieMeshAgent.speed = 0.1f;
         }
     }
+
+    public void showFloatingText()
+    {
+        Instantiate(FloatingTextPrefab, transform.position, Quaternion.identity, transform);
+    }
+
     public void slowSpeed()
     {
         zombieMeshAgent.speed = 0.1f;
@@ -104,6 +112,8 @@ public class ZombieMovement : MonoBehaviour
         {
             dieParticleEffect.SetActive(true);
             dropLoot();
+            if (FloatingTextPrefab)
+                showFloatingText();
 
             ZombieApocalypse.GameData.gameScore += 10;
             scoreAndLootFlag = true;
