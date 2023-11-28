@@ -56,33 +56,26 @@ public class SkillScript : MonoBehaviour
 
     private void UpdateEffect()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E)&&!ZombieApocalypse.GameStatus.isPaused)
         {
             currentPrefabIndex = 0;
             SetAiming();
         }
-        else if(Input.GetKeyUp(KeyCode.E) && isAimingSkill)
+        else if(Input.GetKeyUp(KeyCode.E) && isAimingSkill && !ZombieApocalypse.GameStatus.isPaused)
         {
             StartCurrent();
         }
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q) && !ZombieApocalypse.GameStatus.isPaused)
         {
             currentPrefabIndex = 1;
             SetAiming();
         }
-        else if (Input.GetKeyUp(KeyCode.Q) && isAimingSkill)
+        else if (Input.GetKeyUp(KeyCode.Q) && isAimingSkill && !ZombieApocalypse.GameStatus.isPaused)
         {
             StartCurrent();
 
         }
-        else if (Input.GetKeyDown(KeyCode.Plus) || Input.GetKeyDown(KeyCode.KeypadPlus))
-        {
-            NextPrefab();
-        }
-        else if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
-        {
-            PreviousPrefab();
-        }
+        
 
     }
 
@@ -159,21 +152,5 @@ public class SkillScript : MonoBehaviour
         currentPrefabScript = null;
     }
 
-    public void NextPrefab()
-    {
-        currentPrefabIndex++;
-        if (currentPrefabIndex == Prefabs.Length)
-        {
-            currentPrefabIndex = 0;
-        }
-    }
-
-    public void PreviousPrefab()
-    {
-        currentPrefabIndex--;
-        if (currentPrefabIndex == -1)
-        {
-            currentPrefabIndex = Prefabs.Length - 1;
-        }
-    }
+    
 }
