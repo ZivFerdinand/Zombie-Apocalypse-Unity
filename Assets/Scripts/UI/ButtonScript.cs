@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,10 +8,15 @@ using UnityEngine.UI;
 public class ButtonScript : MonoBehaviour
 {
     public GameObject pauseUI;
-    public RectTransform overlay;
+    public RectTransform pauseOverlay;
+    public GameObject gameoverUI;
+    public RectTransform gameoverOverlay;
+    public TextMeshProUGUI scoreText;
 
     private List<Vector2> pauseUIInitPos;
     private bool isAnimating = false;
+
+    public PlayerHealth playerHealth;
     private void Start()
     {
         pauseUIInitPos = new List<Vector2>();
@@ -24,9 +30,18 @@ public class ButtonScript : MonoBehaviour
     }
     void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            gameoverCheck();
+        }
         if (Input.GetKeyDown(KeyCode.Escape) && !isAnimating)
         {
             pauseCheck();
+        }
+        if (playerHealth.currentHealth < 0.1f && !isAnimating)
+        {
+            gameoverCheck();
         }
     }
 
@@ -36,7 +51,7 @@ public class ButtonScript : MonoBehaviour
         {
             isAnimating = true;
             pauseUI.SetActive(true);
-            StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0, 1f, 0.25f));
+            StartCoroutine(CustomFadeAnimator.Fade(pauseOverlay.GetComponent<Image>(), 0, 1f, 0.25f));
 
             for (int i = 0; i < pauseUI.transform.childCount; i++)
             {
@@ -53,7 +68,7 @@ public class ButtonScript : MonoBehaviour
         {
             isAnimating = true;
             pauseUpdate();
-            StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 1, 0, 0.25f));
+            StartCoroutine(CustomFadeAnimator.Fade(pauseOverlay.GetComponent<Image>(), 1, 0, 0.25f));
 
             for (int i = 0; i < pauseUI.transform.childCount; i++)
             {
@@ -90,5 +105,25 @@ public class ButtonScript : MonoBehaviour
                 break;
         }
 
+    }
+    private void gameoverCheck()
+    {
+        gameoverUI.SetActive(true);
+
+        StartCoroutine(CustomFadeAnimator.Fade(gameoverOverlay.GetComponent<Image>(), 0, 1, 0.4f));
+        StartCoroutine(CustomFadeAnimator.Fade(gameoverOverlay.transform.GetChild(0).GetComponent<Image>(), 0, 1, 0.4f));
+        
+        StartCoroutine(setGameOver());
+        updateScoreText();
+    }
+    private IEnumerator setGameOver()
+    {
+        yield return new WaitForSeconds(0.45f);
+
+        pauseUpdate();
+    }
+    private void updateScoreText()
+    {
+        scoreText.text = "Score : " + ZombieApocalypse.GameData.gameScore.ToString();
     }
 }

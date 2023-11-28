@@ -58,6 +58,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void updateOverlayAlpha()
     {
+        // Debug.Log("Nyut-Nyut");
         float tempAlpha = overlay.color.a + Time.deltaTime * updtDmg;
         setOverlayColor(Mathf.Clamp01(tempAlpha));
 

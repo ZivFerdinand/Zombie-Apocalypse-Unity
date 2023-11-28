@@ -13,6 +13,6 @@ public class PlayerScore : MonoBehaviour
     }
     private void UpdateScoreText()
     {
-        scoreText.text = ZombieApocalypse.GameData.gameScore.ToString("D10");
+        scoreText.text = ZombieApocalypse.GameData.gameScore.ToString();
     }
 }
