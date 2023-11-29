@@ -12,6 +12,7 @@ TagManager:
   - Zombie
   - Fire
   - Potion
+  - ComboBar
   layers:
   - Default
   - TransparentFX

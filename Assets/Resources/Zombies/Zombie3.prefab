@@ -5744,6 +5744,9 @@ MonoBehaviour:
   - {fileID: 197236, guid: 4fc855fb7bf094a0891967175e5bdb17, type: 3}
   - {fileID: 173500, guid: fb5a9652227c545d98a413cd73b80b69, type: 3}
   dropChance: 20
+  zombieAnimation: {fileID: 3568628872616989892}
+  comboBar: {fileID: 0}
+  barValue: 25
   FloatingTextPrefab: {fileID: 6049633952643000866, guid: 3647556404c8c6e4bb388c8e230c6d72, type: 3}
 --- !u!1 &4956532458698703312
 GameObject:
