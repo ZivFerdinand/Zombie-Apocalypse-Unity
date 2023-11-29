@@ -1,34 +1,44 @@
 using DigitalRuby.PyroParticles;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 
 
 public class SkillScript : MonoBehaviour
 {
+    private Color fireColor = new Color(1, 0.33f, 0.33f);
+    private Color iceColor = new Color(0.35f, 0.64f, 1);
+    private Color idleColor = new Color(1, 1, 1, 0.35f);
     private const float initAimingTime = 5f;
 
     public GameObject[] Prefabs;
-    public GameObject customCrosshair;
+    public GameObject aimingStatus;
     public TextMeshProUGUI skillTimeText;
+    public Slider sliderSkill;
     public int currentPrefabIndex;
+    public Image[] iceBars, fireBars;
 
     private GameObject currentPrefabObject;
     private FireBaseScript currentPrefabScript;
     
     private float aimingTimeLeft;
     private bool isAimingSkill;
+    private int iceCount;
+    private int fireCount;
     void Start()
     {
+        iceCount = fireCount = 2;
         isAimingSkill = false;
     }
 
     void Update()
     {
-        customCrosshair.SetActive(isAimingSkill);
+        aimingStatus.SetActive(isAimingSkill);
         if (isAimingSkill)
         {
+            sliderSkill.value = aimingTimeLeft / initAimingTime;
             aimingTimeLeft -= Time.deltaTime / 0.25f;
             if(aimingTimeLeft > 0)
             {
@@ -53,11 +63,26 @@ public class SkillScript : MonoBehaviour
         }
         UpdateEffect();
     }
-
+    public void getSkill(int idx)
+    {
+        if(idx == 0)
+        {
+            fireCount++;
+            fireCount = Mathf.Min(fireCount, 2);
+        }
+        else if(idx == 1)
+        {
+            iceCount++;
+            iceCount = Mathf.Min(iceCount, 2);
+        }
+        updateSkillBar();
+    }
     private void UpdateEffect()
     {
-        if (Input.GetKeyDown(KeyCode.E)&&!ZombieApocalypse.GameStatus.isPaused)
+        if (fireCount > 0 && Input.GetKeyDown(KeyCode.E) && !ZombieApocalypse.GameStatus.isPaused)
         {
+            fireCount--;
+            updateSkillBar();
             currentPrefabIndex = 0;
             SetAiming();
         }
@@ -65,8 +90,10 @@ public class SkillScript : MonoBehaviour
         {
             StartCurrent();
         }
-        if (Input.GetKeyDown(KeyCode.Q) && !ZombieApocalypse.GameStatus.isPaused)
+        if (iceCount > 0 && Input.GetKeyDown(KeyCode.Q) && !ZombieApocalypse.GameStatus.isPaused)
         {
+            iceCount--;
+            updateSkillBar();
             currentPrefabIndex = 1;
             SetAiming();
         }
@@ -78,7 +105,36 @@ public class SkillScript : MonoBehaviour
         
 
     }
+    private void updateSkillBar()
+    {
+        if(iceCount <= 0)
+        {
+            iceBars[0].color = iceBars[1].color = idleColor;
+        }
+        else if(iceCount == 1)
+        {
+            iceBars[0].color = iceColor;
+            iceBars[1].color = idleColor;
+        }
+        else
+        {
+            iceBars[0].color = iceBars[1].color = iceColor;
+        }
 
+        if (fireCount <= 0)
+        {
+            fireBars[0].color = fireBars[1].color = idleColor;
+        }
+        else if (fireCount == 1)
+        {
+            fireBars[0].color = fireColor;
+            fireBars[1].color = idleColor;
+        }
+        else
+        {
+            fireBars[0].color = fireBars[1].color = fireColor;
+        }
+    }
     private void BeginEffect()
     {
         Vector3 pos;

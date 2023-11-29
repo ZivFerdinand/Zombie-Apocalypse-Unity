@@ -13,9 +13,12 @@ public class PlayerHealth : MonoBehaviour
     public Image overlay;
     public float duration;
     public float fadeSpeed = 1f;
+    private float healCoolDown;
     private float updtDmg;
 
     public TextMeshProUGUI healthStatus;
+    public TextMeshProUGUI healingTime;
+    public GameObject healingStatus;
     private float durationTimer;
 
     private void Start()
@@ -28,8 +31,20 @@ public class PlayerHealth : MonoBehaviour
     private void Update()
     {
         healthStatus.text = ((int)currentHealth).ToString();
-        healPlayer(Time.deltaTime * 0.5f);
-
+        if (currentHealth < 20)
+        {
+            healPlayer(Time.deltaTime * 0.5f);
+        }
+        if(healCoolDown > 0)
+        {
+            healingTime.text = healCoolDown.ToString("F1") + "s";
+            healCoolDown -= Time.deltaTime;
+            healPlayer(Time.deltaTime);
+        }
+        else
+        {
+            healingStatus.SetActive(false);
+        }
         if (currentHealth < 30)
         {
             updateOverlayAlpha();
@@ -43,7 +58,11 @@ public class PlayerHealth : MonoBehaviour
             }
         }
     }
-
+    public void startHeal()
+    {
+        healingStatus.SetActive(true);
+        healCoolDown = 7f;
+    }
     public void damagePlayer(int damage)
     {
         currentHealth = Mathf.Max(0, currentHealth - damage);
@@ -53,12 +72,12 @@ public class PlayerHealth : MonoBehaviour
 
     private void healPlayer(float heal)
     {
+        // SHAM, SELAMA PLAYER SEDANG HEAL, TOLONG BUAT IJO IJO NYUT NYUT DI LAYAR YE
         currentHealth = Mathf.Min(maxHealth, currentHealth + heal);
     }
 
     private void updateOverlayAlpha()
     {
-        // Debug.Log("Nyut-Nyut");
         float tempAlpha = overlay.color.a + Time.deltaTime * updtDmg;
         setOverlayColor(Mathf.Clamp01(tempAlpha));
 

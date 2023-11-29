@@ -6,6 +6,18 @@ namespace ZombieApocalypse
 {
     public static class GameData
     {
+        public static string playerName
+        {
+            set
+            {
+                PlayerPrefs.SetString("playerName", value);
+
+            }
+            get
+            {
+                return PlayerPrefs.GetString("playerName", null);
+            }
+        }
         public static int gameScore
         {
             set

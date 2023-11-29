@@ -13,6 +13,7 @@ public class StartUIController : MonoBehaviour
     public GameObject playButt, normButt, hardButt;
     public GameObject overlay;
     public GameObject loadingCircle;
+    public GameObject leaderboardUI;
 
     private List<Vector2> mainScChildInitPos;
     private Vector2 creditScInitPos;
@@ -90,9 +91,19 @@ public class StartUIController : MonoBehaviour
                 }
 
             }
+            if (name == "LeaderboardButton")
+            {
+                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0, 1, 0.5f));
+                leaderboardUI.SetActive(true);
+            }
             if (name == "OptionsButton")
             {
 
+            }
+            if (name == "BackButton")
+            {
+                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 1, 0, 0.5f));
+                leaderboardUI.SetActive(false);
             }
         }
     }

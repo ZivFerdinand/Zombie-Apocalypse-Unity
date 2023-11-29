@@ -10,6 +10,7 @@ public class ButtonScript : MonoBehaviour
     public GameObject player;
     public GameObject player2;
 
+    public GameObject askNameUI;
     public GameObject pauseUI;
     public GameObject LeaderboardUI;
     public RectTransform pauseOverlay;
@@ -105,16 +106,22 @@ public class ButtonScript : MonoBehaviour
                 SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
                 break;
             case "LeaderBoardButton":
+                gameoverUI.SetActive(false);
                 LeaderboardUI.SetActive(true);
                 break;
             case "BackButton":
+                gameoverUI.SetActive(true);
                 LeaderboardUI.SetActive(false);
                 break;
 
         }
 
     }
-
+    public void onPlayerNameSubmit()
+    {
+        askNameUI.SetActive(false);
+        LeaderboardUI.SetActive(true);
+    }
     private IEnumerator playerDeathAnimation()
     {
         // Get the player's forward direction
@@ -146,6 +153,12 @@ public class ButtonScript : MonoBehaviour
     private void gameoverCheck()
     {
         gameoverUI.SetActive(true);
+        if (ZombieApocalypse.GameData.playerName == "")
+        {
+            gameoverUI.SetActive(false);
+            askNameUI.SetActive(true);
+        }
+
 
         StartCoroutine(CustomFadeAnimator.Fade(gameoverOverlay.GetComponent<Image>(), 0, 1, 1f));
         StartCoroutine(CustomFadeAnimator.Fade(gameoverOverlay.transform.GetChild(0).GetComponent<Image>(), 0, 1, 0.75f));

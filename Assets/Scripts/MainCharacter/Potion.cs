@@ -14,7 +14,7 @@ public class Potion : MonoBehaviour
 
         if (playerInventory != null && other.gameObject.tag == "Player")
         {
-            playerInventory.PotionCollected();
+            playerInventory.PotionCollected(gameObject.name);
 
             Destroy(gameObject);
         }

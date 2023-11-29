@@ -20,9 +20,7 @@ public class ZombieMovement : MonoBehaviour
     private PlayerHealth playerHealth;
     private NavMeshAgent zombieMeshAgent;
     private Animator zombieAnimation;
-
-    public ComboBar comboBar;
-    public float barValue = 10f;
+    private BoxCollider zombieCollider;
 
     private float attackInterval = 1f;
     private float moveCooldown = -1f;
@@ -36,15 +34,11 @@ public class ZombieMovement : MonoBehaviour
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        comboBar = GameObject.FindGameObjectWithTag("ComboBar").GetComponent<ComboBar>();
 
         playerHealth = player.GetComponent<PlayerHealth>();
         zombieMeshAgent = GetComponent<NavMeshAgent>();
         zombieAnimation = GetComponent<Animator>();
-        if(zombieAnimation != null )
-        {
-            Debug.Log("XX");    
-        }
+        zombieCollider = GetComponent<BoxCollider>();
 
         dieParticleEffect.SetActive(false);
     }
@@ -60,6 +54,7 @@ public class ZombieMovement : MonoBehaviour
         }
         else if (zombieHealth < 0f)
         {
+            zombieCollider.enabled = false; 
             setAttackMovingDead(false, false, true);
 
             timeToDestroy -= Time.deltaTime;
@@ -122,7 +117,8 @@ public class ZombieMovement : MonoBehaviour
             dropLoot();
             if (FloatingTextPrefab)
                 showFloatingText();
-            comboBar.SetBar(barValue);
+
+            ComboBar.comboCurrentValue += 10;
 
             ZombieApocalypse.GameData.gameScore += 10;
             scoreAndLootFlag = true;
