@@ -16,13 +16,13 @@ public class PlayerHealth : MonoBehaviour
     private float healCoolDown;
     private float updtDmg;
 
+    [Header("Healing Overlay")]
+    public Image healOverlay;
+    public float pulseSpeed = 5f;
     public TextMeshProUGUI healthStatus;
     public TextMeshProUGUI healingTime;
     public GameObject healingStatus;
     private float durationTimer;
-
-    public Image healOverlay;
-    public float pulseSpeed = 5f;
 
     private void Start()
     {
