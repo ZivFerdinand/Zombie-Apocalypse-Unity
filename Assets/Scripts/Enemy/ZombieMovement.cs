@@ -22,6 +22,8 @@ public class ZombieMovement : MonoBehaviour
     private Animator zombieAnimation;
     private BoxCollider zombieCollider;
 
+    private float barScore = 25f;
+
     private float attackInterval = 1f;
     private float moveCooldown = -1f;
     private float timeToDestroy = 3.5f;
@@ -118,7 +120,7 @@ public class ZombieMovement : MonoBehaviour
             if (FloatingTextPrefab)
                 showFloatingText();
 
-            ComboBar.comboCurrentValue += 10;
+            ComboBar.comboCurrentValue += barScore;
 
             ZombieApocalypse.GameData.gameScore += 10;
             scoreAndLootFlag = true;
