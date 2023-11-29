@@ -162,7 +162,6 @@ namespace DigitalRuby.PyroParticles
                 if (r != null)
                 {
                     r.AddExplosionForce(force, pos, radius);
-                    Debug.Log("meledak");
                 }
             }
         }
