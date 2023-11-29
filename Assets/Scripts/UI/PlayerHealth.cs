@@ -10,7 +10,7 @@ public class PlayerHealth : MonoBehaviour
     private int maxHealth = 100;
 
     [Header("Damage Overlay")]
-    public Image overlay;
+    public Image damageOverlay;
     public float duration;
     public float fadeSpeed = 1f;
     private float healCoolDown;
@@ -21,21 +21,27 @@ public class PlayerHealth : MonoBehaviour
     public GameObject healingStatus;
     private float durationTimer;
 
+    public Image healOverlay;
+    public float pulseSpeed = 5f;
+
     private void Start()
     {
         currentHealth = maxHealth;
-        resetOverlay();
+        resetOverlay(damageOverlay);
+        resetOverlay(healOverlay);
         updtDmg = fadeSpeed;
     }
 
     private void Update()
     {
         healthStatus.text = ((int)currentHealth).ToString();
+
         if (currentHealth < 20)
         {
             healPlayer(Time.deltaTime * 0.5f);
         }
-        if(healCoolDown > 0)
+
+        if (healCoolDown > 0)
         {
             healingTime.text = healCoolDown.ToString("F1") + "s";
             healCoolDown -= Time.deltaTime;
@@ -45,17 +51,28 @@ public class PlayerHealth : MonoBehaviour
         {
             healingStatus.SetActive(false);
         }
-        if (currentHealth < 30)
+
+        if (currentHealth < 20 || healCoolDown > 0)
         {
-            updateOverlayAlpha();
+            PulsateOverlay(healOverlay);
+            resetOverlay(damageOverlay);
         }
-        else if (overlay.color.a > 0)
+        else if (currentHealth < 30)
+        {
+            resetOverlay(healOverlay);
+            updateOverlayAlpha(damageOverlay);
+        }
+        else if (damageOverlay.color.a > 0)
         {
             durationTimer += Time.deltaTime;
             if (durationTimer > duration)
             {
-                fadeOverlay();
+                fadeOverlay(damageOverlay);
             }
+        }
+        else
+        {
+            resetOverlay(healOverlay);
         }
     }
     public void startHeal()
@@ -67,19 +84,19 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth = Mathf.Max(0, currentHealth - damage);
         durationTimer = 0;
-        setOverlayColor(0.55f);
+        setOverlayColor(damageOverlay, 0.55f);
     }
 
     private void healPlayer(float heal)
     {
-        // SHAM, SELAMA PLAYER SEDANG HEAL, TOLONG BUAT IJO IJO NYUT NYUT DI LAYAR YE
         currentHealth = Mathf.Min(maxHealth, currentHealth + heal);
+        setOverlayColor(healOverlay, 0.55f);
     }
 
-    private void updateOverlayAlpha()
+    private void updateOverlayAlpha(Image overlay)
     {
         float tempAlpha = overlay.color.a + Time.deltaTime * updtDmg;
-        setOverlayColor(Mathf.Clamp01(tempAlpha));
+        setOverlayColor(overlay, Mathf.Clamp01(tempAlpha));
 
         if (tempAlpha < 0 || tempAlpha > 1)
         {
@@ -87,19 +104,26 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    private void fadeOverlay()
+    private void fadeOverlay(Image overlay)
     {
         float tempAlpha = overlay.color.a - Time.deltaTime * fadeSpeed;
-        setOverlayColor(Mathf.Clamp01(tempAlpha));
+        setOverlayColor(damageOverlay, Mathf.Clamp01(tempAlpha));
     }
 
-    private void setOverlayColor(float alpha)
+    private void setOverlayColor(Image overlay, float alpha)
     {
         overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, alpha);
     }
 
-    private void resetOverlay()
+    private void resetOverlay(Image overlay)
     {
-        setOverlayColor(0);
+        setOverlayColor(overlay, 0);
+    }
+
+    void PulsateOverlay(Image overlay)
+    {
+        overlay.gameObject.SetActive(true);
+        float alpha = Mathf.Sin(Time.time * pulseSpeed) * 0.5f + 0.5f;
+        setOverlayColor(overlay, alpha);
     }
 }
