@@ -10,28 +10,41 @@ public class ButtonScript : MonoBehaviour
     public GameObject player;
     public GameObject player2;
 
-    public GameObject askNameUI;
-    public GameObject pauseUI;
-    public GameObject LeaderboardUI;
-    public GameObject optionsUI;
+    [Header("Pause UI")]
     public RectTransform pauseOverlay;
+    public GameObject pauseUI;
+    public GameObject optionsUI;
+
+    [Header("Game Over UI")]
     public GameObject gameoverUI;
     public RectTransform gameoverOverlay;
+    public GameObject LeaderboardUI;
+    public GameObject askNameUI;
     public TextMeshProUGUI scoreText;
+    public PlayerHealth playerHealth;
+
+    [Header("Shop UI")]
+    public GameObject shopUI;
+    private bool isShopMenuOpen = false;
 
     private List<Vector2> pauseUIInitPos;
+    private List<Vector2> shopUIInitPos;
     private bool isAnimating = false;
 
-    public PlayerHealth playerHealth;
+    
     private void Start()
     {
         pauseUIInitPos = new List<Vector2>();
+        shopUIInitPos = new List<Vector2>();
+
         ZombieApocalypse.GameStatus.isPaused = (Time.timeScale == 0);
 
         for (int i = 0; i < pauseUI.transform.childCount; i++)
         {
             pauseUIInitPos.Add(pauseUI.transform.GetChild(i).transform.localPosition);
             pauseUI.transform.GetChild(i).transform.localPosition = new Vector2(0, -1000);
+            shopUIInitPos.Add(shopUI.transform.GetChild(i).transform.localPosition);
+            shopUI.transform.GetChild(i).transform.localPosition = new Vector2(0, -1000);
         }
     }
     void Update()
@@ -42,18 +55,24 @@ public class ButtonScript : MonoBehaviour
             isAnimating = true;
             StartCoroutine(playerDeathAnimation());
         }
-        if (Input.GetKeyDown(KeyCode.Escape) && !isAnimating)
+        if ((!isAnimating && Input.GetKeyDown(KeyCode.B)) && !isShopMenuOpen) // Check if the shop menu is not open
         {
+            shopUI.SetActive(true);
+            shopCheck();
+        }
+        if (Input.GetKeyDown(KeyCode.Escape) && !isAnimating && !isShopMenuOpen) // Check if the shop menu is not open
+        {
+            pauseUI.SetActive(true);
             pauseCheck();
         }
     }
 
     private void pauseCheck()
     {
-        if (!ZombieApocalypse.GameStatus.isPaused)
+        if (!ZombieApocalypse.GameStatus.isPaused && !isShopMenuOpen)
         {
+            shopUI.SetActive(false);
             isAnimating = true;
-            pauseUI.SetActive(true);
             StartCoroutine(CustomFadeAnimator.Fade(pauseOverlay.GetComponent<Image>(), 0, 1f, 0.25f));
 
             for (int i = 0; i < pauseUI.transform.childCount; i++)
@@ -61,13 +80,12 @@ public class ButtonScript : MonoBehaviour
                 if (i == pauseUI.transform.childCount - 1)
                     LeanTween.moveLocal(pauseUI.transform.GetChild(i).gameObject, pauseUIInitPos[i], 0.5f).setEaseOutBack().setOnComplete(() => {
                         isAnimating = false; pauseUpdate();
-                        
                     });
                 else
                     LeanTween.moveLocal(pauseUI.transform.GetChild(i).gameObject, pauseUIInitPos[i], 0.5f).setEaseOutBack();
             }
         }
-        else
+        else if (!isShopMenuOpen)
         {
             isAnimating = true;
             pauseUpdate();
@@ -77,7 +95,6 @@ public class ButtonScript : MonoBehaviour
             {
                 if (i == pauseUI.transform.childCount - 1)
                     LeanTween.moveLocal(pauseUI.transform.GetChild(i).gameObject, new Vector2(0, -1000), 0.5f).setEaseInBack().setOnComplete(() => {
-
                         isAnimating = false; });
                 else
                     LeanTween.moveLocal(pauseUI.transform.GetChild(i).gameObject, new Vector2(0, -1000), 0.5f).setEaseInBack();
@@ -101,6 +118,13 @@ public class ButtonScript : MonoBehaviour
                 break;
             case "ResumeButton":
                 pauseCheck();
+                break;
+            case "ShopResumeButton":
+                shopCheck();
+                break;
+            case "ShopButton":
+                // pauseCheck();
+                // StartCoroutine(shopFromPause());
                 break;
             case "MainMenuButton":
                 Time.timeScale = 1;
@@ -183,5 +207,55 @@ public class ButtonScript : MonoBehaviour
     private void updateScoreText()
     {
         scoreText.text = "Score : " + ZombieApocalypse.GameData.gameScore.ToString();
+    }
+    private void shopCheck()
+    {
+        if (!ZombieApocalypse.GameStatus.isPaused)
+        {
+            isAnimating = true;
+            shopUI.SetActive(true);
+            isShopMenuOpen = true;
+            pauseUI.SetActive(false);
+            StartCoroutine(CustomFadeAnimator.Fade(pauseOverlay.GetComponent<Image>(), 0, 1f, 0.25f));
+
+            for (int i = 0; i < shopUI.transform.childCount; i++)
+            {
+                if (i == shopUI.transform.childCount - 1)
+                    LeanTween.moveLocal(shopUI.transform.GetChild(i).gameObject, shopUIInitPos[i], 0.5f).setEaseOutBack().setOnComplete(() => {
+                        isAnimating = false; pauseUpdate();
+
+                    });
+                else
+                    LeanTween.moveLocal(shopUI.transform.GetChild(i).gameObject, shopUIInitPos[i], 0.5f).setEaseOutBack();
+            }
+        }
+        else
+        {
+            isAnimating = true;
+            isShopMenuOpen = false;
+            pauseUpdate();
+            StartCoroutine(CustomFadeAnimator.Fade(pauseOverlay.GetComponent<Image>(), 1, 0, 0.25f));
+
+            for (int i = 0; i < shopUI.transform.childCount; i++)
+            {
+                if (i == shopUI.transform.childCount - 1)
+                    LeanTween.moveLocal(shopUI.transform.GetChild(i).gameObject, new Vector2(0, -1000), 0.5f).setEaseInBack().setOnComplete(() => {
+
+                        isAnimating = false;
+                    });
+                else
+                    LeanTween.moveLocal(shopUI.transform.GetChild(i).gameObject, new Vector2(0, -1000), 0.5f).setEaseInBack();
+            }
+
+            pauseUI.SetActive(true); // Activate the pause menu when shop closes
+        }
+    }
+    private IEnumerator shopFromPause()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        shopUI.SetActive(true);
+        pauseUI.SetActive(false);
+        shopCheck();
     }
 }
