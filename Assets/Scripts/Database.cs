@@ -59,5 +59,43 @@ namespace ZombieApocalypse
                 return temp;
             }
         }
+        public static float sfxValue
+        {
+            set
+            {
+                PlayerPrefs.SetFloat("sfxValue", value);
+
+            }
+            get
+            {
+                float temp = PlayerPrefs.GetFloat("sfxValue", 1);
+                return temp;
+            }
+        }
+        public static float musicValue
+        {
+            set
+            {
+                PlayerPrefs.SetFloat("musicValue", value);
+
+            }
+            get
+            {
+                float temp = PlayerPrefs.GetFloat("musicValue", 1);
+                return temp;
+            }
+        }
+        public static bool isMuted
+        {
+            set
+            {
+                PlayerPrefs.SetInt("isMuted", (value == true) ? 1 : 0);
+            }
+            get
+            {
+                int temp = PlayerPrefs.GetInt("isMuted", 0);
+                return (temp == 1) ? true : false;
+            }
+        }
     }
 }

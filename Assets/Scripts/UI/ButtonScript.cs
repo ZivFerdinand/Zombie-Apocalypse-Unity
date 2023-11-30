@@ -13,6 +13,7 @@ public class ButtonScript : MonoBehaviour
     public GameObject askNameUI;
     public GameObject pauseUI;
     public GameObject LeaderboardUI;
+    public GameObject optionsUI;
     public RectTransform pauseOverlay;
     public GameObject gameoverUI;
     public RectTransform gameoverOverlay;
@@ -105,6 +106,10 @@ public class ButtonScript : MonoBehaviour
                 Time.timeScale = 1;
                 SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
                 break;
+            case "OptionsButton":
+                pauseUI.SetActive(false);
+                optionsUI.SetActive(true);
+                break;
             case "LeaderBoardButton":
                 gameoverUI.SetActive(false);
                 LeaderboardUI.SetActive(true);
@@ -113,7 +118,10 @@ public class ButtonScript : MonoBehaviour
                 gameoverUI.SetActive(true);
                 LeaderboardUI.SetActive(false);
                 break;
-
+            case "BackOptionsButton":
+                pauseUI.SetActive(true);
+                optionsUI.SetActive(false);
+                break;
         }
 
     }

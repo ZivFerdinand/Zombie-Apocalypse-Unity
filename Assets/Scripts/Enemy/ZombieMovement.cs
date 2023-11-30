@@ -150,11 +150,15 @@ public class ZombieMovement : MonoBehaviour
     }
     private void dropLoot()
     {
-        int random = Random.Range(1, 101); 
+        // Test Instantiate Ice
+        //GameObject loot = Instantiate(lootModel[1],
+        //                                    transform.position + new Vector3(1.0f, 1.0f, 0.0f),
+        //                                    Quaternion.identity);
+        int random = Random.Range(1, 101);
         if (random <= dropChance)
         {
-            GameObject loot = Instantiate(lootModel[Random.Range(0, lootModel.Length)], 
-                                            transform.position + new Vector3(1.0f, 1.0f, 0.0f), 
+            GameObject loot = Instantiate(lootModel[Random.Range(0, lootModel.Length)],
+                                            transform.position + new Vector3(1.0f, 1.0f, 0.0f),
                                             Quaternion.identity);
             loot.SetActive(true);
             Destroy(loot, 15f);

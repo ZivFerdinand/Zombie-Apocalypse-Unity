@@ -22,6 +22,7 @@ public class PlayerHealth : MonoBehaviour
     public TextMeshProUGUI healthStatus;
     public TextMeshProUGUI healingTime;
     public GameObject healingStatus;
+    public Slider healingSlider;
     private float durationTimer;
 
     private void Start()
@@ -44,6 +45,7 @@ public class PlayerHealth : MonoBehaviour
         if (healCoolDown > 0)
         {
             healingTime.text = healCoolDown.ToString("F1") + "s";
+            healingSlider.value = healCoolDown / 7f;
             healCoolDown -= Time.deltaTime;
             healPlayer(Time.deltaTime);
         }
