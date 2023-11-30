@@ -7,7 +7,6 @@ public class Multiplier : MonoBehaviour
 {
     public TextMeshProUGUI multiplierText;
 
-    // Update is called once per frame
     void Update()
     {
         UpdateMultiplier();
@@ -18,14 +17,17 @@ public class Multiplier : MonoBehaviour
         if(ComboBar.divider == 1f)
         {
             multiplierText.text = "x 1";
+            ZombieApocalypse.GameData.currentMultiplier = 1;
         }
         else if(ComboBar.divider == 1.5f)
         {
-            multiplierText.text = "x 2";
+            multiplierText.text = "x 1.5";
+            ZombieApocalypse.GameData.currentMultiplier = 1.5f;
         }
         else if(ComboBar.divider == 2f)
         {
-            multiplierText.text = "x 4";
+            multiplierText.text = "x 2";
+            ZombieApocalypse.GameData.currentMultiplier = 2;
         }
     }
 }

@@ -132,6 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 729f8e377b3bf5f41a39ab87a641e171, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aboveZombieText: {fileID: 8988759750677268243}
   DestroyTime: 3
   Offsset: {x: 0, y: 3, z: 0}
   RandomizeIntensity: {x: 0.5, y: 0, z: 0}

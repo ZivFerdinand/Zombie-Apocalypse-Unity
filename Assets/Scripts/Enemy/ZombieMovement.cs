@@ -22,7 +22,7 @@ public class ZombieMovement : MonoBehaviour
     private Animator zombieAnimation;
     private BoxCollider zombieCollider;
 
-    private float barScore = 25f;
+    private float barScore = 40f;
 
     private float attackInterval = 1f;
     private float moveCooldown = -1f;

@@ -31,6 +31,19 @@ namespace ZombieApocalypse
                 return temp;
             }
         }
+        public static float currentMultiplier
+        {
+            set
+            {
+                PlayerPrefs.SetFloat("currentMultiplier", value);
+
+            }
+            get
+            {
+                float temp = PlayerPrefs.GetFloat("currentMultiplier", 1);
+                return temp;
+            }
+        }
     }
     public static class GameStatus
     {

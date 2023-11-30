@@ -18,9 +18,6 @@ public class ComboBar : MonoBehaviour
         comboBar.value += comboCurrentValue / divider;
         comboCurrentValue = 0;
 
-
-        comboBar.value -= Time.deltaTime * 1.25f;
-
         if(comboBar.value >= 100 && divider < 2f)
         {
             comboBar.value = overBarValue;
@@ -32,5 +29,7 @@ public class ComboBar : MonoBehaviour
             comboBar.value = 99;
             divider -= 0.5f;
         }
+
+        comboBar.value -= Time.deltaTime * (1.25f * divider);
     }
 }
