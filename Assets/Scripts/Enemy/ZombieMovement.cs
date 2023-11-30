@@ -23,6 +23,7 @@ public class ZombieMovement : MonoBehaviour
     private BoxCollider zombieCollider;
 
     private float barScore = 40f;
+    private int scoreNow = 0;
 
     private float attackInterval = 1f;
     private float moveCooldown = -1f;
@@ -121,8 +122,10 @@ public class ZombieMovement : MonoBehaviour
                 showFloatingText();
 
             ComboBar.comboCurrentValue += barScore;
+            scoreNow = (int) (ZombieApocalypse.GameData.currentMultiplier * 10);
 
-            ZombieApocalypse.GameData.gameScore += 10;
+            ZombieApocalypse.GameData.coinCounter += scoreNow;
+            ZombieApocalypse.GameData.gameScore += scoreNow;
             scoreAndLootFlag = true;
         }
     }

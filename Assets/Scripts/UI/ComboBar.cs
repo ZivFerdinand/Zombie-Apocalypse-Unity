@@ -30,6 +30,6 @@ public class ComboBar : MonoBehaviour
             divider -= 0.5f;
         }
 
-        comboBar.value -= Time.deltaTime * (1.25f * divider);
+        comboBar.value -= Time.deltaTime * (2f * divider);
     }
 }

@@ -44,6 +44,19 @@ namespace ZombieApocalypse
                 return temp;
             }
         }
+        public static int coinCounter
+        {
+            set
+            {
+                PlayerPrefs.SetInt("coinCounter", value);
+
+            }
+            get
+            {
+                int temp = PlayerPrefs.GetInt("coinCounter", 0);
+                return temp;
+            }
+        }
     }
     public static class GameStatus
     {
