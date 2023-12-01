@@ -41,7 +41,18 @@ public class GunScript : MonoBehaviour {
     {
 		crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
 		bulletsI = bulletsInTheGun;
-    }
+
+		if (gameObject.name == "newGun_semi")
+		{
+			bulletsI = bulletsInTheGun = ZombieApocalypse.GameShopInfo.weapon_1_2;
+			bulletsIHave = ZombieApocalypse.GameShopInfo.weapon_1_1;
+		}
+		else if(gameObject.name == "newGun_auto")
+		{
+			bulletsI = bulletsInTheGun = ZombieApocalypse.GameShopInfo.weapon_2_2;
+			bulletsIHave = ZombieApocalypse.GameShopInfo.weapon_2_1;
+		}
+	}
 
     /*
 	 * Collection the variables upon awake that we need.
@@ -105,7 +116,16 @@ public class GunScript : MonoBehaviour {
 
 		CrossHairFadeout();
 
-
+		if (gameObject.name == "newGun_semi")
+		{
+			ZombieApocalypse.GameShopInfo.weapon_1_2 = bulletsInTheGun;
+			ZombieApocalypse.GameShopInfo.weapon_1_1 = bulletsIHave;
+		}
+		else
+		{
+			ZombieApocalypse.GameShopInfo.weapon_2_2 = bulletsInTheGun;
+			ZombieApocalypse.GameShopInfo.weapon_2_1 = bulletsIHave;
+		}
 	}
 
 	/*

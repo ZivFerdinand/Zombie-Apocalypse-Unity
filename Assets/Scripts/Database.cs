@@ -4,6 +4,61 @@ using UnityEngine;
 
 namespace ZombieApocalypse
 {
+    public static class GameShopInfo
+    {
+        public static float weapon_1_1
+        {
+            set
+            {
+                PlayerPrefs.SetFloat("weapon_1_1", value);
+
+            }
+            get
+            {
+                float temp = PlayerPrefs.GetFloat("weapon_1_1", 1800f);
+                return temp;
+            }
+        }
+        public static float weapon_1_2
+        {
+            set
+            {
+                PlayerPrefs.SetFloat("weapon_1_2", value);
+
+            }
+            get
+            {
+                float temp = PlayerPrefs.GetFloat("weapon_1_2", 60f);
+                return temp;
+            }
+        }
+        public static float weapon_2_1
+        {
+            set
+            {
+                PlayerPrefs.SetFloat("weapon_2_1", value);
+
+            }
+            get
+            {
+                float temp = PlayerPrefs.GetFloat("weapon_2_1", 900f);
+                return temp;
+            }
+        }
+        public static float weapon_2_2
+        {
+            set
+            {
+                PlayerPrefs.SetFloat("weapon_2_2", value);
+
+            }
+            get
+            {
+                float temp = PlayerPrefs.GetFloat("weapon_2_2", 30f);
+                return temp;
+            }
+        }
+    }
     public static class GameData
     {
         public static string playerName
@@ -107,7 +162,7 @@ namespace ZombieApocalypse
             }
             get
             {
-                float temp = PlayerPrefs.GetFloat("mouseValue", 0.3f);
+                float temp = PlayerPrefs.GetFloat("mouseValue", 0.1f);
                 return temp;
             }
         }

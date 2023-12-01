@@ -19,7 +19,6 @@ public class LeaderBoardScript : MonoBehaviour
     public void GetLeaderBoard()
     {
         LeaderboardCreator.GetLeaderboard(publicNormalLeaderboardKey, ((msg) =>{
-            Debug.Log(msg);
             int loopLength=(msg.Length<names.Count)?msg.Length:names.Count;
             for (int i = 0; i < loopLength; i++)
             {

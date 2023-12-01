@@ -2335,7 +2335,7 @@ MonoBehaviour:
   mls: {fileID: 0}
   walkingSpeed: 3
   runningSpeed: 5
-  bulletsIHave: 3600
+  bulletsIHave: 900
   bulletsInTheGun: 30
   amountOfBulletsPerLoad: 30
   currentGunPosition: {x: 0, y: 0, z: 0}
@@ -2346,30 +2346,6 @@ MonoBehaviour:
   mouseSensitvity_notAiming: 4
   mouseSensitvity_aiming: 1
   mouseSensitvity_running: 1
-  m_smoothCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   meeleAttack: 0
   aiming: 0
   mainCamera: {fileID: 0}
