@@ -40,13 +40,19 @@ public class ButtonScript : MonoBehaviour
 
         ZombieApocalypse.GameStatus.isPaused = (Time.timeScale == 0);
 
-        int shopUIChildCount = shopUI.transform.childCount;
-        for (int i = 0; i < pauseUI.transform.childCount; i++)
-        {
-            pauseUIInitPos.Add(pauseUI.transform.GetChild(i).transform.localPosition);
-            pauseUI.transform.GetChild(i).transform.localPosition = new Vector2(0, -1000);
+        int pauseUICount = pauseUI.transform.childCount;
+        int shopUICount = shopUI.transform.childCount;
+        int count = Mathf.Max(pauseUICount, shopUICount);
 
-            if (i < shopUIChildCount)
+        for (int i = 0; i < count; i++)
+        {
+            if (i < pauseUICount)
+            {
+                pauseUIInitPos.Add(pauseUI.transform.GetChild(i).transform.localPosition);
+                pauseUI.transform.GetChild(i).transform.localPosition = new Vector2(0, -1000);
+            }
+
+            if (i < shopUICount)
             {
                 shopUIInitPos.Add(shopUI.transform.GetChild(i).transform.localPosition);
                 shopUI.transform.GetChild(i).transform.localPosition = new Vector2(0, -1000);
@@ -125,12 +131,8 @@ public class ButtonScript : MonoBehaviour
             case "ResumeButton":
                 pauseCheck();
                 break;
-            case "ShopResumeButton":
-                shopCheck();
-                break;
             case "ShopButton":
-                // pauseCheck();
-                // StartCoroutine(shopFromPause());
+                StartCoroutine(shopFromPause());
                 break;
             case "MainMenuButton":
                 Time.timeScale = 1;
@@ -154,8 +156,22 @@ public class ButtonScript : MonoBehaviour
                 pauseUI.SetActive(true);
                 optionsUI.SetActive(false);
                 break;
-        }
+            case "ShopResumeButton":
+                shopCheck();
+                break;
+            case "BuyAmmoButton":
 
+                break;
+            case "IncreaseDropButton":
+
+                break;
+            case "IncreaseDmgButton":
+                
+                break;
+            case "AimTimeButton":
+
+                break;
+        }
     }
     public void onPlayerNameSubmit()
     {
@@ -260,10 +276,10 @@ public class ButtonScript : MonoBehaviour
     }
     private IEnumerator shopFromPause()
     {
+        pauseCheck();
+
         yield return new WaitForSeconds(0.5f);
 
-        shopUI.SetActive(true);
-        pauseUI.SetActive(false);
         shopCheck();
     }
 }
