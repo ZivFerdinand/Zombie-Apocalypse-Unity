@@ -26,6 +26,7 @@ public class ButtonScript : MonoBehaviour
     [Header("Shop UI")]
     public GameObject shopUI;
     private bool isShopMenuOpen = false;
+    private bool isOptionsOpen = false;
 
     private List<Vector2> pauseUIInitPos;
     private List<Vector2> shopUIInitPos;
@@ -60,12 +61,12 @@ public class ButtonScript : MonoBehaviour
             isAnimating = true;
             StartCoroutine(playerDeathAnimation());
         }
-        if ((!isAnimating && Input.GetKeyDown(KeyCode.B)) && !isShopMenuOpen) // Check if the shop menu is not open
+        if ((!isAnimating && Input.GetKeyDown(KeyCode.B)) && !isShopMenuOpen && !isOptionsOpen) // Check if the shop menu is not open
         {
             shopUI.SetActive(true);
             shopCheck();
         }
-        if (Input.GetKeyDown(KeyCode.Escape) && !isAnimating && !isShopMenuOpen) // Check if the shop menu is not open
+        if (Input.GetKeyDown(KeyCode.Escape) && !isAnimating && !isShopMenuOpen && !isOptionsOpen) // Check if the shop menu is not open
         {
             pauseUI.SetActive(true);
             pauseCheck();
@@ -74,7 +75,7 @@ public class ButtonScript : MonoBehaviour
 
     private void pauseCheck()
     {
-        if (!ZombieApocalypse.GameStatus.isPaused && !isShopMenuOpen)
+        if (!ZombieApocalypse.GameStatus.isPaused && !isShopMenuOpen && !isOptionsOpen)
         {
             shopUI.SetActive(false);
             isAnimating = true;
@@ -90,7 +91,7 @@ public class ButtonScript : MonoBehaviour
                     LeanTween.moveLocal(pauseUI.transform.GetChild(i).gameObject, pauseUIInitPos[i], 0.5f).setEaseOutBack();
             }
         }
-        else if (!isShopMenuOpen)
+        else if (!isShopMenuOpen && !isOptionsOpen)
         {
             isAnimating = true;
             pauseUpdate();
@@ -136,6 +137,7 @@ public class ButtonScript : MonoBehaviour
                 SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
                 break;
             case "OptionsButton":
+                isOptionsOpen = true;
                 pauseUI.SetActive(false);
                 optionsUI.SetActive(true);
                 break;
@@ -148,6 +150,7 @@ public class ButtonScript : MonoBehaviour
                 LeaderboardUI.SetActive(false);
                 break;
             case "BackOptionsButton":
+                isOptionsOpen = false;
                 pauseUI.SetActive(true);
                 optionsUI.SetActive(false);
                 break;
