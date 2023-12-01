@@ -8,7 +8,9 @@ public class OptionsScript : MonoBehaviour
     public Slider sfxSlider;
     public Slider musicSlider;
     public Toggle muteToggle;
+    public AudioClip selectSound;
     public AudioSource menuMusicSource;
+    public AudioSource selectSoundSource;
 
     private void Start()
     {
@@ -23,6 +25,7 @@ public class OptionsScript : MonoBehaviour
     public void sfxChange()
     {
         ZombieApocalypse.GameStatus.sfxValue = sfxSlider.value;
+        selectSoundSource.volume = sfxSlider.value;
         if(sfxSlider.value > 0)
         {
             ZombieApocalypse.GameStatus.isMuted = muteToggle.isOn = false;
@@ -46,6 +49,13 @@ public class OptionsScript : MonoBehaviour
             ZombieApocalypse.GameStatus.musicValue = musicSlider.value = 0;
             ZombieApocalypse.GameStatus.sfxValue = sfxSlider.value = 0;
 
+        }
+    }
+    private void Update()
+    {
+        if(Input.GetMouseButtonDown(0))
+        {
+            selectSoundSource.PlayOneShot(selectSound);
         }
     }
 }
