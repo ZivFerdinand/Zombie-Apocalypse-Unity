@@ -51,7 +51,11 @@ public class ZombieMovement : MonoBehaviour
         attackInterval -= (attackInterval > 0) ? Time.deltaTime : 0;
 
         float zombiePlayerDistance = Vector3.Distance(transform.position, player.position);
-        if (transform.position.y < 0)
+        if(skillCD > 0)
+        {
+
+        }
+        else if (transform.position.y < 0)
         {
             Destroy(gameObject);
         }
@@ -107,8 +111,8 @@ public class ZombieMovement : MonoBehaviour
 
     public void slowSpeed()
     {
-        zombieMeshAgent.speed = 0.1f;
-        skillCD = 5f;
+        zombieMeshAgent.SetDestination(transform.position);
+        skillCD = 10f;
     }
     public void decreaseHealth(int amount)
     {
