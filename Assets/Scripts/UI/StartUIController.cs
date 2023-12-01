@@ -66,41 +66,44 @@ public class StartUIController : MonoBehaviour
     {
         if (!isLoading)
         {
-            if (name == "PlayButton")
+            if (!creditScActive)
             {
-                playButt.SetActive(false);
-                normButt.SetActive(true);
-                hardButt.SetActive(true);
-            }
-            if (name == "NormalButton")
-            {
-                StartCoroutine(OnLoadScene(0));
-
-            }
-            if (name == "HardButton")
-            {
-                StartCoroutine(OnLoadScene(1));
-            }
-            if (name == "CreditsButton")
-            {
-                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0f, 0.25f, 1));
-                creditSc.SetActive(true);
-
-                foreach (Transform child in mainSc.transform)
+                if (name == "PlayButton")
                 {
-                    LeanTween.moveLocal(child.gameObject, new Vector2(0, -1500), 0.5f).setEaseInBack().setOnComplete(() => creditScActive = true);
+                    playButt.SetActive(false);
+                    normButt.SetActive(true);
+                    hardButt.SetActive(true);
                 }
+                if (name == "NormalButton")
+                {
+                    StartCoroutine(OnLoadScene(0));
 
-            }
-            if (name == "LeaderboardButton")
-            {
-                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0, 1, 0.25f));
-                leaderboardUI.SetActive(true);
-            }
-            if (name == "OptionsButton")
-            {
-                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0, 1, 0.25f));
-                optionsUI.SetActive(true);
+                }
+                if (name == "HardButton")
+                {
+                    StartCoroutine(OnLoadScene(1));
+                }
+                if (name == "CreditsButton")
+                {
+                    StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0f, 0.25f, 1));
+                    creditSc.SetActive(true);
+
+                    foreach (Transform child in mainSc.transform)
+                    {
+                        LeanTween.moveLocal(child.gameObject, new Vector2(0, -1500), 0.5f).setEaseInBack().setOnComplete(() => creditScActive = true);
+                    }
+
+                }
+                if (name == "LeaderboardButton")
+                {
+                    StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0, 1, 0.25f));
+                    leaderboardUI.SetActive(true);
+                }
+                if (name == "OptionsButton")
+                {
+                    StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0, 1, 0.25f));
+                    optionsUI.SetActive(true);
+                }
             }
             if (name == "BackButton")
             {
