@@ -5873,7 +5873,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 43202bb0f68f2e048b724a8f5cf6e74f, type: 3}
   deadSound: {fileID: 8300000, guid: 976ef55aaf156574bbd2465d06956297, type: 3}
   soundSource: {fileID: 2923352551722890670}
-  Growl: {fileID: 8126877496734657920}
+  growlSoundSource: {fileID: 8126877496734657920}
 --- !u!82 &8126877496734657920
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5886,7 +5886,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 2ec0a5a007447ea47b3fc1836924ca2b, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.216
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 1
   Mute: 0

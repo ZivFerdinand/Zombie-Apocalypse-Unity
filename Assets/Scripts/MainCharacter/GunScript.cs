@@ -438,9 +438,12 @@ public class GunScript : MonoBehaviour {
 				holdFlash = Instantiate(muzzelFlash[randomNumberForMuzzelFlash], muzzelSpawn.transform.position /*- muzzelPosition*/, muzzelSpawn.transform.rotation * Quaternion.Euler(0,0,90) ) as GameObject;
 				holdFlash.transform.parent = muzzelSpawn.transform;
 				if (shoot_sound_source)
-					shoot_sound_source.Play ();
+				{
+					shoot_sound_source.volume = ZombieApocalypse.GameStatus.sfxValue;
+					shoot_sound_source.Play();
+				}
 				else
-					print ("Missing 'Shoot Sound Source'.");
+					print("Missing 'Shoot Sound Source'.");
 
 				RecoilMath();
 

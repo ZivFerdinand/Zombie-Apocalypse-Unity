@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class OptionsScript : MonoBehaviour
 {
     public Slider sfxSlider;
     public Slider musicSlider;
+    public Slider mouseSlider;
     public Toggle muteToggle;
     public AudioClip selectSound;
     public AudioSource menuMusicSource;
@@ -15,12 +17,13 @@ public class OptionsScript : MonoBehaviour
     private void Start()
     {
         sfxSlider.value = ZombieApocalypse.GameStatus.sfxValue;
-        musicSlider.value = ZombieApocalypse.GameStatus.musicValue;
         muteToggle.isOn = ZombieApocalypse.GameStatus.isMuted;
+        mouseSlider.value = ZombieApocalypse.GameStatus.mouseValue;
 
         sfxChange();
         musicChange();
         muteChange();
+        mouseChange();
     }
     public void sfxChange()
     {
@@ -40,6 +43,10 @@ public class OptionsScript : MonoBehaviour
             ZombieApocalypse.GameStatus.isMuted = muteToggle.isOn = false;
         }
     }
+    public void mouseChange()
+    {
+        ZombieApocalypse.GameStatus.mouseValue = mouseSlider.value;
+    }
     public void muteChange()
     {
         ZombieApocalypse.GameStatus.isMuted = muteToggle.isOn;
@@ -55,7 +62,8 @@ public class OptionsScript : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
-            selectSoundSource.PlayOneShot(selectSound);
+            if(ZombieApocalypse.GameStatus.isPaused || SceneManager.GetActiveScene().name == "MainMenu")
+                selectSoundSource.PlayOneShot(selectSound);
         }
     }
 }

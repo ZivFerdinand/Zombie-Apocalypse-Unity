@@ -8,11 +8,18 @@ public class ZombieAudioManager : MonoBehaviour
     public AudioClip[] attackSounds;
     public AudioClip deadSound;
     public AudioSource soundSource;
-    public AudioSource Growl;
-    
+    private float initSoundValue;
+    public AudioSource growlSoundSource;
+    private float initGrowlSoundValue;
+    private void Start()
+    {
+        initSoundValue = soundSource.volume;
+        initGrowlSoundValue = growlSoundSource.volume;
+    }
     public void LeftFoot()
     {
         int n = Random.Range(0,footstepSounds.Length);
+        soundSource.volume = initSoundValue * ZombieApocalypse.GameStatus.sfxValue;
         soundSource.clip= footstepSounds[n];
         soundSource.PlayOneShot(soundSource.clip);
         footstepSounds[n]= footstepSounds[0];
@@ -21,6 +28,7 @@ public class ZombieAudioManager : MonoBehaviour
     public void LeftRunFoot()
     {
         int n = Random.Range(0, footstepSounds.Length);
+        soundSource.volume = initSoundValue * ZombieApocalypse.GameStatus.sfxValue;
         soundSource.clip = footstepSounds[n];
         soundSource.PlayOneShot(soundSource.clip);
         footstepSounds[n]= footstepSounds[0];
@@ -29,6 +37,7 @@ public class ZombieAudioManager : MonoBehaviour
     public void RightRunFoot()
     {
         int n = Random.Range(0, footstepSounds.Length);
+        soundSource.volume = initSoundValue * ZombieApocalypse.GameStatus.sfxValue;
         soundSource.clip = footstepSounds[n];
         soundSource.PlayOneShot(soundSource.clip);
         footstepSounds[n]= footstepSounds[0];
@@ -37,6 +46,7 @@ public class ZombieAudioManager : MonoBehaviour
     public void RightFoot()
     {
         int n = Random.Range(0, footstepSounds.Length);
+        soundSource.volume = initSoundValue * ZombieApocalypse.GameStatus.sfxValue;
         soundSource.clip = footstepSounds[n];
         soundSource.PlayOneShot(soundSource.clip);
         footstepSounds[n] = footstepSounds[0];
@@ -44,8 +54,8 @@ public class ZombieAudioManager : MonoBehaviour
     }
     public void Attack()
     {
-        Debug.Log("5");
         int n = Random.Range(0, attackSounds.Length);
+        soundSource.volume = initSoundValue * ZombieApocalypse.GameStatus.sfxValue;
         soundSource.clip = attackSounds[n];
         soundSource.PlayOneShot(soundSource.clip);
         attackSounds[n] = attackSounds[0];
@@ -53,20 +63,21 @@ public class ZombieAudioManager : MonoBehaviour
     }
     public void DeadZombie()
     {
-        Growl.Stop();
+        growlSoundSource.Stop();
         soundSource.clip = deadSound;
         soundSource.PlayOneShot(deadSound);
     }
     private void Update()
     {
-        if (Growl.isPlaying)
+        if (growlSoundSource.isPlaying)
         {
-            if(ZombieApocalypse.GameStatus.isPaused)
-            Growl.Stop();
+            growlSoundSource.volume = initGrowlSoundValue * ZombieApocalypse.GameStatus.sfxValue;
+            if (ZombieApocalypse.GameStatus.isPaused)
+            growlSoundSource.Stop();
         }
         else
         {
-            Growl.Play();
+            growlSoundSource.Play();
         }
     }
 }

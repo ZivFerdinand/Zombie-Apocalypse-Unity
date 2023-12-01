@@ -82,10 +82,10 @@ public class MouseLookScript : MonoBehaviour {
 			mouseSensitvity = mouseSensitvity_aiming;
 		}
 		else if(GetComponent<PlayerMovementScript>().maxSpeed > 5){
-			mouseSensitvity = mouseSensitvity_notAiming;
+			mouseSensitvity = ZombieApocalypse.GameStatus.mouseValue * 100;
 		}
 		else{
-			mouseSensitvity = mouseSensitvity_notAiming;
+			mouseSensitvity = ZombieApocalypse.GameStatus.mouseValue * 100;
 		}
 
 

@@ -98,6 +98,19 @@ namespace ZombieApocalypse
                 return temp;
             }
         }
+        public static float mouseValue
+        {
+            set
+            {
+                PlayerPrefs.SetFloat("mouseValue", value);
+
+            }
+            get
+            {
+                float temp = PlayerPrefs.GetFloat("mouseValue", 0.3f);
+                return temp;
+            }
+        }
         public static float musicValue
         {
             set
