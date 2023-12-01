@@ -57,7 +57,7 @@ public class StartUIController : MonoBehaviour
                 }
 
                 creditSc.SetActive(false);
-                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0.5f, 0, 1));
+                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0.25f, 0, 1));
             });
 
         }
@@ -83,7 +83,7 @@ public class StartUIController : MonoBehaviour
             }
             if (name == "CreditsButton")
             {
-                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0f, 0.5f, 1));
+                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0f, 0.25f, 1));
                 creditSc.SetActive(true);
 
                 foreach (Transform child in mainSc.transform)
@@ -94,22 +94,22 @@ public class StartUIController : MonoBehaviour
             }
             if (name == "LeaderboardButton")
             {
-                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0, 1, 0.5f));
+                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0, 1, 0.25f));
                 leaderboardUI.SetActive(true);
             }
             if (name == "OptionsButton")
             {
-                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0, 1, 0.5f));
+                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0, 1, 0.25f));
                 optionsUI.SetActive(true);
             }
             if (name == "BackButton")
             {
-                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 1, 0, 0.5f));
+                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 1, 0, 0.25f));
                 leaderboardUI.SetActive(false);
             }
             if (name == "BackOptionsButton")
             {
-                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 1, 0, 0.5f));
+                StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 1, 0, 0.25f));
                 optionsUI.SetActive(false);
             }
         }

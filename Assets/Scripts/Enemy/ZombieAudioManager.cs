@@ -12,7 +12,6 @@ public class ZombieAudioManager : MonoBehaviour
     
     public void LeftFoot()
     {
-        Debug.Log("1");
         int n = Random.Range(0,footstepSounds.Length);
         soundSource.clip= footstepSounds[n];
         soundSource.PlayOneShot(soundSource.clip);
@@ -21,7 +20,6 @@ public class ZombieAudioManager : MonoBehaviour
     }
     public void LeftRunFoot()
     {
-        Debug.Log("3");
         int n = Random.Range(0, footstepSounds.Length);
         soundSource.clip = footstepSounds[n];
         soundSource.PlayOneShot(soundSource.clip);
@@ -30,7 +28,6 @@ public class ZombieAudioManager : MonoBehaviour
     }
     public void RightRunFoot()
     {
-        Debug.Log("4");
         int n = Random.Range(0, footstepSounds.Length);
         soundSource.clip = footstepSounds[n];
         soundSource.PlayOneShot(soundSource.clip);
@@ -39,7 +36,6 @@ public class ZombieAudioManager : MonoBehaviour
     }
     public void RightFoot()
     {
-        Debug.Log("2");
         int n = Random.Range(0, footstepSounds.Length);
         soundSource.clip = footstepSounds[n];
         soundSource.PlayOneShot(soundSource.clip);
@@ -58,11 +54,9 @@ public class ZombieAudioManager : MonoBehaviour
     public void DeadZombie()
     {
         Growl.Stop();
-        Debug.Log("6");
         soundSource.clip = deadSound;
         soundSource.PlayOneShot(deadSound);
     }
-    // Update is called once per frame
     private void Update()
     {
         if (Growl.isPlaying)

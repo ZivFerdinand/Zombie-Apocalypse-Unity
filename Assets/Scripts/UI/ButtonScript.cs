@@ -39,12 +39,17 @@ public class ButtonScript : MonoBehaviour
 
         ZombieApocalypse.GameStatus.isPaused = (Time.timeScale == 0);
 
+        int shopUIChildCount = shopUI.transform.childCount;
         for (int i = 0; i < pauseUI.transform.childCount; i++)
         {
             pauseUIInitPos.Add(pauseUI.transform.GetChild(i).transform.localPosition);
             pauseUI.transform.GetChild(i).transform.localPosition = new Vector2(0, -1000);
-            shopUIInitPos.Add(shopUI.transform.GetChild(i).transform.localPosition);
-            shopUI.transform.GetChild(i).transform.localPosition = new Vector2(0, -1000);
+
+            if (i < shopUIChildCount)
+            {
+                shopUIInitPos.Add(shopUI.transform.GetChild(i).transform.localPosition);
+                shopUI.transform.GetChild(i).transform.localPosition = new Vector2(0, -1000);
+            }
         }
     }
     void Update()
