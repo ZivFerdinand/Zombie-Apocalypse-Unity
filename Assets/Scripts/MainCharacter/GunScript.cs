@@ -23,9 +23,9 @@ public class GunScript : MonoBehaviour {
 
 	[Header("Bullet properties")]
 	[Tooltip("Preset value to tell with how many bullets will our waepon spawn aside.")]
-	private float bulletsIHave = 20;
+	public float bulletsIHave = 20;
 	[Tooltip("Preset value to tell with how much bullets will our waepon spawn inside rifle.")]
-	private float bulletsInTheGun = 5;
+	public float bulletsInTheGun = 5;
 	private float bulletsI;
 	[Tooltip("Preset value to tell how much bullets can one magazine carry.")]
 	public float amountOfBulletsPerLoad = 5;
@@ -40,17 +40,18 @@ public class GunScript : MonoBehaviour {
     private void Start()
     {
 		crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
-		bulletsI = bulletsInTheGun;
 
-		if (gameObject.name == "newGun_semi")
+		if (gameObject.name == "NewGun_semi(Clone)")
 		{
 			bulletsI = bulletsInTheGun = ZombieApocalypse.GameShopInfo.weapon_1_2;
 			bulletsIHave = ZombieApocalypse.GameShopInfo.weapon_1_1;
+			bulletsI = 60f;
 		}
-		else if(gameObject.name == "newGun_auto")
+		else
 		{
 			bulletsI = bulletsInTheGun = ZombieApocalypse.GameShopInfo.weapon_2_2;
 			bulletsIHave = ZombieApocalypse.GameShopInfo.weapon_2_1;
+			bulletsI = 30f;
 		}
 	}
 
@@ -116,7 +117,7 @@ public class GunScript : MonoBehaviour {
 
 		CrossHairFadeout();
 
-		if (gameObject.name == "newGun_semi")
+		if (gameObject.name == "NewGun_semi(Clone)")
 		{
 			ZombieApocalypse.GameShopInfo.weapon_1_2 = bulletsInTheGun;
 			ZombieApocalypse.GameShopInfo.weapon_1_1 = bulletsIHave;
