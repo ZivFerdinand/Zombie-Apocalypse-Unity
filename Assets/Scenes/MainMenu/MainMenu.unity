@@ -5617,6 +5617,7 @@ GameObject:
   - component: {fileID: 1339968153}
   - component: {fileID: 1339968152}
   - component: {fileID: 1339968151}
+  - component: {fileID: 1339968156}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -5645,6 +5646,7 @@ MonoBehaviour:
   loadingCircle: {fileID: 1238585025}
   leaderboardUI: {fileID: 1245112049}
   optionsUI: {fileID: 1788241528}
+  bannerAds: {fileID: 1339968156}
 --- !u!114 &1339968152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5733,6 +5735,24 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1339968156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339968150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 957b1e55e255c6845ace84f4adbd415c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _loadBannerButton: {fileID: 0}
+  _showBannerButton: {fileID: 0}
+  _hideBannerButton: {fileID: 0}
+  _bannerPosition: 4
+  _androidAdUnitId: Banner_Android
+  _iOSAdUnitId: Banner_iOS
 --- !u!1 &1347560246
 GameObject:
   m_ObjectHideFlags: 0

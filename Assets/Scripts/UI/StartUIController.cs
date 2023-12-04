@@ -22,6 +22,8 @@ public class StartUIController : MonoBehaviour
     private bool creditScActive;
     private bool isLoading;
 
+    public BannerAds bannerAds;
+
     private void Start()
     {
         creditScInitPos = creditSc.transform.position;
@@ -77,11 +79,13 @@ public class StartUIController : MonoBehaviour
                 if (name == "NormalButton")
                 {
                     StartCoroutine(OnLoadScene(0));
+                    bannerAds.HideBannerAd();
 
                 }
                 if (name == "HardButton")
                 {
                     StartCoroutine(OnLoadScene(1));
+                    bannerAds.HideBannerAd();
                 }
                 if (name == "CreditsButton")
                 {
@@ -92,7 +96,7 @@ public class StartUIController : MonoBehaviour
                     {
                         LeanTween.moveLocal(child.gameObject, new Vector2(0, -1500), 0.5f).setEaseInBack().setOnComplete(() => creditScActive = true);
                     }
-
+                    bannerAds.HideBannerAd();
                 }
                 if (name == "LeaderboardButton")
                 {

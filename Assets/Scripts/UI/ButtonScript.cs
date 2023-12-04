@@ -28,6 +28,8 @@ public class ButtonScript : MonoBehaviour
     private bool isShopMenuOpen = false;
     private bool isOptionsOpen = false;
 
+    public BannerAds bannerAds;
+
     private List<Vector2> pauseUIInitPos;
     private List<Vector2> shopUIInitPos;
     private bool isAnimating = false;
@@ -75,6 +77,7 @@ public class ButtonScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) && !isAnimating && !isShopMenuOpen && !isOptionsOpen) // Check if the shop menu is not open
         {
             pauseUI.SetActive(true);
+            bannerAds.ShowBannerAd();
             pauseCheck();
         }
     }
@@ -127,34 +130,42 @@ public class ButtonScript : MonoBehaviour
             case "RestartButton":
                 pauseCheck();
                 SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+                bannerAds.HideBannerAd();
                 break;
             case "ResumeButton":
                 pauseCheck();
+                bannerAds.HideBannerAd();
                 break;
             case "ShopButton":
                 StartCoroutine(shopFromPause());
+                bannerAds.HideBannerAd();
                 break;
             case "MainMenuButton":
                 Time.timeScale = 1;
                 SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+                bannerAds.HideBannerAd();
                 break;
             case "OptionsButton":
                 isOptionsOpen = true;
                 pauseUI.SetActive(false);
                 optionsUI.SetActive(true);
+                bannerAds.HideBannerAd();
                 break;
             case "LeaderBoardButton":
                 gameoverUI.SetActive(false);
                 LeaderboardUI.SetActive(true);
+                bannerAds.HideBannerAd();
                 break;
             case "BackButton":
                 gameoverUI.SetActive(true);
                 LeaderboardUI.SetActive(false);
+                bannerAds.ShowBannerAd();
                 break;
             case "BackOptionsButton":
                 isOptionsOpen = false;
                 pauseUI.SetActive(true);
                 optionsUI.SetActive(false);
+                bannerAds.ShowBannerAd();
                 break;
             case "ShopResumeButton":
                 shopCheck();
@@ -204,6 +215,7 @@ public class ButtonScript : MonoBehaviour
         yield return new WaitForSeconds(1.25f);
         //yield return new WaitForSeconds(0.5f);
 
+        bannerAds.ShowBannerAd();
         gameoverCheck();
     }
     private void gameoverCheck()
