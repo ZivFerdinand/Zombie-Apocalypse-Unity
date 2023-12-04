@@ -79,7 +79,7 @@ public class ButtonScript : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.Escape))
             {
                 pauseUI.SetActive(true);
-                bannerAds.ShowBannerAd();
+                bannerAds.HideBannerAd();
                 pauseCheck();
             }
         }
@@ -90,6 +90,7 @@ public class ButtonScript : MonoBehaviour
         if (!ZombieApocalypse.GameStatus.isPaused && !isShopMenuOpen && !isOptionsOpen)
         {
             shopUI.SetActive(false);
+            bannerAds.ShowBannerAd();
             isAnimating = true;
             StartCoroutine(CustomFadeAnimator.Fade(pauseOverlay.GetComponent<Image>(), 0, 1f, 0.25f));
 
