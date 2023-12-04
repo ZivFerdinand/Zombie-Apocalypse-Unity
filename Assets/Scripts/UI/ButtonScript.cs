@@ -69,16 +69,19 @@ public class ButtonScript : MonoBehaviour
             isAnimating = true;
             StartCoroutine(playerDeathAnimation());
         }
-        if ((!isAnimating && Input.GetKeyDown(KeyCode.B)) && !isShopMenuOpen && !isOptionsOpen) // Check if the shop menu is not open
+
+        if (!isAnimating && !isShopMenuOpen && !isOptionsOpen)
         {
-            shopUI.SetActive(true);
-            shopCheck();
-        }
-        if (Input.GetKeyDown(KeyCode.Escape) && !isAnimating && !isShopMenuOpen && !isOptionsOpen) // Check if the shop menu is not open
-        {
-            pauseUI.SetActive(true);
-            bannerAds.ShowBannerAd();
-            pauseCheck();
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                OpenShop();
+            }
+            else if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                pauseUI.SetActive(true);
+                bannerAds.ShowBannerAd();
+                pauseCheck();
+            }
         }
     }
 
@@ -168,7 +171,14 @@ public class ButtonScript : MonoBehaviour
                 bannerAds.ShowBannerAd();
                 break;
             case "ShopResumeButton":
-                shopCheck();
+                if (isShopMenuOpen)
+                {
+                    CloseShop();
+                }
+                else
+                {
+                    Debug.Log("Ignoring ShopResumeButton click while shop is closed.");
+                }
                 break;
             case "BuyAmmoButton":
 
@@ -291,7 +301,18 @@ public class ButtonScript : MonoBehaviour
         pauseCheck();
 
         yield return new WaitForSeconds(0.5f);
-
+        
+        shopCheck();
+    }
+    private void OpenShop()
+    {
+        isShopMenuOpen = true;
+        shopUI.SetActive(true);
+        shopCheck();
+    }
+    private void CloseShop()
+    {
+        isShopMenuOpen = false;
         shopCheck();
     }
 }
