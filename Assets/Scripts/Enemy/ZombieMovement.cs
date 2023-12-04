@@ -9,7 +9,8 @@ public class ZombieMovement : MonoBehaviour
 {
     public GameObject dieParticleEffect;
     public GameObject[] lootModel;
-    public int dropChance;
+    private int[] dropChancePerLevel = { 10, 20, 30, 40, 50, 60 };
+    public float[] dropChancePerLevelPrice = { 100f, 150f, 200f, 250f, 300f };
 
     private const float detectionRadius = 20f;
     private const float attackradius = 2f;
@@ -28,7 +29,7 @@ public class ZombieMovement : MonoBehaviour
     private float attackInterval = 1f;
     private float moveCooldown = -1f;
     private float timeToDestroy = 3.5f;
-    private float zombieHealth = 2f;
+    private float zombieHealth = 9f;
     private bool scoreAndLootFlag = false;
     private float skillCD;
 
@@ -162,7 +163,7 @@ public class ZombieMovement : MonoBehaviour
         //                                    transform.position + new Vector3(1.0f, 1.0f, 0.0f),
         //                                    Quaternion.identity);
         int random = Random.Range(1, 101);
-        if (random <= dropChance)
+        if (random <= dropChancePerLevel[ZombieApocalypse.GameShopInfo.item_drop_chance_level])
         {
             GameObject loot = Instantiate(lootModel[Random.Range(0, lootModel.Length)],
                                             transform.position + new Vector3(1.0f, 1.0f, 0.0f),

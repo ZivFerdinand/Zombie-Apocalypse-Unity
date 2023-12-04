@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 
-
 public class SkillScript : MonoBehaviour
 {
     private Color fireColor = new Color(1, 0.33f, 0.33f);

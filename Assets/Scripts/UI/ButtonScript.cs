@@ -10,6 +10,12 @@ public class ButtonScript : MonoBehaviour
     public GameObject player;
     public GameObject player2;
 
+    [Header("Scripts")]
+    public ZombieMovement zombieMovement;
+
+    [Header("Shop Buttons")]
+    public TextMeshProUGUI increaseDropChancePrice;
+
     [Header("Pause UI")]
     public RectTransform pauseOverlay;
     public GameObject pauseUI;
@@ -33,6 +39,8 @@ public class ButtonScript : MonoBehaviour
     private List<Vector2> pauseUIInitPos;
     private List<Vector2> shopUIInitPos;
     private bool isAnimating = false;
+    private const int maxUpgradeLevel = 5;
+
 
     
     private void Start()
@@ -63,7 +71,6 @@ public class ButtonScript : MonoBehaviour
     }
     void Update()
     {
-
         if ((!isAnimating && Input.GetKeyDown(KeyCode.Backspace)) || (playerHealth.currentHealth < 0.1f && !isAnimating))
         {
             isAnimating = true;
@@ -83,6 +90,7 @@ public class ButtonScript : MonoBehaviour
                 pauseCheck();
             }
         }
+        updateButtonText();
     }
 
     private void pauseCheck()
@@ -185,7 +193,7 @@ public class ButtonScript : MonoBehaviour
 
                 break;
             case "IncreaseDropButton":
-
+                upgradeDropChance();
                 break;
             case "IncreaseDmgButton":
                 
@@ -315,5 +323,30 @@ public class ButtonScript : MonoBehaviour
     {
         isShopMenuOpen = false;
         shopCheck();
+    }
+    private void upgradeDropChance()
+    {
+        // Debug.Log("Before Coins: " + ZombieApocalypse.GameData.coinCounter);
+        // Debug.Log("Before Level: " + ZombieApocalypse.GameShopInfo.item_drop_chance_level);
+        if (ZombieApocalypse.GameShopInfo.item_drop_chance_level < maxUpgradeLevel)
+        {
+            if (ZombieApocalypse.GameData.coinCounter - (int)zombieMovement.dropChancePerLevelPrice[ZombieApocalypse.GameShopInfo.item_drop_chance_level] >= 0)
+            {
+                ZombieApocalypse.GameData.coinCounter -= (int)zombieMovement.dropChancePerLevelPrice[ZombieApocalypse.GameShopInfo.item_drop_chance_level];
+                ZombieApocalypse.GameShopInfo.item_drop_chance_level += 1;
+            }
+        }
+        // Debug.Log("After Coins: " + ZombieApocalypse.GameData.coinCounter);
+        // Debug.Log("After Level: " + ZombieApocalypse.GameShopInfo.item_drop_chance_level);
+
+    }
+    private void updateButtonText()
+    {
+        if (ZombieApocalypse.GameShopInfo.item_drop_chance_level < maxUpgradeLevel)
+            increaseDropChancePrice.text = zombieMovement.dropChancePerLevelPrice[ZombieApocalypse.GameShopInfo.item_drop_chance_level].ToString();
+        else
+            increaseDropChancePrice.text = "MAX";
+
+
     }
 }

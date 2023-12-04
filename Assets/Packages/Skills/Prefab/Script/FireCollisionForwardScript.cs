@@ -33,7 +33,7 @@ namespace DigitalRuby.PyroParticles
                     if (skillScript.currentPrefabIndex==0)
                     {
 
-                        col.gameObject.GetComponent<ZombieMovement>().decreaseHealth(3);
+                        col.gameObject.GetComponent<ZombieMovement>().decreaseHealth(50);
                     }
                     else
                     {

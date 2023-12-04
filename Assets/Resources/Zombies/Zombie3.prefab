@@ -5746,7 +5746,13 @@ MonoBehaviour:
   - {fileID: 146310, guid: f244d85ca954f4336a1a7595053efbfc, type: 3}
   - {fileID: 197236, guid: 4fc855fb7bf094a0891967175e5bdb17, type: 3}
   - {fileID: 173500, guid: fb5a9652227c545d98a413cd73b80b69, type: 3}
-  dropChance: 20
+  dropChancePerLevelPrice:
+  - 100
+  - 150
+  - 200
+  - 250
+  - 300
+  - 0
   FloatingTextPrefab: {fileID: 6049633952643000866, guid: 3647556404c8c6e4bb388c8e230c6d72, type: 3}
 --- !u!82 &2923352551722890670
 AudioSource:

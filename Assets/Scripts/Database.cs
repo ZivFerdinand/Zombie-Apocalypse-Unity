@@ -58,6 +58,66 @@ namespace ZombieApocalypse
                 return temp;
             }
         }
+        public static int weapon_1_dmg_level
+        {
+            set
+            {
+                PlayerPrefs.SetInt("weapon_1_dmg_level", value);
+            }
+            get
+            {
+                int temp = PlayerPrefs.GetInt("weapon_1_dmg_level", 0);
+                return temp;
+            }
+        }
+        public static int weapon_2_dmg_level
+        {
+            set
+            {
+                PlayerPrefs.SetInt("weapon_2_dmg_level", value);
+            }
+            get
+            {
+                int temp = PlayerPrefs.GetInt("weapon_2_dmg_level", 0);
+                return temp;
+            }
+        }
+        public static int item_drop_chance_level
+        {
+            set
+            {
+                PlayerPrefs.SetInt("item_drop_chance_level", value);
+            }
+            get
+            {
+                int temp = PlayerPrefs.GetInt("item_drop_chance_level", 0);
+                return temp;
+            }
+        }
+        public static int skill_1_aim_duration_level
+        {
+            set
+            {
+                PlayerPrefs.SetInt("skill_1_aim_duration_level", value);
+            }
+            get
+            {
+                int temp = PlayerPrefs.GetInt("skill_1_aim_duration_level", 0);
+                return temp;
+            }
+        }
+        public static int skill_2_aim_duration_level
+        {
+            set
+            {
+                PlayerPrefs.SetInt("skill_2_aim_duration_level", value);
+            }
+            get
+            {
+                int temp = PlayerPrefs.GetInt("skill_2_aim_duration_level", 0);
+                return temp;
+            }
+        }
     }
     public static class GameData
     {
