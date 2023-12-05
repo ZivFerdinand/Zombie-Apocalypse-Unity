@@ -16,6 +16,7 @@ public class OptionsScript : MonoBehaviour
 
     private void Start()
     {
+        musicSlider.value = ZombieApocalypse.GameStatus.musicValue;
         sfxSlider.value = ZombieApocalypse.GameStatus.sfxValue;
         muteToggle.isOn = ZombieApocalypse.GameStatus.isMuted;
         mouseSlider.value = ZombieApocalypse.GameStatus.mouseValue;
