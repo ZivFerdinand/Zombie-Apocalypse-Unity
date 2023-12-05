@@ -83,6 +83,7 @@ public class SkillScript : MonoBehaviour
             fireCount--;
             updateSkillBar();
             currentPrefabIndex = 0;
+            Prefabs[currentPrefabIndex].GetComponent<AudioSource>().volume = ZombieApocalypse.GameStatus.sfxValue;
             SetAiming();
         }
         else if(Input.GetKeyUp(KeyCode.E) && isAimingSkill && !ZombieApocalypse.GameStatus.isPaused)
@@ -94,6 +95,7 @@ public class SkillScript : MonoBehaviour
             iceCount--;
             updateSkillBar();
             currentPrefabIndex = 1;
+            Prefabs[currentPrefabIndex].GetComponent<AudioSource>().volume = ZombieApocalypse.GameStatus.sfxValue;
             SetAiming();
         }
         else if (Input.GetKeyUp(KeyCode.Q) && isAimingSkill && !ZombieApocalypse.GameStatus.isPaused)

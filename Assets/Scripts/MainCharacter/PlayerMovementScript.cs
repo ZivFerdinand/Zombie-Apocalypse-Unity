@@ -80,9 +80,12 @@ public class PlayerMovementScript : MonoBehaviour {
 		if (!ZombieApocalypse.GameStatus.isPaused && Input.GetKeyDown (KeyCode.Space) && grounded) {
 			rb.AddRelativeForce (Vector3.up * jumpForce);
 			if (_jumpSound)
-				_jumpSound.Play ();
+			{
+				_jumpSound.volume = ZombieApocalypse.GameStatus.sfxValue;
+				_jumpSound.Play();
+			}
 			else
-				print ("Missig jump sound.");
+				print("Missig jump sound.");
 			_walkSound.Stop ();
 			_runSound.Stop ();
 		}
@@ -114,6 +117,8 @@ public class PlayerMovementScript : MonoBehaviour {
 						//	print ("tu sem");
 						if (!_walkSound.isPlaying) {
 							//	print ("playam hod");
+
+							_walkSound.volume = ZombieApocalypse.GameStatus.sfxValue;
 							_walkSound.Play ();
 							_runSound.Stop ();
 						}					
@@ -122,6 +127,7 @@ public class PlayerMovementScript : MonoBehaviour {
 
 						if (!_runSound.isPlaying) {
 							_walkSound.Stop ();
+							_runSound.volume = ZombieApocalypse.GameStatus.sfxValue;
 							_runSound.Play ();
 						}
 					}
@@ -312,9 +318,12 @@ public class PlayerMovementScript : MonoBehaviour {
 			GunScript.HitMarkerSound ();
 
 			if (_hitSound)
-				_hitSound.Play ();
+			{
+				_hitSound.volume = ZombieApocalypse.GameStatus.sfxValue;
+				_hitSound.Play();
+			}
 			else
-				print ("Missing hit sound");
+				print("Missing hit sound");
 			
 			if (!swordHitWithGunOrNot) {
 				if (bloodEffect)
@@ -327,7 +336,8 @@ public class PlayerMovementScript : MonoBehaviour {
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "Potion")
-        {
+		{
+			_pickPotion.volume = ZombieApocalypse.GameStatus.sfxValue;
 			_pickPotion.Play();
         }
     }

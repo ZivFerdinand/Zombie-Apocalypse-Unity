@@ -433,6 +433,8 @@ public class GunScript : MonoBehaviour {
 	* Sounds that is called upon hitting the target.
 	*/
 	public static void HitMarkerSound(){
+		hitMarker.volume = ZombieApocalypse.GameStatus.sfxValue;
+    
 		hitMarker.Play();
 	}
 
@@ -497,9 +499,12 @@ public class GunScript : MonoBehaviour {
 
 			if (reloadSound_source.isPlaying == false && reloadSound_source != null) {
 				if (reloadSound_source)
-					reloadSound_source.Play ();
+				{reloadSound_source.volume = ZombieApocalypse.GameStatus.sfxValue;
+             
+					reloadSound_source.Play();
+				}
 				else
-					print ("'Reload Sound Source' missing.");
+					print("'Reload Sound Source' missing.");
 			}
 		
 
@@ -512,10 +517,13 @@ public class GunScript : MonoBehaviour {
 			yield return new WaitForSeconds (reloadChangeBulletsTime - 0.5f);//minus ovo vrijeme cekanja na yield
 			if (meeleAttack == false && pmS.maxSpeed != runningSpeed) {
 				//print ("tu sam");
-				if (player.GetComponent<PlayerMovementScript> ()._freakingZombiesSound)
-					player.GetComponent<PlayerMovementScript> ()._freakingZombiesSound.Play ();
+				if (player.GetComponent<PlayerMovementScript>()._freakingZombiesSound)
+				{
+					player.GetComponent<PlayerMovementScript>()._freakingZombiesSound.volume = ZombieApocalypse.GameStatus.sfxValue;
+					player.GetComponent<PlayerMovementScript>()._freakingZombiesSound.Play();
+				}
 				else
-					print ("Missing Freaking Zombies Sound");
+					print("Missing Freaking Zombies Sound");
 				
 				if (bulletsIHave - amountOfBulletsPerLoad >= 0) {
 					bulletsIHave -= amountOfBulletsPerLoad - bulletsInTheGun;
