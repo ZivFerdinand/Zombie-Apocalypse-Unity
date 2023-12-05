@@ -77,7 +77,7 @@ public class PlayerMovementScript : MonoBehaviour {
 	* Handles jumping and ads the force and sounds.
 	*/
 	void Jumping(){
-		if (!ZombieApocalypse.GameStatus.isPaused && Input.GetKeyDown (KeyCode.Space) && grounded) {
+		if (!ZombieApocalypse.GameStatus.isPaused && Input.GetKeyDown(KeyCode.Space) && grounded) {
 			rb.AddRelativeForce (Vector3.up * jumpForce);
 			if (_jumpSound)
 			{

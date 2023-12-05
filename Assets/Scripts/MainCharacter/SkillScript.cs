@@ -10,7 +10,9 @@ public class SkillScript : MonoBehaviour
     private Color fireColor = new Color(1, 0.33f, 0.33f);
     private Color iceColor = new Color(0f, 0.54f, 0f);
     private Color idleColor = new Color(1, 1, 1, 0.35f);
-    private const float initAimingTime = 5f;
+    
+    private float[] aimingTimePerLevel = { 1f, 1.5f, 2f, 2.5f, 3f, 4f };
+    public float[] aimingTimePerLevelPrice = { 100f, 200f, 300f, 400f, 500f };
 
     public GameObject[] Prefabs;
     public GameObject aimingStatus;
@@ -26,10 +28,11 @@ public class SkillScript : MonoBehaviour
     private bool isAimingSkill;
     private int iceCount;
     private int fireCount;
+    private bool isFireSkill;
     void Start()
     {
         iceCount = fireCount = 2;
-        isAimingSkill = false;
+        isAimingSkill = isFireSkill = false;
     }
 
     void Update()
@@ -37,9 +40,13 @@ public class SkillScript : MonoBehaviour
         aimingStatus.SetActive(isAimingSkill);
         if (isAimingSkill)
         {
-            sliderSkill.value = aimingTimeLeft / initAimingTime;
+            if (!isFireSkill)
+                sliderSkill.value = aimingTimeLeft / aimingTimePerLevel[ZombieApocalypse.GameShopInfo.skill_1_aim_duration_level];
+            else
+                sliderSkill.value = aimingTimeLeft / aimingTimePerLevel[ZombieApocalypse.GameShopInfo.skill_2_aim_duration_level];
+
             aimingTimeLeft -= Time.deltaTime / 0.25f;
-            if(aimingTimeLeft > 0)
+            if (aimingTimeLeft > 0)
             {
                 skillTimeText.text = aimingTimeLeft.ToString("F2") + "s";
             }
@@ -84,7 +91,7 @@ public class SkillScript : MonoBehaviour
             updateSkillBar();
             currentPrefabIndex = 0;
             Prefabs[currentPrefabIndex].GetComponent<AudioSource>().volume = ZombieApocalypse.GameStatus.sfxValue;
-            SetAiming();
+            SetAiming('E');
         }
         else if(Input.GetKeyUp(KeyCode.E) && isAimingSkill && !ZombieApocalypse.GameStatus.isPaused)
         {
@@ -96,7 +103,7 @@ public class SkillScript : MonoBehaviour
             updateSkillBar();
             currentPrefabIndex = 1;
             Prefabs[currentPrefabIndex].GetComponent<AudioSource>().volume = ZombieApocalypse.GameStatus.sfxValue;
-            SetAiming();
+            SetAiming('Q');
         }
         else if (Input.GetKeyUp(KeyCode.Q) && isAimingSkill && !ZombieApocalypse.GameStatus.isPaused)
         {
@@ -184,11 +191,20 @@ public class SkillScript : MonoBehaviour
         currentPrefabObject.transform.rotation = rotation;
     }
 
-    public void SetAiming()
+    public void SetAiming(char skill)
     {
         isAimingSkill = true;
         Time.timeScale = 0.25f;
-        aimingTimeLeft = initAimingTime;
+        if (skill == 'Q')
+        {
+            isFireSkill = false;
+            aimingTimeLeft = aimingTimePerLevel[ZombieApocalypse.GameShopInfo.skill_1_aim_duration_level];
+        }
+        else
+        {
+            isFireSkill = true;
+            aimingTimeLeft = aimingTimePerLevel[ZombieApocalypse.GameShopInfo.skill_2_aim_duration_level];
+        }
     }
     public void StartCurrent()
     {

@@ -20,7 +20,6 @@ public class GunScript : MonoBehaviour {
 	[Tooltip("Speed is determined via gun because not every gun has same properties or weights so you MUST set up your speeds here")]
 	public int runningSpeed = 5;
 
-
 	[Header("Bullet properties")]
 	[Tooltip("Preset value to tell with how many bullets will our waepon spawn aside.")]
 	public float bulletsIHave = 20;

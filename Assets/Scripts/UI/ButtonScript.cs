@@ -12,9 +12,14 @@ public class ButtonScript : MonoBehaviour
 
     [Header("Scripts")]
     public ZombieMovement zombieMovement;
+    public SkillScript skillScript;
+    public GunScript gunScriptWeapon1;
+    public GunScript gunScriptWeapon2;
 
     [Header("Shop Buttons")]
     public TextMeshProUGUI increaseDropChancePrice;
+    public TextMeshProUGUI aimTime1Price;
+    public TextMeshProUGUI aimTime2Price;
 
     [Header("Pause UI")]
     public RectTransform pauseOverlay;
@@ -182,25 +187,27 @@ public class ButtonScript : MonoBehaviour
                 break;
             case "ShopResumeButton":
                 if (isShopMenuOpen)
-                {
                     CloseShop();
-                }
                 else
-                {
                     Debug.Log("Ignoring ShopResumeButton click while shop is closed.");
-                }
                 break;
-            case "BuyAmmoButton":
-
+            case "BuyAmmo1Button":
+                buyWeapon1Ammo();
                 break;
-            case "IncreaseDropButton":
-                upgradeDropChance();
+            case "BuyAmmo2Button":
+                buyWeapon2Ammo();
                 break;
             case "IncreaseDmgButton":
                 
                 break;
-            case "AimTimeButton":
-
+            case "IncreaseDropButton":
+                upgradeDropChance();
+                break;
+            case "AimTime1Button":
+                upgradeAimTime1();
+                break;
+            case "AimTime2Button":
+                upgradeAimTime2();
                 break;
         }
     }
@@ -340,7 +347,45 @@ public class ButtonScript : MonoBehaviour
         }
         // Debug.Log("After Coins: " + ZombieApocalypse.GameData.coinCounter);
         // Debug.Log("After Level: " + ZombieApocalypse.GameShopInfo.item_drop_chance_level);
-
+    }
+    private void buyWeapon1Ammo()
+    {
+        if (ZombieApocalypse.GameData.coinCounter - 200 >= 0)
+        {
+            ZombieApocalypse.GameData.coinCounter -= 200;
+            ZombieApocalypse.GameShopInfo.weapon_1_1 += 300;
+            gunScriptWeapon1.bulletsIHave += 300;
+        }
+    }
+    private void buyWeapon2Ammo()
+    {
+        if (ZombieApocalypse.GameData.coinCounter - 200 >= 0)
+        {
+            ZombieApocalypse.GameData.coinCounter -= 200;
+            ZombieApocalypse.GameShopInfo.weapon_2_1 += 300;
+        }
+    }
+    private void upgradeAimTime1()
+    {
+        if (ZombieApocalypse.GameShopInfo.skill_1_aim_duration_level < maxUpgradeLevel)
+        {
+            if (ZombieApocalypse.GameData.coinCounter - (int)skillScript.aimingTimePerLevelPrice[ZombieApocalypse.GameShopInfo.skill_1_aim_duration_level] >= 0)
+            {
+                ZombieApocalypse.GameData.coinCounter -= (int)skillScript.aimingTimePerLevelPrice[ZombieApocalypse.GameShopInfo.skill_1_aim_duration_level];
+                ZombieApocalypse.GameShopInfo.skill_1_aim_duration_level += 1;
+            }
+        }
+    }
+    private void upgradeAimTime2()
+    {
+        if (ZombieApocalypse.GameShopInfo.skill_2_aim_duration_level < maxUpgradeLevel)
+        {
+            if (ZombieApocalypse.GameData.coinCounter - (int)skillScript.aimingTimePerLevelPrice[ZombieApocalypse.GameShopInfo.skill_2_aim_duration_level] >= 0)
+            {
+                ZombieApocalypse.GameData.coinCounter -= (int)skillScript.aimingTimePerLevelPrice[ZombieApocalypse.GameShopInfo.skill_2_aim_duration_level];
+                ZombieApocalypse.GameShopInfo.skill_2_aim_duration_level += 1;
+            }
+        }
     }
     private void updateButtonText()
     {
@@ -349,6 +394,14 @@ public class ButtonScript : MonoBehaviour
         else
             increaseDropChancePrice.text = "MAX";
 
+        if (ZombieApocalypse.GameShopInfo.skill_1_aim_duration_level < maxUpgradeLevel)
+            aimTime1Price.text = skillScript.aimingTimePerLevelPrice[ZombieApocalypse.GameShopInfo.skill_1_aim_duration_level].ToString();
+        else
+            aimTime1Price.text = "MAX";
 
+        if (ZombieApocalypse.GameShopInfo.skill_2_aim_duration_level < maxUpgradeLevel)
+            aimTime2Price.text = skillScript.aimingTimePerLevelPrice[ZombieApocalypse.GameShopInfo.skill_2_aim_duration_level].ToString();
+        else
+            aimTime2Price.text = "MAX";
     }
 }

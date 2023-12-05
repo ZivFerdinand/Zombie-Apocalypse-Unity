@@ -115,7 +115,7 @@ public class ZombieMovement : MonoBehaviour
         zombieMeshAgent.SetDestination(transform.position);
         skillCD = 10f;
     }
-    public void decreaseHealth(int amount)
+    public void decreaseHealth(float amount)
     {
         zombieHealth -= amount;
 
