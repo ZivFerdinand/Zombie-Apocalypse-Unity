@@ -35,6 +35,7 @@ public class ButtonScript : MonoBehaviour
     private bool isOptionsOpen = false;
 
     public BannerAds bannerAds;
+    public InterstitialAds interstitialAds;
 
     private List<Vector2> pauseUIInitPos;
     private List<Vector2> shopUIInitPos;
@@ -234,7 +235,8 @@ public class ButtonScript : MonoBehaviour
         yield return new WaitForSeconds(1.25f);
         //yield return new WaitForSeconds(0.5f);
 
-        bannerAds.ShowBannerAd();
+        interstitialAds.LoadAd();
+        interstitialAds.ShowAd();
         gameoverCheck();
     }
     private void gameoverCheck()
