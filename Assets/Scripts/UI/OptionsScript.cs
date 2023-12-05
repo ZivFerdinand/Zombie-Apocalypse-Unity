@@ -60,10 +60,13 @@ public class OptionsScript : MonoBehaviour
     }
     private void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
-            if(ZombieApocalypse.GameStatus.isPaused || SceneManager.GetActiveScene().name == "MainMenu")
+            if (ZombieApocalypse.GameStatus.isPaused || SceneManager.GetActiveScene().name == "MainMenu")
+            {
+                selectSoundSource.volume = ZombieApocalypse.GameStatus.sfxValue;
                 selectSoundSource.PlayOneShot(selectSound);
+            }
         }
     }
 }

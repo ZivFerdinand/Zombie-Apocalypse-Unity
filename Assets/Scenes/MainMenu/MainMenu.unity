@@ -7265,9 +7265,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1709311113032229593, guid: 866f78fe74ab5b344b8144e544ca5569, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 540596109}
+    - target: {fileID: 1709311113032229593, guid: 866f78fe74ab5b344b8144e544ca5569, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: muteChange
+      objectReference: {fileID: 0}
+    - target: {fileID: 4211699668102866091, guid: 866f78fe74ab5b344b8144e544ca5569, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 540596109}
+    - target: {fileID: 4211699668102866091, guid: 866f78fe74ab5b344b8144e544ca5569, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: musicChange
+      objectReference: {fileID: 0}
+    - target: {fileID: 4317717107522358917, guid: 866f78fe74ab5b344b8144e544ca5569, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 540596109}
+    - target: {fileID: 4317717107522358917, guid: 866f78fe74ab5b344b8144e544ca5569, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: sfxChange
+      objectReference: {fileID: 0}
     - target: {fileID: 5436059676748224850, guid: 866f78fe74ab5b344b8144e544ca5569, type: 3}
       propertyPath: m_Value
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436059676748224850, guid: 866f78fe74ab5b344b8144e544ca5569, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 540596109}
+    - target: {fileID: 5436059676748224850, guid: 866f78fe74ab5b344b8144e544ca5569, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: mouseChange
       objectReference: {fileID: 0}
     - target: {fileID: 6086737436268244477, guid: 866f78fe74ab5b344b8144e544ca5569, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
