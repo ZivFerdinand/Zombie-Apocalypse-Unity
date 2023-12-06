@@ -12,6 +12,7 @@ public class StartUIController : MonoBehaviour
     public GameObject mainSc, creditSc;
     public GameObject playButt, normButt, hardButt;
     public GameObject overlay;
+    public GameObject helpUI;
     public GameObject loadingCircle;
     public GameObject leaderboardUI;
     public GameObject optionsUI;
@@ -19,6 +20,7 @@ public class StartUIController : MonoBehaviour
     private List<Vector2> mainScChildInitPos;
     private Vector2 creditScInitPos;
 
+    private bool helpActive;
     private bool creditScActive;
     private bool isLoading;
 
@@ -28,6 +30,7 @@ public class StartUIController : MonoBehaviour
     {
         creditScInitPos = creditSc.transform.position;
         isLoading = false;
+        helpActive = false;
         creditScActive = false;
         mainScChildInitPos = new List<Vector2>();
         bannerAds.ShowBannerAd();
@@ -65,6 +68,7 @@ public class StartUIController : MonoBehaviour
             });
             
         }
+        
     }
     public void onButtonClick(string name)
     {
@@ -112,6 +116,11 @@ public class StartUIController : MonoBehaviour
                     optionsUI.SetActive(true);
                     bannerAds.HideBannerAd();
                 }
+                if(name == "HelpButton")
+                {
+                    helpUI.SetActive(true);
+                    bannerAds.HideBannerAd();
+                }
             }
             if (name == "BackButton")
             {
@@ -123,6 +132,11 @@ public class StartUIController : MonoBehaviour
             {
                 StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 1, 0, 0.25f));
                 optionsUI.SetActive(false);
+                bannerAds.ShowBannerAd();
+            }
+            if(name == "BackHelpButton")
+            {
+                helpUI.SetActive(false);
                 bannerAds.ShowBannerAd();
             }
         }
