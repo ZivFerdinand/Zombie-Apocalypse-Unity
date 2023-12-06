@@ -8,7 +8,6 @@ public class ScoreManagerScript : MonoBehaviour
     private TextMeshProUGUI inputScore;
     [SerializeField]
     private TMP_InputField inputName;
-    // Start is called before the first frame update
     public UnityEvent<string, int> submitscoreEvent;
     public void SubmitScore()
     {

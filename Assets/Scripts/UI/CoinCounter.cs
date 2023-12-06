@@ -9,10 +9,6 @@ public class CoinCounter : MonoBehaviour
 
     void Update()
     {
-        UpdateCoinText();
-    }
-    private void UpdateCoinText()
-    {
         coin.text = ZombieApocalypse.GameData.coinCounter.ToString();
     }
 }

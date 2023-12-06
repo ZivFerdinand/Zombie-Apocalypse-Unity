@@ -31,6 +31,7 @@ public class ZombieDemo : MonoBehaviour
     {
         navMeshAgent.speed = Random.Range(1f, 3f);
         transform.position = new Vector3(-travelPositionLimit, transform.position.y, transform.position.z);
+
         setDestination();
     }
     private void setDestination()

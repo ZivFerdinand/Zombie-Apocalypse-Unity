@@ -227,15 +227,10 @@ public class ButtonScript : MonoBehaviour
         // Convert the quaternion to Euler angles
         Vector3 targetEulerAngles = targetRotation.eulerAngles;
 
-        //// Initiate the rotation animation using LeanTween
-        //LeanTween.rotateLocal(player, targetEulerAngles - new Vector3(90, 0, 0), 1.5f).setEaseOutBounce();
-        //LeanTween.rotateLocal(player2, targetEulerAngles - new Vector3(90, 0, 0), 1.5f).setEaseOutBounce();
 
         player2.GetComponent<GunInventory>().currentHandsAnimator.SetBool("changingWeapon", true);
 
 
-        //LeanTween.rotate(player, new Vector3(-90, initEuler.y, initEuler.z), 1.5f).setEaseOutBounce();
-        //LeanTween.moveX(player, player.transform.position.x -10, 2);
         yield return new WaitForSeconds(0.75f);
         player.SetActive(false);
         LeanTween.rotateLocal(player2, targetEulerAngles - new Vector3(90, 0, 0), 2.5f).setEaseOutBounce();

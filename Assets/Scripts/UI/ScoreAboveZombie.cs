@@ -6,8 +6,6 @@ using UnityEngine;
 public class ScoreAdder : MonoBehaviour
 {
     public TextMeshProUGUI aboveZombieText;
-
-    // Update is called once per frame
     void Update()
     {
         UpdateScore();

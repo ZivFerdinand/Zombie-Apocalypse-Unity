@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,24 +13,28 @@ public class ComboBar : MonoBehaviour
 
     private void Update()
     {
-        if (comboBar.value + comboCurrentValue/divider > 100)
-            overBarValue = (comboBar.value + comboCurrentValue/divider) - 100;
+        validateBarValue();
+        comboBar.value -= Time.deltaTime * (2f * divider);
+    }
+
+    private void validateBarValue()
+    {
+        if (comboBar.value + comboCurrentValue / divider > 100)
+            overBarValue = (comboBar.value + comboCurrentValue / divider) - 100;
 
         comboBar.value += comboCurrentValue / divider;
         comboCurrentValue = 0;
 
-        if(comboBar.value >= 100 && divider < 2f)
+        if (comboBar.value >= 100 && divider < 2f)
         {
             comboBar.value = overBarValue;
             overBarValue = 0;
             divider += 0.5f;
-        } 
-        else if(comboBar.value <= 1 && divider > 1f)
+        }
+        else if (comboBar.value <= 1 && divider > 1f)
         {
             comboBar.value = 99;
             divider -= 0.5f;
         }
-
-        comboBar.value -= Time.deltaTime * (2f * divider);
     }
 }

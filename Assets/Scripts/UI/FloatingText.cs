@@ -6,13 +6,15 @@ using static UnityEngine.GraphicsBuffer;
 
 public class FloatingText : MonoBehaviour
 {
-    public TextMesh aboveZombieText;
     private Transform player;
+    private bool updated = false;
+
+    public TextMesh aboveZombieText;
     public float DestroyTime = 3f;
+
     public Vector3 Offsset = new Vector3 (0, 3, 0);
     public Vector3 RandomizeIntensity = new Vector3((float)0.5, 0, 0);
-    private bool updated = false;
-    // Start is called before the first frame update
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -20,8 +22,9 @@ public class FloatingText : MonoBehaviour
 
         transform.localPosition += Offsset;
         transform.localPosition += new Vector3(Random.Range(-RandomizeIntensity.x, RandomizeIntensity.x),
-            Random.Range(-RandomizeIntensity.y, RandomizeIntensity.y),
-            Random.Range(-RandomizeIntensity.z, RandomizeIntensity.z));
+                                                Random.Range(-RandomizeIntensity.y, RandomizeIntensity.y),
+                                                Random.Range(-RandomizeIntensity.z, RandomizeIntensity.z)
+                                              );
     }
 
     void Update()

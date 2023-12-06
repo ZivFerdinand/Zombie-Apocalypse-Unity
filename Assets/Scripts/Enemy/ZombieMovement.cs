@@ -7,10 +7,11 @@ using UnityEngine.AI;
 
 public class ZombieMovement : MonoBehaviour
 {
-    public GameObject dieParticleEffect;
-    public GameObject[] lootModel;
     private int[] dropChancePerLevel = { 10, 20, 30, 40, 50, 60 };
     public float[] dropChancePerLevelPrice = { 100f, 150f, 200f, 250f, 300f };
+
+    public GameObject dieParticleEffect;
+    public GameObject[] lootModel;
 
     private const float detectionRadius = 20f;
     private const float attackradius = 2f;
@@ -105,10 +106,7 @@ public class ZombieMovement : MonoBehaviour
         }
     }
 
-    public void showFloatingText()
-    {
-        Instantiate(FloatingTextPrefab, transform.position, Quaternion.identity, transform);
-    }
+    
 
     public void slowSpeed()
     {
@@ -134,6 +132,10 @@ public class ZombieMovement : MonoBehaviour
             scoreAndLootFlag = true;
         }
     }
+    private void showFloatingText()
+    {
+        Instantiate(FloatingTextPrefab, transform.position, Quaternion.identity, transform);
+    }
     private void setWalkAround()
     {
         if (moveCooldown < 0f)
@@ -158,10 +160,6 @@ public class ZombieMovement : MonoBehaviour
     }
     private void dropLoot()
     {
-        // Test Instantiate Ice
-        //GameObject loot = Instantiate(lootModel[1],
-        //                                    transform.position + new Vector3(1.0f, 1.0f, 0.0f),
-        //                                    Quaternion.identity);
         int random = Random.Range(1, 101);
         if (random <= dropChancePerLevel[ZombieApocalypse.GameShopInfo.item_drop_chance_level])
         {
