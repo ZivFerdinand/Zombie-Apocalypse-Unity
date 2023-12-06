@@ -40,7 +40,7 @@ public class LeaderBoardScript : MonoBehaviour
             GetLeaderBoard();
         }));
 
-        LeaderboardCreator.ResetPlayer();
+        //LeaderboardCreator.ResetPlayer();
 
         if (username != "")
         buttonScript.onPlayerNameSubmit();
