@@ -30,6 +30,7 @@ public class StartUIController : MonoBehaviour
         isLoading = false;
         creditScActive = false;
         mainScChildInitPos = new List<Vector2>();
+        bannerAds.ShowBannerAd();
 
         foreach (Transform child in mainSc.transform)
         {
@@ -59,9 +60,10 @@ public class StartUIController : MonoBehaviour
                 }
 
                 creditSc.SetActive(false);
+                bannerAds.ShowBannerAd();
                 StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0.25f, 0, 1));
             });
-
+            
         }
     }
     public void onButtonClick(string name)
@@ -102,22 +104,26 @@ public class StartUIController : MonoBehaviour
                 {
                     StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0, 1, 0.25f));
                     leaderboardUI.SetActive(true);
+                    bannerAds.HideBannerAd();
                 }
                 if (name == "OptionsButton")
                 {
                     StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 0, 1, 0.25f));
                     optionsUI.SetActive(true);
+                    bannerAds.HideBannerAd();
                 }
             }
             if (name == "BackButton")
             {
                 StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 1, 0, 0.25f));
                 leaderboardUI.SetActive(false);
+                bannerAds.ShowBannerAd();
             }
             if (name == "BackOptionsButton")
             {
                 StartCoroutine(CustomFadeAnimator.Fade(overlay.GetComponent<Image>(), 1, 0, 0.25f));
                 optionsUI.SetActive(false);
+                bannerAds.ShowBannerAd();
             }
         }
     }

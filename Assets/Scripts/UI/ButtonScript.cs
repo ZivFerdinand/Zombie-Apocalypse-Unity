@@ -161,7 +161,7 @@ public class ButtonScript : MonoBehaviour
             case "MainMenuButton":
                 Time.timeScale = 1;
                 SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
-                bannerAds.HideBannerAd();
+                bannerAds.ShowBannerAd();
                 break;
             case "OptionsButton":
                 isOptionsOpen = true;
@@ -172,12 +172,10 @@ public class ButtonScript : MonoBehaviour
             case "LeaderBoardButton":
                 gameoverUI.SetActive(false);
                 LeaderboardUI.SetActive(true);
-                bannerAds.HideBannerAd();
                 break;
             case "BackButton":
                 gameoverUI.SetActive(true);
                 LeaderboardUI.SetActive(false);
-                bannerAds.ShowBannerAd();
                 break;
             case "BackOptionsButton":
                 isOptionsOpen = false;
