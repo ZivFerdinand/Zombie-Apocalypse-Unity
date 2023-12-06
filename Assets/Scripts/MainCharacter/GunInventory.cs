@@ -24,7 +24,7 @@ public class GunInventory : MonoBehaviour
 
     public WeaponSelection weaponSelection;
 
-    private List<GameObject> instantiatedGuns = new List<GameObject>();
+    public List<GameObject> instantiatedGuns = new List<GameObject>();
 
     void Awake()
     {

@@ -27,16 +27,22 @@ public class LeaderBoardScript : MonoBehaviour
             }
         }));
     }
-    public void SetLeaderboardEntry(string username,int score)
+    public void SetLeaderboardEntry(string username, int score)
     {
-        ZombieApocalypse.GameData.playerName = username;
-        LeaderboardCreator.UploadNewEntry(publicNormalLeaderboardKey, username, score, ((_) =>
+        if (username != "")
+            ZombieApocalypse.GameData.playerName = username;
+        else
+        {
+            LeaderboardCreator.DeleteEntry(publicNormalLeaderboardKey);
+        }
+        LeaderboardCreator.UploadNewEntry(publicNormalLeaderboardKey, ZombieApocalypse.GameData.playerName, score, ((_) =>
         {
             GetLeaderBoard();
         }));
 
         LeaderboardCreator.ResetPlayer();
 
+        if (username != "")
         buttonScript.onPlayerNameSubmit();
     }
   

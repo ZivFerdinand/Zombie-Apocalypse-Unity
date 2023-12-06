@@ -7,14 +7,15 @@ using UnityEngine.UI;
 
 public class ButtonScript : MonoBehaviour
 {
+    public LeaderBoardScript leaderBoardScript;
+    public TextMeshProUGUI scoreA;
     public GameObject player;
     public GameObject player2;
 
     [Header("Scripts")]
     public ZombieMovement zombieMovement;
     public SkillScript skillScript;
-    public GunScript gunScriptWeapon1;
-    public GunScript gunScriptWeapon2;
+    public GunInventory gunInventory;
 
     [Header("Shop Buttons")]
     public TextMeshProUGUI increaseDropChancePrice;
@@ -51,6 +52,7 @@ public class ButtonScript : MonoBehaviour
     
     private void Start()
     {
+        interstitialAds.LoadAd();
         pauseUIInitPos = new List<Vector2>();
         shopUIInitPos = new List<Vector2>();
 
@@ -235,7 +237,6 @@ public class ButtonScript : MonoBehaviour
         yield return new WaitForSeconds(1.25f);
         //yield return new WaitForSeconds(0.5f);
 
-        interstitialAds.LoadAd();
         interstitialAds.ShowAd();
         gameoverCheck();
     }
@@ -247,6 +248,8 @@ public class ButtonScript : MonoBehaviour
             gameoverUI.SetActive(false);
             askNameUI.SetActive(true);
         }
+        else
+            leaderBoardScript.SetLeaderboardEntry("", int.Parse(scoreA.text));
 
 
         StartCoroutine(CustomFadeAnimator.Fade(gameoverOverlay.GetComponent<Image>(), 0, 1, 1f));
@@ -346,8 +349,7 @@ public class ButtonScript : MonoBehaviour
         if (ZombieApocalypse.GameData.coinCounter - 200 >= 0)
         {
             ZombieApocalypse.GameData.coinCounter -= 200;
-            ZombieApocalypse.GameShopInfo.weapon_1_1 += 300;
-            gunScriptWeapon1.bulletsIHave += 300;
+            gunInventory.instantiatedGuns[0].GetComponent<GunScript>().bulletsIHave += 60;
         }
     }
     private void buyWeapon2Ammo()
@@ -355,7 +357,7 @@ public class ButtonScript : MonoBehaviour
         if (ZombieApocalypse.GameData.coinCounter - 200 >= 0)
         {
             ZombieApocalypse.GameData.coinCounter -= 200;
-            ZombieApocalypse.GameShopInfo.weapon_2_1 += 300;
+            gunInventory.instantiatedGuns[1].GetComponent<GunScript>().bulletsIHave += 30;
         }
     }
     private void upgradeAimTime1()

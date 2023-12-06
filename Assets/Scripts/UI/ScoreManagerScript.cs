@@ -13,4 +13,5 @@ public class ScoreManagerScript : MonoBehaviour
     {
         submitscoreEvent.Invoke(inputName.text, int.Parse(inputScore.text));
     }
+
 }
