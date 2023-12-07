@@ -172,6 +172,19 @@ namespace ZombieApocalypse
                 return temp;
             }
         }
+        public static int currentWeapon
+        {
+            set
+            {
+                PlayerPrefs.SetInt("currentWeapon", value);
+
+            }
+            get
+            {
+                int temp = PlayerPrefs.GetInt("currentWeapon", 0);
+                return temp;
+            }
+        }
     }
     public static class GameStatus
     {

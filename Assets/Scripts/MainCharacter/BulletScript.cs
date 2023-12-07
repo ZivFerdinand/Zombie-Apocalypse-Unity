@@ -3,7 +3,8 @@ using System.Collections;
 
 public class BulletScript : MonoBehaviour {
 
-	[Tooltip("Furthest distance bullet will look for target")]
+    [Header("Bullet Logic")]
+    [Tooltip("Furthest distance bullet will look for target")]
 	public float maxDistance = 1000000;
 	RaycastHit hit;
 	[Tooltip("Prefab of wall damange hit. The object needs 'LevelPart' tag to create decal on it.")]
@@ -15,28 +16,39 @@ public class BulletScript : MonoBehaviour {
 	[Tooltip("Put Weapon layer and Player layer to ignore bullet raycast.")]
 	public LayerMask ignoreLayer;
 
-	/*
-	* Uppon bullet creation with this script attatched,
-	* bullet creates a raycast which searches for corresponding tags.
-	* If raycast finds something it will create a decal of corresponding tag.
-	*/
-	void Update () {
+	private float[] bulletDamagePerLevel = { 1f, 1.5f, 2f, 2.5f, 3f, 4f };
+    public float[] bulletDamagePerLevelPrice = { 100f, 200f, 300f, 400f, 500f };
 
-		if(Physics.Raycast(transform.position, transform.forward,out hit, maxDistance, ~ignoreLayer)){
-			if(decalHitWall){
-				if(hit.transform.tag == "LevelPart"){
+    void Update () {
+		if (Physics.Raycast(transform.position, transform.forward,out hit, maxDistance, ~ignoreLayer))
+		{
+			if (decalHitWall)
+			{
+				if (hit.transform.tag == "LevelPart")
+				{
 					Instantiate(decalHitWall, hit.point + hit.normal * floatInfrontOfWall, Quaternion.LookRotation(hit.normal));
 					Destroy(gameObject);
 				}
-				if(hit.transform.tag == "Zombie"){
-					Instantiate(bloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
-					hit.transform.GetComponentInParent<ZombieMovement>().decreaseHealth(1);
-					Destroy(gameObject);
+				if (hit.transform.tag == "Zombie")
+				{
+					if (ZombieApocalypse.GameData.currentWeapon == 1)
+					{
+						Debug.Log(bulletDamagePerLevel[ZombieApocalypse.GameShopInfo.weapon_2_dmg_level] + " berkurang Auto");
+                        Instantiate(bloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
+						hit.transform.GetComponentInParent<ZombieMovement>().decreaseHealth(bulletDamagePerLevel[ZombieApocalypse.GameShopInfo.weapon_2_dmg_level]);
+                        Destroy(gameObject);
+                    } 
+					else
+					{
+                        Debug.Log(bulletDamagePerLevel[ZombieApocalypse.GameShopInfo.weapon_1_dmg_level] + " berkurang Sniper");
+                        Instantiate(bloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                        hit.transform.GetComponentInParent<ZombieMovement>().decreaseHealth(bulletDamagePerLevel[ZombieApocalypse.GameShopInfo.weapon_1_dmg_level]);
+                        Destroy(gameObject);
+                    }
 				}
 			}		
 			Destroy(gameObject);
 		}
 		Destroy(gameObject, 0.1f);
 	}
-
 }

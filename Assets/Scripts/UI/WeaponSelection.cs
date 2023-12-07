@@ -18,12 +18,17 @@ public class WeaponSelection : MonoBehaviour
     public float scaleSpeed = 5f;
     public float weaponNameDisplayDuration = 1.0f;
 
-    private bool currentA = false;
+    public bool currentA = false;
 
+    private void Start()
+    {
+        ZombieApocalypse.GameData.currentWeapon = 0;
+    }
     public void SelectWeaponChange()
     {
         if (currentA)
         {
+            ZombieApocalypse.GameData.currentWeapon = 0;
             LeanTween.scale(autoImage, new Vector3(1.2f, 1.2f, 1.2f), 0.25f).setEaseInBack();
             StartCoroutine(CustomFadeAnimator.Fade(automaticRifleIcon.GetComponent<Image>(), 0.5f, 1, 0.5f));
             StartCoroutine(CustomFadeAnimator.Fade(sniperIcon.GetComponent<Image>(), 1, 0.5f, 0.5f));
@@ -38,6 +43,7 @@ public class WeaponSelection : MonoBehaviour
         }
         else
         {
+            ZombieApocalypse.GameData.currentWeapon = 1;
             LeanTween.scale(sniperImage, new Vector3(1.2f, 1.2f, 1.2f), 0.25f).setEaseInBack();
             StartCoroutine(CustomFadeAnimator.Fade(sniperIcon.GetComponent<Image>(), 0.5f, 1, 0.5f));
             StartCoroutine(CustomFadeAnimator.Fade(automaticRifleIcon.GetComponent<Image>(), 1, 0.5f, 0.5f));
@@ -50,5 +56,6 @@ public class WeaponSelection : MonoBehaviour
             StartCoroutine(CustomFadeAnimator.Fade(autoImage.GetComponent<Image>(), 1f, 0.5f, 0.5f));
             currentA = !currentA;
         }
+        Debug.Log(ZombieApocalypse.GameData.currentWeapon + " : 1 = Auto, 0 = Sniper");
     }
 }
