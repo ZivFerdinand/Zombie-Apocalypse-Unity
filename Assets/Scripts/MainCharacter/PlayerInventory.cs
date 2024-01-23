@@ -13,13 +13,13 @@ public class PlayerInventory : MonoBehaviour
     {
         switch (name)
         {
-            case "FirePotion":
+            case "FirePotion(Clone)":
                 playerSkill.getSkill(0);
                 break;
-            case "HealPotion":
+            case "HealPotion(Clone)":
                 playerHealth.startHeal();
                 break;
-            case "IcePotion":
+            case "IcePotion(Clone)":
                 playerSkill.getSkill(1);
                 break;
         }

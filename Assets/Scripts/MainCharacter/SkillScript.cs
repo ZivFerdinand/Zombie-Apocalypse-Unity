@@ -8,7 +8,7 @@ using TMPro;
 public class SkillScript : MonoBehaviour
 {
     private Color fireColor = new Color(1, 0.33f, 0.33f);
-    private Color iceColor = new Color(0f, 0.54f, 0f);
+    private Color iceColor = new Color(0.35f, 0.64f, 1f);
     private Color idleColor = new Color(1, 1, 1, 0.35f);
     
     private float[] aimingTimePerLevel = { 1f, 1.5f, 2f, 2.5f, 3f, 4f };
