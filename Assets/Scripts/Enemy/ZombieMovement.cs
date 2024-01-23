@@ -35,6 +35,7 @@ public class ZombieMovement : MonoBehaviour
     private float skillCD;
 
     public GameObject FloatingTextPrefab;
+    private GameObject dizzyStars;
 
     private void Start()
     {
@@ -46,6 +47,7 @@ public class ZombieMovement : MonoBehaviour
         zombieCollider = GetComponent<BoxCollider>();
 
         dieParticleEffect.SetActive(false);
+        dizzyStars = transform.GetChild(1).transform.gameObject;
     }
 
     private void Update()
@@ -53,7 +55,7 @@ public class ZombieMovement : MonoBehaviour
         attackInterval -= (attackInterval > 0) ? Time.deltaTime : 0;
 
         float zombiePlayerDistance = Vector3.Distance(transform.position, player.position);
-        if(skillCD > 0)
+        if (skillCD > 0)
         {
 
         }
@@ -63,7 +65,7 @@ public class ZombieMovement : MonoBehaviour
         }
         else if (zombieHealth < 0f)
         {
-            zombieCollider.enabled = false; 
+            zombieCollider.enabled = false;
             setAttackMovingDead(false, false, true);
 
             timeToDestroy -= Time.deltaTime;
@@ -85,9 +87,9 @@ public class ZombieMovement : MonoBehaviour
         else if (zombiePlayerDistance <= detectionRadius)
         {
             setAttackMovingDead(false, true, false);
-           
+
             zombieMeshAgent.SetDestination(player.position);
-            
+
         }
         else
         {
@@ -98,6 +100,7 @@ public class ZombieMovement : MonoBehaviour
         skillCD -= Time.deltaTime;
         if (skillCD < 0)
         {
+            dizzyStars.SetActive(false);
             zombieMeshAgent.speed = 0.5f;
         }
         else
@@ -106,12 +109,14 @@ public class ZombieMovement : MonoBehaviour
         }
     }
 
-    
+
 
     public void slowSpeed()
     {
         zombieMeshAgent.SetDestination(transform.position);
         skillCD = 10f;
+
+        dizzyStars.SetActive(true);
     }
     public void decreaseHealth(float amount)
     {
@@ -125,7 +130,7 @@ public class ZombieMovement : MonoBehaviour
                 showFloatingText();
 
             ComboBar.comboCurrentValue += barScore;
-            scoreNow = (int) (ZombieApocalypse.GameData.currentMultiplier * 10);
+            scoreNow = (int)(ZombieApocalypse.GameData.currentMultiplier * 10);
 
             ZombieApocalypse.GameData.coinCounter += scoreNow;
             ZombieApocalypse.GameData.gameScore += scoreNow;
