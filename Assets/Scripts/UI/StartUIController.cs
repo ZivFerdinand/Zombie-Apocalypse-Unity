@@ -121,6 +121,10 @@ public class StartUIController : MonoBehaviour
                     helpUI.SetActive(true);
                     bannerAds.HideBannerAd();
                 }
+                if (name == "QuitButton")
+                {
+                    Application.Quit();
+                }
             }
             if (name == "BackButton")
             {
