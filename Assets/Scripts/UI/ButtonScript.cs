@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class ButtonScript : MonoBehaviour
 {
+    public AudioSource clip;
     public LeaderBoardScript leaderBoardScript;
     public TextMeshProUGUI scoreA;
     public GameObject player;
@@ -80,7 +81,7 @@ public class ButtonScript : MonoBehaviour
     }
     void Update()
     {
-        if ((!isAnimating && Input.GetKeyDown(KeyCode.Backspace)) || (playerHealth.currentHealth < 0.1f && !isAnimating))
+        if (playerHealth.currentHealth < 0.1f && !isAnimating)
         {
             isAnimating = true;
             StartCoroutine(playerDeathAnimation());
@@ -149,6 +150,7 @@ public class ButtonScript : MonoBehaviour
         switch (name)
         {
             case "RestartButton":
+                ZombieApocalypse.GameData.gameScore = 0;
                 pauseCheck();
                 SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
                 bannerAds.HideBannerAd();
@@ -193,24 +195,31 @@ public class ButtonScript : MonoBehaviour
                     Debug.Log("Ignoring ShopResumeButton click while shop is closed.");
                 break;
             case "BuyAmmo1Button":
+                clip.Play();
                 buyWeapon1Ammo();
                 break;
             case "BuyAmmo2Button":
+                clip.Play();
                 buyWeapon2Ammo();
                 break;
             case "IncreaseDmg1Button":
+                clip.Play();
                 upgradeWeapon1Dmg();
                 break;
             case "IncreaseDmg2Button":
+                clip.Play();
                 upgradeWeapon2Dmg();
                 break;
             case "IncreaseDropButton":
+                clip.Play();
                 upgradeDropChance();
                 break;
             case "AimTime1Button":
+                clip.Play();
                 upgradeAimTime1();
                 break;
             case "AimTime2Button":
+                clip.Play();
                 upgradeAimTime2();
                 break;
         }
