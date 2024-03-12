@@ -77,12 +77,15 @@ public class PlayerMovementScript : MonoBehaviour {
 	* Handles jumping and ads the force and sounds.
 	*/
 	void Jumping(){
-		if (!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetKeyDown (KeyCode.Space) && grounded) {
+		if (!ZombieApocalypse.GameStatus.isPaused && Input.GetKeyDown(KeyCode.Space) && grounded) {
 			rb.AddRelativeForce (Vector3.up * jumpForce);
 			if (_jumpSound)
-				_jumpSound.Play ();
+			{
+				_jumpSound.volume = ZombieApocalypse.GameStatus.sfxValue;
+				_jumpSound.Play();
+			}
 			else
-				print ("Missig jump sound.");
+				print("Missig jump sound.");
 			_walkSound.Stop ();
 			_runSound.Stop ();
 		}
@@ -114,6 +117,8 @@ public class PlayerMovementScript : MonoBehaviour {
 						//	print ("tu sem");
 						if (!_walkSound.isPlaying) {
 							//	print ("playam hod");
+
+							_walkSound.volume = ZombieApocalypse.GameStatus.sfxValue;
 							_walkSound.Play ();
 							_runSound.Stop ();
 						}					
@@ -122,6 +127,7 @@ public class PlayerMovementScript : MonoBehaviour {
 
 						if (!_runSound.isPlaying) {
 							_walkSound.Stop ();
+							_runSound.volume = ZombieApocalypse.GameStatus.sfxValue;
 							_runSound.Play ();
 						}
 					}
@@ -164,7 +170,7 @@ public class PlayerMovementScript : MonoBehaviour {
 	* If player toggle the crouch it will scale the player to appear that is crouching
 	*/
 	void Crouching(){
-		if(!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetKey(KeyCode.C)){
+		if(!ZombieApocalypse.GameStatus.isPaused && Input.GetKey(KeyCode.C)){
 			transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(1,0.6f,1), Time.deltaTime * 15);
 		}
 		else{
@@ -312,9 +318,12 @@ public class PlayerMovementScript : MonoBehaviour {
 			GunScript.HitMarkerSound ();
 
 			if (_hitSound)
-				_hitSound.Play ();
+			{
+				_hitSound.volume = ZombieApocalypse.GameStatus.sfxValue;
+				_hitSound.Play();
+			}
 			else
-				print ("Missing hit sound");
+				print("Missing hit sound");
 			
 			if (!swordHitWithGunOrNot) {
 				if (bloodEffect)
@@ -324,7 +333,16 @@ public class PlayerMovementScript : MonoBehaviour {
 			}
 		} 
 	}
-	private GameObject myBloodEffect;
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Potion")
+		{
+			_pickPotion.volume = ZombieApocalypse.GameStatus.sfxValue;
+			_pickPotion.Play();
+        }
+    }
+    
+    private GameObject myBloodEffect;
 
 
 	[Header("Player SOUNDS")]
@@ -338,5 +356,6 @@ public class PlayerMovementScript : MonoBehaviour {
 	public AudioSource _walkSound;
 	[Tooltip("Run Sound player makes.")]
 	public AudioSource _runSound;
+	public AudioSource _pickPotion;
 }
 

@@ -1,26 +1,33 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine.SceneManagement;
 
 public class MouseLookScript : MonoBehaviour {
 
 	[HideInInspector]
 	public Transform myCamera;
-	/*
+    /*
 	 * Hiding the cursor.
 	 */
-	void Awake(){
-		Cursor.lockState = CursorLockMode.Locked;
-		myCamera = GameObject.FindGameObjectWithTag("MainCamera").transform;
+    public Vector3 GetCameraForward()
+    {
+        return myCamera.forward;
+    }
+    void Awake(){
+        
+        myCamera = GameObject.FindGameObjectWithTag("MainCamera").transform;
 	}
 
 	/*
 	* Locking the mouse if pressing L.
 	* Triggering the headbob camera omvement if player is faster than 1 of speed
 	*/
-	void  Update(){
-
-		MouseInputMovement();
+	void Update(){
+        if (!ZombieApocalypse.GameStatus.isPaused)
+            Cursor.lockState = CursorLockMode.Locked;
+        else
+            Cursor.lockState = CursorLockMode.None;
+        MouseInputMovement();
 
 		if (Input.GetKeyDown (KeyCode.L)) {
 			Cursor.lockState = CursorLockMode.Locked;
@@ -62,138 +69,138 @@ public class MouseLookScript : MonoBehaviour {
 	[HideInInspector]
 	public float mouseSensitvity_aiming = 50;
 
-/*
-* FixedUpdate()
-* If aiming set the mouse sensitvity from our variables and vice versa.
-*/
-void FixedUpdate(){
+	/*
+	* FixedUpdate()
+	* If aiming set the mouse sensitvity from our variables and vice versa.
+	*/
+	void FixedUpdate(){
+
+		/*
+		 * Reduxing mouse sensitvity if we are aiming.
+		 */
+		if(Input.GetAxis("Fire2") != 0){
+			mouseSensitvity = mouseSensitvity_aiming;
+		}
+		else if(GetComponent<PlayerMovementScript>().maxSpeed > 5){
+			mouseSensitvity = ZombieApocalypse.GameStatus.mouseValue * 100;
+		}
+		else{
+			mouseSensitvity = ZombieApocalypse.GameStatus.mouseValue * 100;
+		}
+
+
+		ApplyingStuff();
+
+
+	}
+
+
+	private float rotationYVelocity, cameraXVelocity;
+	[Tooltip("Speed that determines how much camera rotation will lag behind mouse movement.")]
+	public float yRotationSpeed, xCameraSpeed;
+
+	[HideInInspector]
+	public float wantedYRotation;
+	[HideInInspector]
+	public float currentYRotation;
+
+	[HideInInspector]
+	public float wantedCameraXRotation;
+	[HideInInspector]
+	public float currentCameraXRotation;
+
+	[Tooltip("Top camera angle.")]
+	public float topAngleView = 60;
+	[Tooltip("Minimum camera angle.")]
+	public float bottomAngleView = -45;
+	/*
+	 * Upon mouse movenet it increases/decreased wanted value. (not actually moving yet)
+	 * Clamping the camera rotation X to top and bottom angles.
+	 */
+	void MouseInputMovement(){
+
+		wantedYRotation += Input.GetAxis("Mouse X") * mouseSensitvity;
+
+		wantedCameraXRotation -= Input.GetAxis("Mouse Y") * mouseSensitvity;
+
+		wantedCameraXRotation = Mathf.Clamp(wantedCameraXRotation, bottomAngleView, topAngleView);
+
+	}
 
 	/*
-	 * Reduxing mouse sensitvity if we are aiming.
+	 * Smoothing the wanted movement.
+	 * Calling the waeponRotation form here, we are rotating the waepon from this script.
+	 * Applying the camera wanted rotation to its transform.
 	 */
-	if(Input.GetAxis("Fire2") != 0){
-		mouseSensitvity = mouseSensitvity_aiming;
+	void ApplyingStuff(){
+
+		currentYRotation = Mathf.SmoothDamp(currentYRotation, wantedYRotation, ref rotationYVelocity, yRotationSpeed);
+		currentCameraXRotation = Mathf.SmoothDamp(currentCameraXRotation, wantedCameraXRotation, ref cameraXVelocity, xCameraSpeed);
+
+		WeaponRotation();
+
+		transform.rotation = Quaternion.Euler(0, currentYRotation, 0);
+		myCamera.localRotation = Quaternion.Euler(currentCameraXRotation, 0, zRotation);
+
 	}
-	else if(GetComponent<PlayerMovementScript>().maxSpeed > 5){
-		mouseSensitvity = mouseSensitvity_notAiming;
-	}
-	else{
-		mouseSensitvity = mouseSensitvity_notAiming;
-	}
 
-
-	ApplyingStuff();
-
-
-}
-
-
-private float rotationYVelocity, cameraXVelocity;
-[Tooltip("Speed that determines how much camera rotation will lag behind mouse movement.")]
-public float yRotationSpeed, xCameraSpeed;
-
-[HideInInspector]
-public float wantedYRotation;
-[HideInInspector]
-public float currentYRotation;
-
-[HideInInspector]
-public float wantedCameraXRotation;
-[HideInInspector]
-public float currentCameraXRotation;
-
-[Tooltip("Top camera angle.")]
-public float topAngleView = 60;
-[Tooltip("Minimum camera angle.")]
-public float bottomAngleView = -45;
-/*
- * Upon mouse movenet it increases/decreased wanted value. (not actually moving yet)
- * Clamping the camera rotation X to top and bottom angles.
- */
-void MouseInputMovement(){
-
-	wantedYRotation += Input.GetAxis("Mouse X") * mouseSensitvity;
-
-	wantedCameraXRotation -= Input.GetAxis("Mouse Y") * mouseSensitvity;
-
-	wantedCameraXRotation = Mathf.Clamp(wantedCameraXRotation, bottomAngleView, topAngleView);
-
-}
-
-/*
- * Smoothing the wanted movement.
- * Calling the waeponRotation form here, we are rotating the waepon from this script.
- * Applying the camera wanted rotation to its transform.
- */
-void ApplyingStuff(){
-
-	currentYRotation = Mathf.SmoothDamp(currentYRotation, wantedYRotation, ref rotationYVelocity, yRotationSpeed);
-	currentCameraXRotation = Mathf.SmoothDamp(currentCameraXRotation, wantedCameraXRotation, ref cameraXVelocity, xCameraSpeed);
-
-	WeaponRotation();
-
-	transform.rotation = Quaternion.Euler(0, currentYRotation, 0);
-	myCamera.localRotation = Quaternion.Euler(currentCameraXRotation, 0, zRotation);
-
-}
-
-private Vector2 velocityGunFollow;
-private float gunWeightX,gunWeightY;
-[Tooltip("Current weapon that player carries.")]
-[HideInInspector]
-public GameObject weapon;
-private GunScript gun;
-/*
- * Rotating current weapon from here.
- * Checkig if we have a weapon, if we do, if its a gun it iwll fetch the gun and rotate it accordingly,
- * same goes for the sword.
- * Incase we dont have a weapon or gun or it didnt find it, it will write into the console that it cant find a weapon.
- */
-void WeaponRotation(){
-	if(!weapon){
-		weapon = GameObject.FindGameObjectWithTag("Weapon");
-		if(weapon){
-			if(weapon.GetComponent<GunScript>()){
-				try{
-					gun = GameObject.FindGameObjectWithTag("Weapon").GetComponent<GunScript>();
-				}catch(System.Exception ex){
-					print("gun not found->"+ex.StackTrace.ToString());
+	private Vector2 velocityGunFollow;
+	private float gunWeightX,gunWeightY;
+	[Tooltip("Current weapon that player carries.")]
+	[HideInInspector]
+	public GameObject weapon;
+	private GunScript gun;
+	/*
+	 * Rotating current weapon from here.
+	 * Checkig if we have a weapon, if we do, if its a gun it iwll fetch the gun and rotate it accordingly,
+	 * same goes for the sword.
+	 * Incase we dont have a weapon or gun or it didnt find it, it will write into the console that it cant find a weapon.
+	 */
+	void WeaponRotation(){
+		if(!weapon){
+			weapon = GameObject.FindGameObjectWithTag("Weapon");
+			if(weapon){
+				if(weapon.GetComponent<GunScript>()){
+					try{
+						gun = GameObject.FindGameObjectWithTag("Weapon").GetComponent<GunScript>();
+					}catch(System.Exception ex){
+						print("gun not found->"+ex.StackTrace.ToString());
+					}
 				}
 			}
 		}
+
 	}
 
-}
+	float deltaTime = 0.0f;
+	[Tooltip("Shows FPS in top left corner.")]
+	public bool showFps = true;
+	/*
+	* Shows fps if its set to true.
+	*/
+	void OnGUI(){
 
-float deltaTime = 0.0f;
-[Tooltip("Shows FPS in top left corner.")]
-public bool showFps = true;
-/*
-* Shows fps if its set to true.
-*/
-void OnGUI(){
+		if(showFps){
+			FPSCounter();
+		}
 
-	if(showFps){
-		FPSCounter();
 	}
+	/*
+	* Calculating real fps because unity status tab shows too much fps even when its not that mutch so i made my own.
+	*/
+	void FPSCounter(){
+		int w = Screen.width, h = Screen.height;
 
-}
-/*
-* Calculating real fps because unity status tab shows too much fps even when its not that mutch so i made my own.
-*/
-void FPSCounter(){
-	int w = Screen.width, h = Screen.height;
+		GUIStyle style = new GUIStyle();
 
-	GUIStyle style = new GUIStyle();
-
-	Rect rect = new Rect(0, 0, w, h * 2 / 100);
-	style.alignment = TextAnchor.UpperLeft;
-	style.fontSize = h * 2 / 100;
-	style.normal.textColor = Color.white;
-	float msec = deltaTime * 1000.0f;
-	float fps = 1.0f / deltaTime;
-	string text = string.Format("{0:0.0} ms ({1:0.} fps)", msec, fps);
-	GUI.Label(rect, text, style);
-}
+		Rect rect = new Rect(0, 0, w, h * 2 / 100);
+		style.alignment = TextAnchor.UpperLeft;
+		style.fontSize = h * 2 / 100;
+		style.normal.textColor = Color.white;
+		float msec = deltaTime * 1000.0f;
+		float fps = 1.0f / deltaTime;
+		string text = string.Format("{0:0.0} ms ({1:0.} fps)", msec, fps);
+		GUI.Label(rect, text, style);
+	}
 
 }

@@ -10,11 +10,14 @@ TagManager:
   - Dummie
   - Weapon
   - Zombie
+  - Fire
+  - Potion
+  - ComboBar
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - FireLayer
   - Water
   - UI
   - 

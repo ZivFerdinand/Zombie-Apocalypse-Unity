@@ -1,101 +1,131 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerHealth : MonoBehaviour
 {
     [Header("Health Bar")]
     public float currentHealth;
-    [HideInInspector] public int maxHealth = 100;
-    public HealthBar healthBar;
+    private int maxHealth = 100;
 
     [Header("Damage Overlay")]
-    public Image overlay;
+    public Image damageOverlay;
     public float duration;
-    public float fadeSpeed;
-    private float dmgSpeed = 1f;
+    public float fadeSpeed = 1f;
+    private float healCoolDown;
     private float updtDmg;
 
+    [Header("Healing Overlay")]
+    public Image healOverlay;
+    public float pulseSpeed = 5f;
+    public TextMeshProUGUI healthStatus;
+    public TextMeshProUGUI healingTime;
+    public GameObject healingStatus;
+    public Slider healingSlider;
     private float durationTimer;
-    public Slider healthBarSlider;
 
-    void Start()
+    private void Start()
     {
         currentHealth = maxHealth;
-        overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0);
+        resetOverlay(damageOverlay);
+        resetOverlay(healOverlay);
         updtDmg = fadeSpeed;
-
-        healthBarSlider.maxValue = maxHealth;
-        healthBarSlider.value = maxHealth;
     }
 
-    void Update()
+    private void Update()
     {
-        SetHealthBarColor();
-        healPlayer(Time.deltaTime * 0.5f);
+        healthStatus.text = ((int)currentHealth).ToString();
 
-        if(currentHealth < 30)
+        if (currentHealth < 20)
         {
-            float tempAlpha = overlay.color.a;
-            tempAlpha += Time.deltaTime * updtDmg;
-            overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, tempAlpha);
-
-            if (overlay.color.a < 0)
-            {
-                overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0);
-                updtDmg = dmgSpeed;
-            }
-            else if (overlay.color.a > 1)
-            {
-                overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 1);
-                updtDmg = -dmgSpeed;
-            }
+            healPlayer(Time.deltaTime * 0.5f);
         }
-        if (overlay.color.a > 0 && currentHealth >= 30)
+
+        if (healCoolDown > 0)
+        {
+            healingTime.text = healCoolDown.ToString("F1") + "s";
+            healingSlider.value = healCoolDown / 7f;
+            healCoolDown -= Time.deltaTime;
+            healPlayer(Time.deltaTime);
+        }
+        else
+        {
+            healingStatus.SetActive(false);
+        }
+
+        if (currentHealth < 20 || healCoolDown > 0)
+        {
+            PulsateOverlay(healOverlay);
+            resetOverlay(damageOverlay);
+        }
+        else if (currentHealth < 30)
+        {
+            resetOverlay(healOverlay);
+            updateOverlayAlpha(damageOverlay);
+        }
+        else if (damageOverlay.color.a > 0)
         {
             durationTimer += Time.deltaTime;
             if (durationTimer > duration)
             {
-                // fade image setelah durasi tertentu
-                float tempAlpha = overlay.color.a;
-                tempAlpha -= Time.deltaTime * fadeSpeed;
-                overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, tempAlpha);
+                fadeOverlay(damageOverlay);
             }
-        }
-    }
-
-    public void damagePlayer(int damage)
-    {
-        currentHealth -= damage;
-        currentHealth = Mathf.Max(0, currentHealth);
-
-        healthBar.SetHealth(currentHealth);
-        durationTimer = 0;
-        overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0.55f);
-    }
-    public void healPlayer(float heal)
-    {
-        currentHealth += heal;
-        currentHealth = Mathf.Min(100, currentHealth);
-
-        healthBar.SetHealth(currentHealth);
-    }
-
-    void SetHealthBarColor()
-    {
-        float normalizedHealth = currentHealth / maxHealth;
-
-        // Change color based on health percentage
-        if (normalizedHealth > 0.5f)
-        {
-            // Green to Yellow transition
-            healthBarSlider.fillRect.GetComponent<Image>().color = Color.Lerp(Color.yellow, Color.green, (normalizedHealth - 0.5f) * 2f);
         }
         else
         {
-            // Yellow to Red transition
-            healthBarSlider.fillRect.GetComponent<Image>().color = Color.Lerp(Color.red, Color.yellow, normalizedHealth * 2f);
+            resetOverlay(healOverlay);
         }
+    }
+    public void startHeal()
+    {
+        healingStatus.SetActive(true);
+        healCoolDown = 7f;
+    }
+    public void damagePlayer(int damage)
+    {
+        currentHealth = Mathf.Max(0, currentHealth - damage);
+        durationTimer = 0;
+        setOverlayColor(damageOverlay, 0.55f);
+    }
+
+    private void healPlayer(float heal)
+    {
+        currentHealth = Mathf.Min(maxHealth, currentHealth + heal);
+        setOverlayColor(healOverlay, 0.55f);
+    }
+
+    private void updateOverlayAlpha(Image overlay)
+    {
+        float tempAlpha = overlay.color.a + Time.deltaTime * updtDmg;
+        setOverlayColor(overlay, Mathf.Clamp01(tempAlpha));
+
+        if (tempAlpha < 0 || tempAlpha > 1)
+        {
+            updtDmg = -updtDmg;
+        }
+    }
+
+    private void fadeOverlay(Image overlay)
+    {
+        float tempAlpha = overlay.color.a - Time.deltaTime * fadeSpeed;
+        setOverlayColor(damageOverlay, Mathf.Clamp01(tempAlpha));
+    }
+
+    private void setOverlayColor(Image overlay, float alpha)
+    {
+        overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, alpha);
+    }
+
+    private void resetOverlay(Image overlay)
+    {
+        setOverlayColor(overlay, 0);
+    }
+
+    void PulsateOverlay(Image overlay)
+    {
+        overlay.gameObject.SetActive(true);
+        float alpha = Mathf.Sin(Time.time * pulseSpeed) * 0.5f + 0.5f;
+        setOverlayColor(overlay, alpha);
     }
 }

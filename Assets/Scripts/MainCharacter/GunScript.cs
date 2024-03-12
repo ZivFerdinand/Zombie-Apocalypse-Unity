@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using TMPro;
+using UnityEngine.UI;
+using System;
 //using UnityStandardAssets.ImageEffects;
 
 public enum GunStyles{
@@ -18,12 +20,12 @@ public class GunScript : MonoBehaviour {
 	[Tooltip("Speed is determined via gun because not every gun has same properties or weights so you MUST set up your speeds here")]
 	public int runningSpeed = 5;
 
-
 	[Header("Bullet properties")]
 	[Tooltip("Preset value to tell with how many bullets will our waepon spawn aside.")]
 	public float bulletsIHave = 20;
 	[Tooltip("Preset value to tell with how much bullets will our waepon spawn inside rifle.")]
 	public float bulletsInTheGun = 5;
+	private float bulletsI;
 	[Tooltip("Preset value to tell how much bullets can one magazine carry.")]
 	public float amountOfBulletsPerLoad = 5;
 
@@ -33,12 +35,29 @@ public class GunScript : MonoBehaviour {
 
 	private PlayerMovementScript pmS;
 
-	/*
+
+    private void Start()
+    {
+		crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
+
+		if (gameObject.name == "NewGun_semi(Clone)")
+		{
+			bulletsI = bulletsInTheGun = ZombieApocalypse.GameShopInfo.weapon_1_2;
+			bulletsIHave = ZombieApocalypse.GameShopInfo.weapon_1_1;
+			bulletsI = 60f;
+		}
+		else
+		{
+			bulletsI = bulletsInTheGun = ZombieApocalypse.GameShopInfo.weapon_2_2;
+			bulletsIHave = ZombieApocalypse.GameShopInfo.weapon_2_1;
+			bulletsI = 30f;
+		}
+	}
+
+    /*
 	 * Collection the variables upon awake that we need.
 	 */
-	void Awake(){
-
-
+    void Awake(){
 		mls = GameObject.FindGameObjectWithTag("Player").GetComponent<MouseLookScript>();
 		player = mls.transform;
 		mainCamera = mls.myCamera;
@@ -95,9 +114,18 @@ public class GunScript : MonoBehaviour {
 
 		Sprint(); //iff we have the gun you sprint from here, if we are gunless then its called from movement script
 
-		CrossHairExpansionWhenWalking();
+		CrossHairFadeout();
 
-
+		if (gameObject.name == "NewGun_semi(Clone)")
+		{
+			ZombieApocalypse.GameShopInfo.weapon_1_2 = bulletsInTheGun;
+			ZombieApocalypse.GameShopInfo.weapon_1_1 = bulletsIHave;
+		}
+		else
+		{
+			ZombieApocalypse.GameShopInfo.weapon_2_2 = bulletsInTheGun;
+			ZombieApocalypse.GameShopInfo.weapon_2_1 = bulletsIHave;
+		}
 	}
 
 	/*
@@ -114,7 +142,7 @@ public class GunScript : MonoBehaviour {
 		 * Changing some values if we are aiming, like sensitity, zoom racion and position of the waepon.
 		 */
 		//if aiming
-		if(!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetAxis("Fire2") != 0 && !reloading && !meeleAttack){
+		if(!ZombieApocalypse.GameStatus.isPaused && Input.GetAxis("Fire2") != 0 && !reloading && !meeleAttack){
 			gunPrecision = gunPrecision_aiming;
 			recoilAmount_x = recoilAmount_x_;
 			recoilAmount_y = recoilAmount_y_;
@@ -156,36 +184,34 @@ public class GunScript : MonoBehaviour {
 	/*
 	 * Used to expand position of the crosshair or make it dissapear when running
 	 */
-	void CrossHairExpansionWhenWalking(){
+	void CrossHairFadeout(){
+        if (!ZombieApocalypse.GameStatus.isPaused && player.GetComponent<Rigidbody>().velocity.magnitude > 1 && Input.GetAxis("Fire1") == 0)
+        {//ifnot shooting
 
-		if(!ZombieApocalypse.DatabaseStatus.isPaused && player.GetComponent<Rigidbody>().velocity.magnitude > 1 && Input.GetAxis("Fire1") == 0){//ifnot shooting
+			if (player.GetComponent<PlayerMovementScript>().maxSpeed < runningSpeed)
+            { //not running
+				if (crosshair.color.a == 0)
+				{
+					StartCoroutine(CustomFadeAnimator.Fade(crosshair, 0, 1, 0.25f));
+				}
+            }
+            else
+            {//running
+                if (crosshair.color.a == 1)
+				{
+					StartCoroutine(CustomFadeAnimator.Fade(crosshair, 1, 0, 0.25f));
+				}
+            }
+        }
+    }
 
-			expandValues_crosshair += new Vector2(20, 40) * Time.deltaTime;
-			if(player.GetComponent<PlayerMovementScript>().maxSpeed < runningSpeed){ //not running
-				expandValues_crosshair = new Vector2(Mathf.Clamp(expandValues_crosshair.x, 0, 10), Mathf.Clamp(expandValues_crosshair.y,0,20));
-				fadeout_value = Mathf.Lerp(fadeout_value, 1, Time.deltaTime * 2);
-			}
-			else{//running
-				fadeout_value = Mathf.Lerp(fadeout_value, 0, Time.deltaTime * 10);
-				expandValues_crosshair = new Vector2(Mathf.Clamp(expandValues_crosshair.x, 0, 20), Mathf.Clamp(expandValues_crosshair.y,0,40));
-			}
-		}
-		else{//if shooting
-			expandValues_crosshair = Vector2.Lerp(expandValues_crosshair, Vector2.zero, Time.deltaTime * 5);
-			expandValues_crosshair = new Vector2(Mathf.Clamp(expandValues_crosshair.x, 0, 10), Mathf.Clamp(expandValues_crosshair.y,0,20));
-			fadeout_value = Mathf.Lerp(fadeout_value, 1, Time.deltaTime * 2);
-
-		}
-
-	}
-
-	/* 
+    /* 
 	 * Changes the max speed that player is allowed to go.
 	 * Also max speed is connected to the animator which will trigger the run animation.
 	 */
-	void Sprint(){// Running();  so i can find it with CTRL + F
+    void Sprint(){// Running();  so i can find it with CTRL + F
 		if (Input.GetAxis ("Vertical") > 0 && Input.GetAxisRaw ("Fire2") == 0 && meeleAttack == false && Input.GetAxisRaw ("Fire1") == 0) {
-			if (!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetKey (KeyCode.LeftShift)) {
+			if (!ZombieApocalypse.GameStatus.isPaused && Input.GetKey (KeyCode.LeftShift)) {
 					pmS.maxSpeed = runningSpeed;
 			}
 			else
@@ -219,10 +245,10 @@ public class GunScript : MonoBehaviour {
 	*/
 	void MeeleAttack(){	
 
-		if(!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetKeyDown(KeyCode.Q) && !meeleAttack){			
-			StartCoroutine("AnimationMeeleAttack");
-		}
-	}
+		if(!ZombieApocalypse.GameStatus.isPaused && (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.E)) && !meeleAttack){
+            StartCoroutine("AnimationMeeleAttack");
+        }
+    }
 	/*
 	* Sets meele animation to play.
 	*/
@@ -318,12 +344,12 @@ public class GunScript : MonoBehaviour {
 	 */
 	public void RecoilMath(){
 		currentRecoilZPos -= recoilAmount_z;
-		currentRecoilXPos -= (Random.value - 0.5f) * recoilAmount_x;
-		currentRecoilYPos -= (Random.value - 0.5f) * recoilAmount_y;
+		currentRecoilXPos -= (UnityEngine.Random.value - 0.5f) * recoilAmount_x;
+		currentRecoilYPos -= (UnityEngine.Random.value - 0.5f) * recoilAmount_y;
 		mls.wantedCameraXRotation -= Mathf.Abs(currentRecoilYPos * gunPrecision);
 		mls.wantedYRotation -= (currentRecoilXPos * gunPrecision);		 
 
-		expandValues_crosshair += new Vector2(6,12);
+		//expandValues_crosshair += new Vector2(6,12);
 
 	}
 
@@ -339,7 +365,7 @@ public class GunScript : MonoBehaviour {
 	 */
 	void Shooting(){
 
-		if (!ZombieApocalypse.DatabaseStatus.isPaused && !meeleAttack) {
+		if (!ZombieApocalypse.GameStatus.isPaused && !meeleAttack) {
 			if (currentStyle == GunStyles.nonautomatic) {
 				if (Input.GetButtonDown ("Fire1")) {
 					ShootMethod ();
@@ -406,10 +432,12 @@ public class GunScript : MonoBehaviour {
 	* Sounds that is called upon hitting the target.
 	*/
 	public static void HitMarkerSound(){
+		hitMarker.volume = ZombieApocalypse.GameStatus.sfxValue;
+    
 		hitMarker.Play();
 	}
 
-	[Tooltip("Array of muzzel flashes, randmly one will appear after each bullet.")]
+    [Tooltip("Array of muzzel flashes, randmly one will appear after each bullet.")]
 	public GameObject[] muzzelFlash;
 	[Tooltip("Place on the gun where muzzel flash will appear.")]
 	public GameObject muzzelSpawn;
@@ -424,7 +452,7 @@ public class GunScript : MonoBehaviour {
 
 			if(bulletsInTheGun > 0){
 
-				int randomNumberForMuzzelFlash = Random.Range(0,5);
+				int randomNumberForMuzzelFlash = UnityEngine.Random.Range(0,5);
 				if (bullet)
 					Instantiate (bullet, bulletSpawnPlace.transform.position, bulletSpawnPlace.transform.rotation);
 				else
@@ -432,15 +460,18 @@ public class GunScript : MonoBehaviour {
 				holdFlash = Instantiate(muzzelFlash[randomNumberForMuzzelFlash], muzzelSpawn.transform.position /*- muzzelPosition*/, muzzelSpawn.transform.rotation * Quaternion.Euler(0,0,90) ) as GameObject;
 				holdFlash.transform.parent = muzzelSpawn.transform;
 				if (shoot_sound_source)
-					shoot_sound_source.Play ();
+				{
+					shoot_sound_source.volume = ZombieApocalypse.GameStatus.sfxValue;
+					shoot_sound_source.Play();
+				}
 				else
-					print ("Missing 'Shoot Sound Source'.");
+					print("Missing 'Shoot Sound Source'.");
 
 				RecoilMath();
 
 				waitTillNextFire = 1;
 				bulletsInTheGun -= 1;
-			}
+            }
 				
 			else{
 				//if(!aiming)
@@ -467,9 +498,12 @@ public class GunScript : MonoBehaviour {
 
 			if (reloadSound_source.isPlaying == false && reloadSound_source != null) {
 				if (reloadSound_source)
-					reloadSound_source.Play ();
+				{reloadSound_source.volume = ZombieApocalypse.GameStatus.sfxValue;
+             
+					reloadSound_source.Play();
+				}
 				else
-					print ("'Reload Sound Source' missing.");
+					print("'Reload Sound Source' missing.");
 			}
 		
 
@@ -482,10 +516,13 @@ public class GunScript : MonoBehaviour {
 			yield return new WaitForSeconds (reloadChangeBulletsTime - 0.5f);//minus ovo vrijeme cekanja na yield
 			if (meeleAttack == false && pmS.maxSpeed != runningSpeed) {
 				//print ("tu sam");
-				if (player.GetComponent<PlayerMovementScript> ()._freakingZombiesSound)
-					player.GetComponent<PlayerMovementScript> ()._freakingZombiesSound.Play ();
+				if (player.GetComponent<PlayerMovementScript>()._freakingZombiesSound)
+				{
+					player.GetComponent<PlayerMovementScript>()._freakingZombiesSound.volume = ZombieApocalypse.GameStatus.sfxValue;
+					player.GetComponent<PlayerMovementScript>()._freakingZombiesSound.Play();
+				}
 				else
-					print ("Missing Freaking Zombies Sound");
+					print("Missing Freaking Zombies Sound");
 				
 				if (bulletsIHave - amountOfBulletsPerLoad >= 0) {
 					bulletsIHave -= amountOfBulletsPerLoad - bulletsInTheGun;
@@ -514,64 +551,53 @@ public class GunScript : MonoBehaviour {
 	 * And drawing CrossHair from here.
 	 */
 	[Tooltip("HUD bullets to display bullet count on screen. Will be find under name 'HUD_bullets' in scene.")]
-	public TextMeshProUGUI HUD_bullets;
-	void OnGUI(){
-		if(!HUD_bullets){
+	public TextMeshProUGUI HUD_bullets_left;
+    public TextMeshProUGUI HUD_bullets_right;
+    void OnGUI(){
+		if(!HUD_bullets_left){
 			try{
-				HUD_bullets = GameObject.Find("HUD_bullets").GetComponent<TextMeshProUGUI>();
+				HUD_bullets_left = GameObject.Find("HUD_bullets_left").GetComponent<TextMeshProUGUI>();
 			}
 			catch(System.Exception ex){
 				print("Couldnt find the HUD_Bullets ->" + ex.StackTrace.ToString());
 			}
 		}
-		if(mls && HUD_bullets)
-			HUD_bullets.text = bulletsIHave.ToString() + " - " + bulletsInTheGun.ToString();
+		if(mls && HUD_bullets_left)
+			HUD_bullets_left.text = bulletsInTheGun.ToString();
 
-		DrawCrosshair();
+        if (!HUD_bullets_right)
+        {
+            try
+            {
+                HUD_bullets_right = GameObject.Find("HUD_bullets_right").GetComponent<TextMeshProUGUI>();
+            }
+            catch (System.Exception ex)
+            {
+                print("Couldnt find the HUD_Bullets ->" + ex.StackTrace.ToString());
+            }
+        }
+        if (mls && HUD_bullets_right)
+            HUD_bullets_right.text = ((int) (bulletsIHave / bulletsI)).ToString();
+
+        DrawCrosshair();
 	}
+
 
 	[Header("Crosshair properties")]
-	public Texture horizontal_crosshair, vertical_crosshair;
-	public Vector2 top_pos_crosshair, bottom_pos_crosshair, left_pos_crosshair, right_pos_crosshair;
-	public Vector2 size_crosshair_vertical = new Vector2(1,1), size_crosshair_horizontal = new Vector2(1,1);
-	[HideInInspector]
-	public Vector2 expandValues_crosshair;
-	private float fadeout_value = 1;
-	/*
+	private Image crosshair;
+    /*
 	 * Drawing the crossHair.
 	 */
-	void DrawCrosshair(){
-		GUI.color = new Color(GUI.color.r, GUI.color.g, GUI.color.b, fadeout_value);
-		if(!ZombieApocalypse.DatabaseStatus.isPaused && Input.GetAxis("Fire2") == 0){//if not aiming draw
-			GUI.DrawTexture(new Rect(vec2(left_pos_crosshair).x + position_x(-expandValues_crosshair.x) + Screen.width/2,Screen.height/2 + vec2(left_pos_crosshair).y, vec2(size_crosshair_horizontal).x, vec2(size_crosshair_horizontal).y), vertical_crosshair);//left
-			GUI.DrawTexture(new Rect(vec2(right_pos_crosshair).x + position_x(expandValues_crosshair.x) + Screen.width/2,Screen.height/2 + vec2(right_pos_crosshair).y, vec2(size_crosshair_horizontal).x, vec2(size_crosshair_horizontal).y), vertical_crosshair);//right
-
-			GUI.DrawTexture(new Rect(vec2(top_pos_crosshair).x + Screen.width/2,Screen.height/2 + vec2(top_pos_crosshair).y + position_y(-expandValues_crosshair.y), vec2(size_crosshair_vertical).x, vec2(size_crosshair_vertical).y ), horizontal_crosshair);//top
-			GUI.DrawTexture(new Rect(vec2(bottom_pos_crosshair).x + Screen.width/2,Screen.height/2 +vec2(bottom_pos_crosshair).y + position_y(expandValues_crosshair.y), vec2(size_crosshair_vertical).x, vec2(size_crosshair_vertical).y), horizontal_crosshair);//bottom
+    void DrawCrosshair(){
+		if(!ZombieApocalypse.GameStatus.isPaused && Input.GetAxis("Fire2") == 0){//if not aiming draw
+            crosshair.gameObject.SetActive(true);
+            //GUI.DrawTexture(new Rect(Screen.width/2 - vec2(size_crosshair).x/2, Screen.height/2 - vec2(size_crosshair).y/2, vec2(size_crosshair).x, vec2(size_crosshair).y), dotCrosshair);
 		}
-
+		else
+		{
+			crosshair.gameObject.SetActive(false);
+		}
 	}
-
-	//#####		RETURN THE SIZE AND POSITION for GUI images ##################
-	private float position_x(float var){
-		return Screen.width * var / 100;
-	}
-	private float position_y(float var)
-	{
-		return Screen.height * var / 100;
-	}
-	private float size_x(float var)
-	{
-		return Screen.width * var / 100;
-	}
-	private float size_y(float var)
-	{
-		return Screen.height * var / 100;
-	}
-	private Vector2 vec2(Vector2 _vec2){
-		return new Vector2(Screen.width * _vec2.x / 100, Screen.height * _vec2.y / 100);
-	}
-	//#
 
 	public Animator handsAnimator;
 	/*
@@ -587,7 +613,7 @@ public class GunScript : MonoBehaviour {
 			handsAnimator.SetFloat("walkSpeed",pmS.currentSpeed);
 			handsAnimator.SetBool("aiming", Input.GetButton("Fire2"));
 			handsAnimator.SetInteger("maxSpeed", pmS.maxSpeed);
-			if(!ZombieApocalypse.DatabaseStatus.isPaused &&  Input.GetKeyDown(KeyCode.R) && pmS.maxSpeed < 5 && !reloading && !meeleAttack/* && !aiming*/){
+			if(!ZombieApocalypse.GameStatus.isPaused && Input.GetKeyDown(KeyCode.R) && pmS.maxSpeed < 5 && !reloading && !meeleAttack/* && !aiming*/){
 				StartCoroutine("Reload_Animation");
 			}
 		}
