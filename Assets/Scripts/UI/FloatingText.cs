@@ -33,6 +33,9 @@ public class FloatingText : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(transform.position - player.position);
     }
 
+    /// <summary>
+    /// This function updates the score appear above the zombie head based on the multiplier.
+    /// </summary>
     void UpdateScore()
     {
         if (!updated)

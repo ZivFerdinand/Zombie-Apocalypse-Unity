@@ -26,13 +26,29 @@ public class GunInventory : MonoBehaviour
 
     public List<GameObject> instantiatedGuns = new List<GameObject>();
 
+    [Header("Sounds")]
+    [Tooltip("Sound of weapon changing.")]
+    public AudioSource weaponChanging;
+
     void Awake()
     {
         SpawnAllWeapons();
         EquipWeapon(0); // Equip the first weapon at start
         if (gunsIHave.Count == 0) print("No guns in the inventory");
     }
+    void Update()
+    {
+        switchWeaponCooldown += 1 * Time.deltaTime;
 
+        if (!ZombieApocalypse.GameStatus.isPaused && switchWeaponCooldown > 1.2f && !Input.GetKey(KeyCode.LeftShift))
+        {
+            ChangeWeapon();
+        }
+    }
+
+    /// <summary>
+    /// This function creates the player's weapons at the start of the game.
+    /// </summary>
     void SpawnAllWeapons()
     {
         foreach (string gunName in gunsIHave)
@@ -43,7 +59,11 @@ public class GunInventory : MonoBehaviour
             instantiatedGuns.Add(gun);
         }
     }
-
+    
+    /// <summary>
+    /// This function sets the weapon that is equipped by the player.
+    /// </summary>
+    /// <param name="index">The weapon's index</param>
     void EquipWeapon(int index)
     {
         if (index >= 0 && index < instantiatedGuns.Count)
@@ -59,20 +79,13 @@ public class GunInventory : MonoBehaviour
             AssignHandsAnimator(currentGun);
 
             currentGunCounter = index;
-            //weaponSelection.SelectWeaponChange();
         }
     }
 
-    void Update()
-    {
-        switchWeaponCooldown += 1 * Time.deltaTime;
-
-        if (!ZombieApocalypse.GameStatus.isPaused && switchWeaponCooldown > 1.2f && !Input.GetKey(KeyCode.LeftShift))
-        {
-            ChangeWeapon();
-        }
-    }
-
+    
+    /// <summary>
+    /// This function switches the weapon that is going to be equipped by the player according to the keyboard/mouse input.
+    /// </summary>
     void ChangeWeapon()
     {
         if (!ZombieApocalypse.GameStatus.isPaused)
@@ -122,6 +135,14 @@ public class GunInventory : MonoBehaviour
             }
         }
     }
+
+
+    /// <summary>
+    /// This function will play the change weapon animation.
+    /// </summary>
+    /// <param name="delay">Amount of time delay from changing weapons.</param>
+    /// <param name="currentGunCounter">Index of weapons being used.</param>
+    /// <returns></returns>
     IEnumerator ChangeWeaponWithDelay(float delay, int currentGunCounter)
     {
         if (weaponChanging)
@@ -134,7 +155,11 @@ public class GunInventory : MonoBehaviour
         AssignHandsAnimator(currentGun);
         EquipWeapon(currentGunCounter);
     }
-
+    /// <summary>
+    /// This function manages the animation of the hands when switching or equipping weapon.
+    /// and manages how hands will move.
+    /// </summary>
+    /// <param name="_currentGun">The weapon that will be equippied</param>
     void AssignHandsAnimator(GameObject _currentGun)
     {
         if (_currentGun.name.Contains("Gun"))
@@ -143,13 +168,13 @@ public class GunInventory : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This function destroys gun equipped when the player is dead.
+    /// </summary>
     public void DeadMethod()
     {
         Destroy(currentGun);
         Destroy(this);
     }
 
-    [Header("Sounds")]
-    [Tooltip("Sound of weapon changing.")]
-    public AudioSource weaponChanging;
 }

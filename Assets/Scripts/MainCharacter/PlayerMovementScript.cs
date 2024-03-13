@@ -14,10 +14,6 @@ public class PlayerMovementScript : MonoBehaviour {
 	[Tooltip("Position of the camera inside the player")]
 	[HideInInspector]public Vector3 cameraPosition;
 
-	/*
-	 * Getting the Players rigidbody component.
-	 * And grabbing the mainCamera from Players child transform.
-	 */
 	void Awake(){
 		rb = GetComponent<Rigidbody>();
 		cameraMain = transform.Find("Main Camera").transform;
@@ -27,18 +23,25 @@ public class PlayerMovementScript : MonoBehaviour {
 	}
 	private Vector3 slowdownV;
 	private Vector2 horizontalMovement;
-	/*
-	* Raycasting for meele attacks and input movement handling here.
-	*/
+
 	void FixedUpdate(){
 		RaycastForMeleeAttacks ();
 
 		PlayerMovementLogic ();
 	}
-	/*
-	* Accordingly to input adds force and if magnitude is bigger it will clamp it.
-	* If player leaves keys it will deaccelerate
-	*/
+	void Update()
+	{
+		Jumping();
+
+		Crouching();
+
+		WalkingSound();
+	}
+
+	/// <summary>
+	/// Accordingly to input adds force and if magnitude is bigger it will clamp it.
+	/// If player leaves keys it will deaccelerate.
+	/// </summary>
 	void PlayerMovementLogic(){
 		currentSpeed = rb.velocity.magnitude;
 		horizontalMovement = new Vector2 (rb.velocity.x, rb.velocity.z);
@@ -64,18 +67,19 @@ public class PlayerMovementScript : MonoBehaviour {
 			rb.AddRelativeForce (Input.GetAxis ("Horizontal") * accelerationSpeed / 2 * Time.deltaTime, 0, Input.GetAxis ("Vertical") * accelerationSpeed / 2 * Time.deltaTime);
 
 		}
-		/*
-		 * Slippery issues fixed here
-		 */
+
+		// Slippery issues fixed here
+		 
 		if (Input.GetAxis ("Horizontal") != 0 || Input.GetAxis ("Vertical") != 0) {
 			deaccelerationSpeed = 0.5f;
 		} else {
 			deaccelerationSpeed = 0.1f;
 		}
 	}
-	/*
-	* Handles jumping and ads the force and sounds.
-	*/
+
+	/// <summary>
+	/// Handles jumping and ads the force and sounds.
+	/// </summary>
 	void Jumping(){
 		if (!ZombieApocalypse.GameStatus.isPaused && Input.GetKeyDown(KeyCode.Space) && grounded) {
 			rb.AddRelativeForce (Vector3.up * jumpForce);
@@ -90,40 +94,28 @@ public class PlayerMovementScript : MonoBehaviour {
 			_runSound.Stop ();
 		}
 	}
-	/*
-	* Update loop calling other stuff
-	*/
-	void Update(){
-		
-
-		Jumping ();
-
-		Crouching();
-
-		WalkingSound ();
 
 
-	}//end update
-
-	/*
-	* Checks if player is grounded and plays the sound accorindlgy to his speed
-	*/
+	
+	/// <summary>
+	/// Checks if player is grounded and plays the sound accorindlgy to his speed.
+	/// </summary>
 	void WalkingSound(){
 		if (_walkSound && _runSound) {
-			if (RayCastGrounded ()) { //for walk sounsd using this because suraface is not straigh			
+			if (RayCastGrounded ()) 
+			{ 
 				if (currentSpeed > 1) {
-					//				print ("unutra sam");
+
 					if (maxSpeed == 3) {
-						//	print ("tu sem");
+
 						if (!_walkSound.isPlaying) {
-							//	print ("playam hod");
 
 							_walkSound.volume = ZombieApocalypse.GameStatus.sfxValue;
 							_walkSound.Play ();
 							_runSound.Stop ();
 						}					
 					} else if (maxSpeed == 5) {
-						//	print ("NE tu sem");
+
 
 						if (!_runSound.isPlaying) {
 							_walkSound.Stop ();
@@ -144,31 +136,31 @@ public class PlayerMovementScript : MonoBehaviour {
 		}
 
 	}
-	/*
-	* Raycasts down to check if we are grounded along the gorunded method() because if the
-	* floor is curvy it will go ON/OFF constatly this assures us if we are really grounded
-	*/
+
+	/// <summary>
+	/// Raycasts down to check if we are grounded along the gorunded method() because if the
+	/// floor is curvy it will go ON/OFF constatly this assures us if we are really grounded.
+	/// </summary>
+	/// <returns></returns>
 	private bool RayCastGrounded(){
 		RaycastHit groundedInfo;
 		if(Physics.Raycast(transform.position, transform.up *-1f, out groundedInfo, 1, ~ignoreLayer)){
 			Debug.DrawRay (transform.position, transform.up * -1f, Color.red, 0.0f);
 			if(groundedInfo.transform != null){
-				//print ("vracam true");
 				return true;
 			}
 			else{
-				//print ("vracam false");
 				return false;
 			}
 		}
-		//print ("nisam if dosao");
 
 		return false;
 	}
 
-	/*
-	* If player toggle the crouch it will scale the player to appear that is crouching
-	*/
+
+	/// <summary>
+	/// If player toggle the crouch it will scale the player to appear that is crouching.
+	/// </summary>
 	void Crouching(){
 		if(!ZombieApocalypse.GameStatus.isPaused && Input.GetKey(KeyCode.C)){
 			transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(1,0.6f,1), Time.deltaTime * 15);
@@ -192,10 +184,12 @@ public class PlayerMovementScript : MonoBehaviour {
 
 	[Tooltip("Tells us weather the player is grounded or not.")]
 	public bool grounded;
-	/*
-	* checks if our player is contacting the ground in the angle less than 60 degrees
-	*	if it is, set groudede to true
-	*/
+
+	/// <summary>
+	/// Checks if our player is contacting the ground in the angle less than 60 degrees
+	///	if it is, set groudede to true.
+	/// </summary>
+	/// <param name="other"></param>
 	void OnCollisionStay(Collision other){
 		foreach(ContactPoint contact in other.contacts){
 			if(Vector2.Angle(contact.normal,Vector3.up) < 60){
@@ -203,9 +197,10 @@ public class PlayerMovementScript : MonoBehaviour {
 			}
 		}
 	}
-	/*
-	* On collision exit set grounded to false
-	*/
+
+	/// <summary>
+	/// On collision exit set grounded to false.
+	/// </summary>
 	void OnCollisionExit ()
 	{
 		grounded = false;
@@ -224,14 +219,14 @@ public class PlayerMovementScript : MonoBehaviour {
 	[Tooltip("Put BulletSpawn gameobject here, palce from where bullets are created.")]
 	[HideInInspector]
 	public Transform bulletSpawn; //from here we shoot a ray to check where we hit him;
-	/*
-	* This method casts 9 rays in different directions. ( SEE scene tab and you will see 9 rays differently coloured).
-	* Used to widley detect enemy infront and increase meele hit detectivity.
-	* Checks for cooldown after last preformed meele attack.
-	*/
-
+	
 
 	public bool been_to_meele_anim = false;
+	/// <summary>
+	/// This method casts 9 rays in different directions. (Ref to scene tab and you will see 9 rays differently coloured).
+	/// Used to widley detect enemy infront and increase meele hit detectivity.
+	/// Checks for cooldown after last preformed meele attack.
+	/// </summary>
 	private void RaycastForMeleeAttacks(){
 
 
@@ -284,10 +279,12 @@ public class PlayerMovementScript : MonoBehaviour {
 
 	}
 
-	/*
-	 *Method that is called if the waepon hit animation has been triggered the first time via Q input
-	 *and if is, it will search for target and make damage
-	 */
+
+	/// <summary>
+	/// Method that is called if the waepon hit animation has been triggered the first time via Q input
+	/// and if is, it will search for target and make damage.
+	/// </summary>
+	/// <returns></returns>
 	IEnumerator MeeleAttackWeaponHit(){
 		if (Physics.Raycast (ray1, out hitInfo, 2f, ~ignoreLayer) || Physics.Raycast (ray2, out hitInfo, 2f, ~ignoreLayer) || Physics.Raycast (ray3, out hitInfo, 2f, ~ignoreLayer)
 			|| Physics.Raycast (ray4, out hitInfo, 2f, ~ignoreLayer) || Physics.Raycast (ray5, out hitInfo, 2f, ~ignoreLayer) || Physics.Raycast (ray6, out hitInfo, 2f, ~ignoreLayer)
@@ -308,10 +305,13 @@ public class PlayerMovementScript : MonoBehaviour {
 	RaycastHit hit;//stores info of hit;
 	[Tooltip("Put your particle blood effect here.")]
 	public GameObject bloodEffect;//blod effect prefab;
-	/*
-	* Upon hitting enemy it calls this method, gives it raycast hit info 
-	* and at that position it creates our blood prefab.
-	*/
+
+	/// <summary>
+	/// Upon hitting enemy it calls this method, gives it raycast hit info 
+	/// and at that position it creates our blood prefab.
+	/// </summary>
+	/// <param name="_hitPos"></param>
+	/// <param name="swordHitWithGunOrNot"></param>
 	void InstantiateBlood (RaycastHit _hitPos,bool swordHitWithGunOrNot) {		
 
 		if (currentWeapo == "gun") {
@@ -333,6 +333,10 @@ public class PlayerMovementScript : MonoBehaviour {
 			}
 		} 
 	}
+	/// <summary>
+	/// On Trigger do volume sfx.
+	/// </summary>
+	/// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "Potion")

@@ -6,22 +6,13 @@ public class MouseLookScript : MonoBehaviour {
 
 	[HideInInspector]
 	public Transform myCamera;
-    /*
-	 * Hiding the cursor.
-	 */
-    public Vector3 GetCameraForward()
-    {
-        return myCamera.forward;
-    }
+
+	
     void Awake(){
         
         myCamera = GameObject.FindGameObjectWithTag("MainCamera").transform;
 	}
 
-	/*
-	* Locking the mouse if pressing L.
-	* Triggering the headbob camera omvement if player is faster than 1 of speed
-	*/
 	void Update(){
         if (!ZombieApocalypse.GameStatus.isPaused)
             Cursor.lockState = CursorLockMode.Locked;
@@ -39,6 +30,37 @@ public class MouseLookScript : MonoBehaviour {
 			HeadMovement ();
 
 	}
+	void FixedUpdate()
+	{
+
+		/*
+		 * Reducing mouse sensitvity if we are aiming.
+		 */
+		if (Input.GetAxis("Fire2") != 0)
+		{
+			mouseSensitvity = mouseSensitvity_aiming;
+		}
+		else if (GetComponent<PlayerMovementScript>().maxSpeed > 5)
+		{
+			mouseSensitvity = ZombieApocalypse.GameStatus.mouseValue * 100;
+		}
+		else
+		{
+			mouseSensitvity = ZombieApocalypse.GameStatus.mouseValue * 100;
+		}
+
+
+		ApplyingStuff();
+	}
+
+	/// <summary>
+	/// Used for Hiding the cursor.
+	/// </summary>
+	/// <returns></returns>
+	public Vector3 GetCameraForward()
+	{
+		return myCamera.forward;
+	}
 
 	[Header("Z Rotation Camera")]
 	[HideInInspector] public float timer;
@@ -48,9 +70,10 @@ public class MouseLookScript : MonoBehaviour {
 	[HideInInspector] public float timeSpeed = 2;
 
 	[HideInInspector] public float timerToRotateZ;
-	/*
-	* Switching Z rotation and applying to camera in camera Rotation().
-	*/
+
+	/// <summary>
+	/// Switching Z rotation and applying to camera in camera Rotation().
+	/// </summary>
 	void HeadMovement(){
 		timer += timeSpeed * Time.deltaTime;
 		int_timer = Mathf.RoundToInt (timer);
@@ -68,32 +91,6 @@ public class MouseLookScript : MonoBehaviour {
 	public float mouseSensitvity_notAiming = 300;
 	[HideInInspector]
 	public float mouseSensitvity_aiming = 50;
-
-	/*
-	* FixedUpdate()
-	* If aiming set the mouse sensitvity from our variables and vice versa.
-	*/
-	void FixedUpdate(){
-
-		/*
-		 * Reduxing mouse sensitvity if we are aiming.
-		 */
-		if(Input.GetAxis("Fire2") != 0){
-			mouseSensitvity = mouseSensitvity_aiming;
-		}
-		else if(GetComponent<PlayerMovementScript>().maxSpeed > 5){
-			mouseSensitvity = ZombieApocalypse.GameStatus.mouseValue * 100;
-		}
-		else{
-			mouseSensitvity = ZombieApocalypse.GameStatus.mouseValue * 100;
-		}
-
-
-		ApplyingStuff();
-
-
-	}
-
 
 	private float rotationYVelocity, cameraXVelocity;
 	[Tooltip("Speed that determines how much camera rotation will lag behind mouse movement.")]
@@ -113,10 +110,11 @@ public class MouseLookScript : MonoBehaviour {
 	public float topAngleView = 60;
 	[Tooltip("Minimum camera angle.")]
 	public float bottomAngleView = -45;
-	/*
-	 * Upon mouse movenet it increases/decreased wanted value. (not actually moving yet)
-	 * Clamping the camera rotation X to top and bottom angles.
-	 */
+
+	/// <summary>
+	/// Upon mouse movenet it increases/decreased wanted value. (not actually moving yet)
+	/// Clamping the camera rotation X to top and bottom angles.
+	/// </summary>
 	void MouseInputMovement(){
 
 		wantedYRotation += Input.GetAxis("Mouse X") * mouseSensitvity;
@@ -127,11 +125,11 @@ public class MouseLookScript : MonoBehaviour {
 
 	}
 
-	/*
-	 * Smoothing the wanted movement.
-	 * Calling the waeponRotation form here, we are rotating the waepon from this script.
-	 * Applying the camera wanted rotation to its transform.
-	 */
+	/// <summary>
+	/// Smoothing the wanted movement.
+	/// Calling the waeponRotation form here, we are rotating the waepon from this script.
+	/// Applying the camera wanted rotation to its transform.
+	/// </summary>
 	void ApplyingStuff(){
 
 		currentYRotation = Mathf.SmoothDamp(currentYRotation, wantedYRotation, ref rotationYVelocity, yRotationSpeed);
@@ -150,12 +148,13 @@ public class MouseLookScript : MonoBehaviour {
 	[HideInInspector]
 	public GameObject weapon;
 	private GunScript gun;
-	/*
-	 * Rotating current weapon from here.
-	 * Checkig if we have a weapon, if we do, if its a gun it iwll fetch the gun and rotate it accordingly,
-	 * same goes for the sword.
-	 * Incase we dont have a weapon or gun or it didnt find it, it will write into the console that it cant find a weapon.
-	 */
+
+	/// <summary>
+	/// Rotating current weapon from here.
+	/// Checkig if we have a weapon, if we do, if its a gun it iwll fetch the gun and rotate it accordingly,
+	/// same goes for the sword.
+	/// Incase we dont have a weapon or gun or it didnt find it, it will write into the console that it cant find a weapon.
+	/// </summary>
 	void WeaponRotation(){
 		if(!weapon){
 			weapon = GameObject.FindGameObjectWithTag("Weapon");
@@ -175,9 +174,10 @@ public class MouseLookScript : MonoBehaviour {
 	float deltaTime = 0.0f;
 	[Tooltip("Shows FPS in top left corner.")]
 	public bool showFps = true;
-	/*
-	* Shows fps if its set to true.
-	*/
+
+	/// <summary>
+	/// Shows fps if its set to true.
+	/// </summary>
 	void OnGUI(){
 
 		if(showFps){
@@ -185,9 +185,10 @@ public class MouseLookScript : MonoBehaviour {
 		}
 
 	}
-	/*
-	* Calculating real fps because unity status tab shows too much fps even when its not that mutch so i made my own.
-	*/
+
+	/// <summary>
+	/// Calculating real fps because unity status tab shows too much fps even when its not that mutch so i made my own.
+	/// </summary>
 	void FPSCounter(){
 		int w = Screen.width, h = Screen.height;
 

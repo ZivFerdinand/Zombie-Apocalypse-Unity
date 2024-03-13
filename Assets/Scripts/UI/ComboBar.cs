@@ -17,6 +17,9 @@ public class ComboBar : MonoBehaviour
         comboBar.value -= Time.deltaTime * (2f * divider);
     }
 
+    /// <summary>
+    /// This function manages the bar value of the combo bar.
+    /// </summary>
     private void validateBarValue()
     {
         if (comboBar.value + comboCurrentValue / divider > 100)

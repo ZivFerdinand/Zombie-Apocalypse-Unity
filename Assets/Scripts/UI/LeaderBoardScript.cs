@@ -16,6 +16,10 @@ public class LeaderBoardScript : MonoBehaviour
     {
         GetLeaderBoard();
     }
+
+    /// <summary>
+    /// This function creates the leaderboard.
+    /// </summary>
     public void GetLeaderBoard()
     {
         LeaderboardCreator.GetLeaderboard(publicNormalLeaderboardKey, ((msg) =>{
@@ -27,6 +31,12 @@ public class LeaderBoardScript : MonoBehaviour
             }
         }));
     }
+
+    /// <summary>
+    /// This function creates a new leaderboard entry.
+    /// </summary>
+    /// <param name="username">The player's username</param>
+    /// <param name="score">The player's final score</param>
     public void SetLeaderboardEntry(string username, int score)
     {
         if (username != "")

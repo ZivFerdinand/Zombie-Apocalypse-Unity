@@ -13,29 +13,39 @@ public class AdsInitializer : MonoBehaviour, IUnityAdsInitializationListener
         InitializeAds();
     }
 
+    /// <summary>
+    /// Initializing ad for different platform.
+    /// </summary>
     public void InitializeAds()
     {
-#if UNITY_IOS
-            _gameId = _iOSGameId;
-#elif UNITY_ANDROID
-            _gameId = _androidGameId;
-#elif UNITY_EDITOR
-        _gameId = _androidGameId; //Only for testing the functionality in the Editor
-#endif
+        #if UNITY_IOS
+                    _gameId = _iOSGameId;
+        #elif UNITY_ANDROID
+                    _gameId = _androidGameId;
+        #elif UNITY_EDITOR
+                _gameId = _androidGameId; //Only for testing the functionality in the Editor
+        #endif
         if (!Advertisement.isInitialized && Advertisement.isSupported)
         {
             Advertisement.Initialize(_gameId, _testMode, this);
         }
     }
 
-
+    /// <summary>
+    /// To show status on initialization completes.
+    /// </summary>
     public void OnInitializationComplete()
     {
-        //Debug.Log("Unity Ads initialization complete.");
+        Debug.Log("Unity Ads initialization complete.");
     }
 
+    /// <summary>
+    /// To show status on initialization fails.
+    /// </summary>
+    /// <param name="error">Event for error</param>
+    /// <param name="message">Error message</param>
     public void OnInitializationFailed(UnityAdsInitializationError error, string message)
     {
-        //Debug.Log($"Unity Ads Initialization Failed: {error.ToString()} - {message}");
+        Debug.Log($"Unity Ads Initialization Failed: {error.ToString()} - {message}");
     }
 }

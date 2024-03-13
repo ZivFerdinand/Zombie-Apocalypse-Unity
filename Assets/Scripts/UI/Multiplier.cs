@@ -12,6 +12,9 @@ public class Multiplier : MonoBehaviour
         UpdateMultiplier();
     }
 
+    /// <summary>
+    /// This function updates the player's score multiplier bar and text.
+    /// </summary>
     private void UpdateMultiplier()
     {
         if(ComboBar.divider == 1f)

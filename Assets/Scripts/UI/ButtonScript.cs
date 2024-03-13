@@ -103,6 +103,9 @@ public class ButtonScript : MonoBehaviour
         updateButtonText();
     }
 
+    /// <summary>
+    /// This function creates/removes the pause screen.
+    /// </summary>
     private void pauseCheck()
     {
         if (!ZombieApocalypse.GameStatus.isPaused && !isShopMenuOpen && !isOptionsOpen)
@@ -139,12 +142,21 @@ public class ButtonScript : MonoBehaviour
 
         }
     }
+
+    /// <summary>
+    /// This function pauses the game and sets the player's cursor status.
+    /// </summary>
     private void pauseUpdate()
     {
         Time.timeScale = (Time.timeScale == 0) ? 1 : 0;
         ZombieApocalypse.GameStatus.isPaused = (Time.timeScale == 0);
         Cursor.visible = ZombieApocalypse.GameStatus.isPaused;
     }
+
+    /// <summary>
+    /// This function detects if the player have entered the zombie spawn point.
+    /// </summary>
+    /// <param name="name">The button's name</param>
     public void onButtonClick(string name)
     {
         switch (name)
@@ -224,11 +236,19 @@ public class ButtonScript : MonoBehaviour
                 break;
         }
     }
+
+    /// <summary>
+    /// This function removes the ask name screen and creates the leaderboard screen.
+    /// </summary>
     public void onPlayerNameSubmit()
     {
         askNameUI.SetActive(false);
         LeaderboardUI.SetActive(true);
     }
+
+    /// <summary>
+    /// This function plays the player death animation, sets the game over status and plays the ad after the game is over.
+    /// </summary>
     private IEnumerator playerDeathAnimation()
     {
         // Get the player's forward direction
@@ -240,9 +260,7 @@ public class ButtonScript : MonoBehaviour
         // Convert the quaternion to Euler angles
         Vector3 targetEulerAngles = targetRotation.eulerAngles;
 
-
         player2.GetComponent<GunInventory>().currentHandsAnimator.SetBool("changingWeapon", true);
-
 
         yield return new WaitForSeconds(0.75f);
         player.SetActive(false);
@@ -253,6 +271,10 @@ public class ButtonScript : MonoBehaviour
         interstitialAds.ShowAd();
         gameoverCheck();
     }
+
+    /// <summary>
+    /// This function activates the game over screen.
+    /// </summary>
     private void gameoverCheck()
     {
         gameoverUI.SetActive(true);
@@ -271,16 +293,28 @@ public class ButtonScript : MonoBehaviour
         StartCoroutine(setGameOver());
         updateScoreText();
     }
+
+    /// <summary>
+    /// This function plays the pause update function- with a delay.
+    /// </summary>
     private IEnumerator setGameOver()
     {
         yield return new WaitForSeconds(1f);
 
         pauseUpdate();
     }
+
+    /// <summary>
+    /// This function updates the player's final score on the screen.
+    /// </summary>
     private void updateScoreText()
     {
         scoreText.text = "Score : " + ZombieApocalypse.GameData.gameScore.ToString();
     }
+
+    /// <summary>
+    /// This function creates/removes the shop screen.
+    /// </summary>
     private void shopCheck()
     {
         if (!ZombieApocalypse.GameStatus.isPaused)
@@ -323,6 +357,10 @@ public class ButtonScript : MonoBehaviour
             pauseUI.SetActive(true); // Activate the pause menu when shop closes
         }
     }
+
+    /// <summary>
+    /// This function removes the pause screen and activates the shop screen with a delay.
+    /// </summary>
     private IEnumerator shopFromPause()
     {
         pauseCheck();
@@ -331,17 +369,29 @@ public class ButtonScript : MonoBehaviour
         
         shopCheck();
     }
+
+    /// <summary>
+    /// This function creates the shop screen.
+    /// </summary>
     private void OpenShop()
     {
         isShopMenuOpen = true;
         shopUI.SetActive(true);
         shopCheck();
     }
+
+    /// <summary>
+    /// This function removes the shop screen.
+    /// </summary>
     private void CloseShop()
     {
         isShopMenuOpen = false;
         shopCheck();
     }
+
+    /// <summary>
+    /// This function upgrades the player's chance to increase the drop rate from zombies.
+    /// </summary>
     private void upgradeDropChance()
     {
         if (ZombieApocalypse.GameShopInfo.item_drop_chance_level < maxUpgradeLevel)
@@ -353,6 +403,10 @@ public class ButtonScript : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// This function increases the ammo count of weapon 1.
+    /// </summary>
     private void buyWeapon1Ammo()
     {
         if (ZombieApocalypse.GameData.coinCounter - 200 >= 0)
@@ -361,6 +415,10 @@ public class ButtonScript : MonoBehaviour
             gunInventory.instantiatedGuns[0].GetComponent<GunScript>().bulletsIHave += 60;
         }
     }
+
+    /// <summary>
+    /// This function increases the ammo count of weapon 2.
+    /// </summary>
     private void buyWeapon2Ammo()
     {
         if (ZombieApocalypse.GameData.coinCounter - 200 >= 0)
@@ -369,6 +427,10 @@ public class ButtonScript : MonoBehaviour
             gunInventory.instantiatedGuns[1].GetComponent<GunScript>().bulletsIHave += 30;
         }
     }
+
+    /// <summary>
+    /// This function increases the aiming time of skill 1.
+    /// </summary>
     private void upgradeAimTime1()
     {
         if (ZombieApocalypse.GameShopInfo.skill_1_aim_duration_level < maxUpgradeLevel)
@@ -380,6 +442,10 @@ public class ButtonScript : MonoBehaviour
             }
         }
     }
+    
+    /// <summary>
+    /// This function increases the aiming time of skill 2.
+    /// </summary>
     private void upgradeAimTime2()
     {
         if (ZombieApocalypse.GameShopInfo.skill_2_aim_duration_level < maxUpgradeLevel)
@@ -391,6 +457,10 @@ public class ButtonScript : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// This function increases the damage of weapon 1.
+    /// </summary>
     private void upgradeWeapon1Dmg()
     {
         if (ZombieApocalypse.GameShopInfo.weapon_1_dmg_level < maxUpgradeLevel)
@@ -402,6 +472,10 @@ public class ButtonScript : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// This function increases the damage of weapon 2.
+    /// </summary>
     private void upgradeWeapon2Dmg()
     {
         if (ZombieApocalypse.GameShopInfo.weapon_2_dmg_level < maxUpgradeLevel)
@@ -413,6 +487,10 @@ public class ButtonScript : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// This function updates the button text according to the player's shop item level.
+    /// </summary>
     private void updateButtonText()
     {
         if (ZombieApocalypse.GameShopInfo.item_drop_chance_level < maxUpgradeLevel)

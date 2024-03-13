@@ -11,6 +11,10 @@ public class PlayerScore : MonoBehaviour
     {
         UpdateScoreText();
     }
+
+    /// <summary>
+    /// Update score based on current combo multiplier.
+    /// </summary>
     private void UpdateScoreText()
     {
         scoreText.text = ZombieApocalypse.GameData.gameScore.ToString();

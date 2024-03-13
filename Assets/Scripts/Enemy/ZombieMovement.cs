@@ -36,7 +36,7 @@ public class ZombieMovement : MonoBehaviour
 
     public GameObject FloatingTextPrefab;
     private GameObject dizzyStars;
-
+    
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -109,8 +109,9 @@ public class ZombieMovement : MonoBehaviour
         }
     }
 
-
-
+    /// <summary>
+    /// This function changes the direction and speed of the zombie's movement.
+    /// </summary>
     public void slowSpeed()
     {
         zombieMeshAgent.SetDestination(transform.position);
@@ -118,6 +119,11 @@ public class ZombieMovement : MonoBehaviour
 
         dizzyStars.SetActive(true);
     }
+
+    /// <summary>
+    /// This function will decrease blood from zombies according to the amount parameter.
+    /// </summary>
+    /// <param name="amount">The amount of damage the zombies received.</param>
     public void decreaseHealth(float amount)
     {
         zombieHealth -= amount;
@@ -137,10 +143,18 @@ public class ZombieMovement : MonoBehaviour
             scoreAndLootFlag = true;
         }
     }
+
+    /// <summary>
+    /// This function creates score that player will get after killing a zombie above the zombie head.
+    /// </summary>
     private void showFloatingText()
     {
         Instantiate(FloatingTextPrefab, transform.position, Quaternion.identity, transform);
     }
+
+    /// <summary>
+    /// This function will set the zombie's random movement pattern.
+    /// </summary>
     private void setWalkAround()
     {
         if (moveCooldown < 0f)
@@ -155,6 +169,10 @@ public class ZombieMovement : MonoBehaviour
         else
             moveCooldown -= Time.deltaTime;
     }
+
+    /// <summary>
+    /// This function will decrease the player's health if the zombie can perform an attack.
+    /// </summary>
     private void attackPlayer()
     {
         if (attackInterval < 0)
@@ -163,6 +181,10 @@ public class ZombieMovement : MonoBehaviour
             attackInterval = attackCoolDown;
         }
     }
+
+    /// <summary>
+    /// This function drops an item after a zombie killed.
+    /// </summary>
     private void dropLoot()
     {
         int random = Random.Range(1, 101);
@@ -175,6 +197,13 @@ public class ZombieMovement : MonoBehaviour
             Destroy(loot, 15f);
         }
     }
+
+    /// <summary>
+    /// This function will set the animation of the zombie.
+    /// </summary>
+    /// <param name="a">A bool value that indicates that the zombie is attacking.</param>
+    /// <param name="b">A bool value that indicates that the zombie is moving.</param>
+    /// <param name="c">A bool value that indicates that the zombie is dead.</param>
     private void setAttackMovingDead(bool a, bool b, bool c)
     {
         zombieAnimation.SetBool("isAttack", a);

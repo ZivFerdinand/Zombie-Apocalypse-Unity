@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace ZombieApocalypse
 {
+    /// <summary>
+    /// Information that contains information inside shop.
+    /// </summary>
     public static class GameShopInfo
     {
         public static float weapon_1_1
@@ -119,6 +122,10 @@ namespace ZombieApocalypse
             }
         }
     }
+    
+    /// <summary>
+    /// Information that contains main game user data.
+    /// </summary>
     public static class GameData
     {
         public static string playerName
@@ -186,6 +193,10 @@ namespace ZombieApocalypse
             }
         }
     }
+    
+    /// <summary>
+    /// Technical information while game runs.
+    /// </summary>
     public static class GameStatus
     {
         public static bool isPaused

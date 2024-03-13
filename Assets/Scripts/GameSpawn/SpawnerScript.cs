@@ -42,6 +42,10 @@ public class SpawnerScript : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// this function will tell which checkpoints to pass.
+    /// </summary>
+    /// <param name="name">The checkpoint number.</param>
     public void setTouched(string name)
     {
         touchedIndex = int.Parse(name);

@@ -27,6 +27,10 @@ public class ZombieDemo : MonoBehaviour
             resetPosition();
         
     }
+
+    /// <summary>
+    /// This function resets the position of the zombie to the starting point again.
+    /// </summary>
     private void resetPosition()
     {
         navMeshAgent.speed = Random.Range(1f, 3f);
@@ -34,6 +38,10 @@ public class ZombieDemo : MonoBehaviour
 
         setDestination();
     }
+
+    /// <summary>
+    /// This function sets the direction of the zombie's next movement after the reset.
+    /// </summary>
     private void setDestination()
     { 
         navMeshAgent.SetDestination(new Vector3(travelPositionLimit + 1f, transform.position.y, transform.position.z));

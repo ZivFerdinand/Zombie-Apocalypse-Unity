@@ -24,6 +24,11 @@ public class StartCameraSaver : MonoBehaviour
 
         changeTarget();
     }
+    /// <summary>
+    /// This function will changes the target rotation of the camera in the main menu.
+    /// Randomly selects a new target rotation from the array of rotationTargets.
+    /// Applies a rotation animation using LeanTween to smoothly rotate the camera towards the new target.
+    /// </summary>
     private void changeTarget()
     {
         currentTarget = rotationTargets[Random.Range(0, 8)];
