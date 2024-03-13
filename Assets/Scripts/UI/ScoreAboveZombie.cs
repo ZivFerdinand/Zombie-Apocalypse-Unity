@@ -11,6 +11,9 @@ public class ScoreAdder : MonoBehaviour
         UpdateScore();
     }
 
+    /// <summary>
+    /// Score string updating.
+    /// </summary>
     private void UpdateScore()
     {
         if (ComboBar.divider == 1f)

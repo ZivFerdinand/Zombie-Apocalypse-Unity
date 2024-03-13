@@ -69,6 +69,10 @@ public class SkillScript : MonoBehaviour
         }
         UpdateEffect();
     }
+    /// <summary>
+    /// This function will update the skill bar when the skill potion is obtained.
+    /// </summary>
+    /// <param name="idx">Index that represents the skills that acquired.</param>
     public void getSkill(int idx)
     {
         if(idx == 0)
@@ -83,6 +87,11 @@ public class SkillScript : MonoBehaviour
         }
         updateSkillBar();
     }
+    /// <summary>
+    /// This function will manages the usage of special skills (fire and ice) based on user input.
+    /// Checks for key presses to activate and release skills, deducting skill counts and updating the skill bar accordingly.
+    /// Adjusts audio volume based on the global sound effects value. Handles aiming and starting the current skill.
+    /// </summary>
     private void UpdateEffect()
     {
         if (fireCount > 0 && Input.GetKeyDown(KeyCode.E) && !ZombieApocalypse.GameStatus.isPaused)
@@ -110,9 +119,10 @@ public class SkillScript : MonoBehaviour
             StartCurrent();
 
         }
-        
-
     }
+    /// <summary>
+    /// This function will update the skill bar after the player uses the skill.
+    /// </summary>
     private void updateSkillBar()
     {
         if(iceCount <= 0)
@@ -143,6 +153,9 @@ public class SkillScript : MonoBehaviour
             fireBars[0].color = fireBars[1].color = fireColor;
         }
     }
+    /// <summary>
+    /// This function will issue the effect of the skill used.
+    /// </summary>
     private void BeginEffect()
     {
         Vector3 pos;
@@ -190,7 +203,12 @@ public class SkillScript : MonoBehaviour
         currentPrefabObject.transform.position = pos;
         currentPrefabObject.transform.rotation = rotation;
     }
-
+    /// <summary>
+    /// This function will provide an aiming effect when using the skill.
+    /// </summary>
+    /// <summary>
+    /// This function controls the player's aiming state.
+    /// </summary>
     public void SetAiming(char skill)
     {
         isAimingSkill = true;
@@ -206,6 +224,13 @@ public class SkillScript : MonoBehaviour
             aimingTimeLeft = aimingTimePerLevel[ZombieApocalypse.GameShopInfo.skill_2_aim_duration_level];
         }
     }
+    /// <summary>
+    /// This function will start the current effect.
+    /// </summary>
+
+    /// <summary>
+    /// This function will start the player's current skill.
+    /// </summary>
     public void StartCurrent()
     {
         Time.timeScale = 1f;
@@ -213,7 +238,12 @@ public class SkillScript : MonoBehaviour
         StopCurrent();
         BeginEffect();
     }
-
+    /// <summary>
+    /// This function will stop the current effect.
+    /// </summary>
+    /// <summary>
+    /// This function will stop the player's current skill.
+    /// </summary>
     private void StopCurrent()
     {
         // if we are running a constant effect like wall of fire, stop it now
@@ -224,6 +254,5 @@ public class SkillScript : MonoBehaviour
         currentPrefabObject = null;
         currentPrefabScript = null;
     }
-
     
 }

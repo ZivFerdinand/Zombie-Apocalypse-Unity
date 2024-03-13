@@ -4,7 +4,6 @@ using UnityEngine.Advertisements;
 
 public class BannerAds : MonoBehaviour
 {
-    // For the purpose of this example, these buttons are for functionality testing:
     [SerializeField] Button _loadBannerButton;
     [SerializeField] Button _showBannerButton;
     [SerializeField] Button _hideBannerButton;
@@ -17,29 +16,22 @@ public class BannerAds : MonoBehaviour
 
     void Start()
     {
-        // Get the Ad Unit ID for the current platform:
+
 #if UNITY_IOS
         _adUnitId = _iOSAdUnitId;
 #elif UNITY_ANDROID
         _adUnitId = _androidAdUnitId;
 #endif
 
-        // Disable the button until an ad is ready to show:
-        //_showBannerButton.interactable = false;
-        //_hideBannerButton.interactable = false;
-
         // Set the banner position:
         Advertisement.Banner.SetPosition(_bannerPosition);
 
-        // Configure the Load Banner button to call the LoadBanner() method when clicked:
-        //_loadBannerButton.onClick.AddListener(LoadBanner);
-        //_loadBannerButton.interactable = true;
-
         LoadBanner();
-        //ShowBannerAd();
     }
 
-    // Implement a method to call when the Load Banner button is clicked:
+    /// <summary>
+    /// Implement a method to call when the Load Banner button is clicked.
+    /// </summary>
     public void LoadBanner()
     {
         // Set up options to notify the SDK of load events:
@@ -53,29 +45,26 @@ public class BannerAds : MonoBehaviour
         Advertisement.Banner.Load(_adUnitId, options);
     }
 
-    // Implement code to execute when the loadCallback event triggers:
+    /// <summary>
+    /// Implement code to execute when the loadCallback event triggers.
+    /// </summary>
     void OnBannerLoaded()
     {
         Debug.Log("Banner loaded");
-
-        // Configure the Show Banner button to call the ShowBannerAd() method when clicked:
-        //_showBannerButton.onClick.AddListener(ShowBannerAd);
-        // Configure the Hide Banner button to call the HideBannerAd() method when clicked:
-        //_hideBannerButton.onClick.AddListener(HideBannerAd);
-
-        // Enable both buttons:
-        //_showBannerButton.interactable = true;
-        //_hideBannerButton.interactable = true;
     }
 
-    // Implement code to execute when the load errorCallback event triggers:
+    /// <summary>
+    /// Implement code to execute when the loadCallback event triggers.
+    /// </summary>
     void OnBannerError(string message)
     {
         Debug.Log($"Banner Error: {message}");
         // Optionally execute additional code, such as attempting to load another ad.
     }
 
-    // Implement a method to call when the Show Banner button is clicked:
+    /// <summary>
+    /// This function will show the Banner when the button is clicked.
+    /// </summary>
     public void ShowBannerAd()
     {
         // Set up options to notify the SDK of show events:
@@ -92,7 +81,9 @@ public class BannerAds : MonoBehaviour
         Advertisement.Banner.SetPosition(_bannerPosition);
     }
 
-    // Implement a method to call when the Hide Banner button is clicked:
+    /// <summary>
+    /// Implement a method to call when the Hide Banner button is clicked.
+    /// </summary>
     public void HideBannerAd()
     {
         // Hide the banner:
@@ -102,12 +93,4 @@ public class BannerAds : MonoBehaviour
     void OnBannerClicked() { }
     void OnBannerShown() { }
     void OnBannerHidden() { }
-
-    void OnDestroy()
-    {
-        // Clean up the listeners:
-        //_loadBannerButton.onClick.RemoveAllListeners();
-        //_showBannerButton.onClick.RemoveAllListeners();
-        //_hideBannerButton.onClick.RemoveAllListeners();
-    }
 }

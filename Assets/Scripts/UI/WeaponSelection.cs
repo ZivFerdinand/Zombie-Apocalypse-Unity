@@ -24,6 +24,10 @@ public class WeaponSelection : MonoBehaviour
     {
         ZombieApocalypse.GameData.currentWeapon = 0;
     }
+
+    /// <summary>
+    /// This function animates the weapon icon when the player switches weapon.
+    /// </summary>
     public void SelectWeaponChange()
     {
         if (currentA)

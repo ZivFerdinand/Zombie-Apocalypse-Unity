@@ -70,6 +70,10 @@ public class StartUIController : MonoBehaviour
         }
         
     }
+    /// <summary>
+    /// This function will Handles button clicks and performs corresponding actions based on the button's name.
+    /// Actions include changing menu buttons, loading scenes, displaying or hiding UI elements, and managing fades for smooth transitions. Also handles quitting the application.
+    /// </summary>
     public void onButtonClick(string name)
     {
         if (!isLoading)
@@ -145,7 +149,11 @@ public class StartUIController : MonoBehaviour
             }
         }
     }
-
+    /// <summary>
+    ///This function will initiates the loading process for the game scene with a specified difficulty level.
+    /// Resets the game score, sets the game mode, and triggers a fade-in effect.
+    /// Displays a loading circle during the loading process.
+    /// </summary>
     private IEnumerator OnLoadScene(int diff)
     {
         ZombieApocalypse.GameData.gameScore = 0;

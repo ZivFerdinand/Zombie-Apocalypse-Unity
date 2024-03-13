@@ -3,7 +3,6 @@ using System.Collections;
 using TMPro;
 using UnityEngine.UI;
 using System;
-//using UnityStandardAssets.ImageEffects;
 
 public enum GunStyles{
 	nonautomatic,automatic
@@ -53,10 +52,6 @@ public class GunScript : MonoBehaviour {
 			bulletsI = 30f;
 		}
 	}
-
-    /*
-	 * Collection the variables upon awake that we need.
-	 */
     void Awake(){
 		mls = GameObject.FindGameObjectWithTag("Player").GetComponent<MouseLookScript>();
 		player = mls.transform;
@@ -97,9 +92,6 @@ public class GunScript : MonoBehaviour {
 
 	private Vector2 gunFollowTimeVelocity;
 
-	/*
-	Update loop calling for methods that are descriped below where they are initiated.
-	*/
 	void Update(){
 
 		Animations();
@@ -128,11 +120,6 @@ public class GunScript : MonoBehaviour {
 		}
 	}
 
-	/*
-	*Update loop calling for methods that are descriped below where they are initiated.
-	*+
-	*Calculation of weapon position when aiming or not aiming.
-	*/
 	void FixedUpdate(){
 		RotationGun ();
 
@@ -173,30 +160,36 @@ public class GunScript : MonoBehaviour {
 	//[HideInInspector]
 	[Tooltip("Sensitvity of this gun while running.")]
 	public float mouseSensitvity_running = 4;
-	/*
-	 * Used to give our main camera different sensivity options for each gun.
-	 */
+
+
+
+	/// <summary>
+	/// Used to give our main camera different sensivity options for each gun.
+	/// </summary>
 	void GiveCameraScriptMySensitvity(){
 		mls.mouseSensitvity_notAiming = mouseSensitvity_notAiming;
 		mls.mouseSensitvity_aiming = mouseSensitvity_aiming;
 	}
 
-	/*
-	 * Used to expand position of the crosshair or make it dissapear when running
-	 */
+	/// <summary>
+	/// Used to expand position of the crosshair or make it dissapear when running.
+	/// </summary>
 	void CrossHairFadeout(){
         if (!ZombieApocalypse.GameStatus.isPaused && player.GetComponent<Rigidbody>().velocity.magnitude > 1 && Input.GetAxis("Fire1") == 0)
-        {//ifnot shooting
+        {
+			//if not shooting
 
 			if (player.GetComponent<PlayerMovementScript>().maxSpeed < runningSpeed)
-            { //not running
+            { 
+				//not running
 				if (crosshair.color.a == 0)
 				{
 					StartCoroutine(CustomFadeAnimator.Fade(crosshair, 0, 1, 0.25f));
 				}
             }
             else
-            {//running
+            {
+				//running
                 if (crosshair.color.a == 1)
 				{
 					StartCoroutine(CustomFadeAnimator.Fade(crosshair, 1, 0, 0.25f));
@@ -205,11 +198,13 @@ public class GunScript : MonoBehaviour {
         }
     }
 
-    /* 
-	 * Changes the max speed that player is allowed to go.
-	 * Also max speed is connected to the animator which will trigger the run animation.
-	 */
-    void Sprint(){// Running();  so i can find it with CTRL + F
+	/// <summary>
+	/// Changes the max speed that player is allowed to go.
+	/// Also max speed is connected to the animator which will trigger the run animation.
+	/// </summary>
+	void Sprint()
+	{
+		// Running();  so developer can find it with CTRL+F
 		if (Input.GetAxis ("Vertical") > 0 && Input.GetAxisRaw ("Fire2") == 0 && meeleAttack == false && Input.GetAxisRaw ("Fire1") == 0) {
 			if (!ZombieApocalypse.GameStatus.isPaused && Input.GetKey (KeyCode.LeftShift)) {
 					pmS.maxSpeed = runningSpeed;
@@ -230,28 +225,32 @@ public class GunScript : MonoBehaviour {
 	public bool meeleAttack;
 	[HideInInspector]
 	public bool aiming;
-	/*
-	 * Checking if meeleAttack is already running.
-	 * If we are not reloading we can trigger the MeeleAttack animation from the IENumerator.
-	 */
+
+	/// <summary>
+	/// Checking if meeleAttack is already running.
+	/// If we are not reloading we can trigger the MeeleAttack animation from the IENumerator.
+	/// </summary>
 	void MeeleAnimationsStates(){
 		if (handsAnimator) {
 			meeleAttack = handsAnimator.GetCurrentAnimatorStateInfo (0).IsName (meeleAnimationName);
 			aiming = handsAnimator.GetCurrentAnimatorStateInfo (0).IsName (aimingAnimationName);	
 		}
 	}
-	/*
-	* User inputs meele attack with Q in keyboard start the coroutine for animation and damage attack.
-	*/
+	
+	/// <summary>
+	/// User inputs meele attack with Q in keyboard start the coroutine for animation and damage attack.
+	/// </summary>
 	void MeeleAttack(){	
 
 		if(!ZombieApocalypse.GameStatus.isPaused && (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.E)) && !meeleAttack){
             StartCoroutine("AnimationMeeleAttack");
         }
     }
-	/*
-	* Sets meele animation to play.
-	*/
+
+	/// <summary>
+	/// Sets meele animation to play.
+	/// </summary>
+	/// <returns></returns>
 	IEnumerator AnimationMeeleAttack(){
 		handsAnimator.SetBool("meeleAttack",true);
 		//yield return new WaitForEndOfFrame();
@@ -260,9 +259,10 @@ public class GunScript : MonoBehaviour {
 	}
 
 	private float startLook, startAim, startRun;
-	/*
-	* Setting the mouse sensitvity lower when meele attack and waits till it ends.
-	*/
+
+	/// <summary>
+	/// Setting the mouse sensitvity lower when meele attack and waits till it ends.
+	/// </summary>
 	void LockCameraWhileMelee(){
 		if (meeleAttack) {
 			mouseSensitvity_notAiming = 2;
@@ -280,10 +280,11 @@ public class GunScript : MonoBehaviour {
 	[HideInInspector]
 	public Transform mainCamera;
 	private Camera secondCamera;
-	/*
-	 * Calculatin the weapon position accordingly to the player position and rotation.
-	 * After calculation the recoil amount are decreased to 0.
-	 */
+
+	/// <summary>
+	/// Calculating the weapon position accordingly to the player position and rotation.
+	/// After calculation the recoil amount are decreased to 0.
+	/// </summary>
 	void PositionGun(){
 		transform.position = Vector3.SmoothDamp(transform.position,
 			mainCamera.transform.position  - 
@@ -315,10 +316,11 @@ public class GunScript : MonoBehaviour {
 	private float angularVelocityX;
 	[Tooltip("Value of forward rotation multiplier.")]
 	public Vector2 forwardRotationAmount = Vector2.one;
-	/*
-	* Rotatin the weapon according to mouse look rotation.
-	* Calculating the forawrd rotation like in Call Of Duty weapon weight
-	*/
+
+	/// <summary>
+	/// Rotating the weapon according to mouse look rotation.
+	/// Calculating the forawrd rotation like in Call Of Duty weapon weight.
+	/// </summary>
 	void RotationGun(){
 
 		rotationDeltaY = mls.currentYRotation - rotationLastY;
@@ -339,18 +341,16 @@ public class GunScript : MonoBehaviour {
 	private float currentRecoilZPos;
 	private float currentRecoilXPos;
 	private float currentRecoilYPos;
-	/*
-	 * Called from ShootMethod();, upon shooting the recoil amount will increase.
-	 */
+
+	/// <summary>
+	/// Called from ShootMethod();, upon shooting the recoil amount will increase.
+	/// </summary>
 	public void RecoilMath(){
 		currentRecoilZPos -= recoilAmount_z;
 		currentRecoilXPos -= (UnityEngine.Random.value - 0.5f) * recoilAmount_x;
 		currentRecoilYPos -= (UnityEngine.Random.value - 0.5f) * recoilAmount_y;
 		mls.wantedCameraXRotation -= Mathf.Abs(currentRecoilYPos * gunPrecision);
 		mls.wantedYRotation -= (currentRecoilXPos * gunPrecision);		 
-
-		//expandValues_crosshair += new Vector2(6,12);
-
 	}
 
 	[Header("Shooting setup - MUSTDO")]
@@ -360,9 +360,10 @@ public class GunScript : MonoBehaviour {
 	[Tooltip("Rounds per second if weapon is set to automatic rafal.")]
 	public float roundsPerSecond;
 	private float waitTillNextFire;
-	/*
-	 * Checking if the gun is automatic or nonautomatic and accordingly runs the ShootMethod();.
-	 */
+
+	/// <summary>
+	/// Checking if the gun is automatic or nonautomatic and accordingly runs the ShootMethod();.
+	/// </summary>
 	void Shooting(){
 
 		if (!ZombieApocalypse.GameStatus.isPaused && !meeleAttack) {
@@ -428,9 +429,9 @@ public class GunScript : MonoBehaviour {
 	[Tooltip("Sound that plays after successful attack bullet hit.")]
 	public static AudioSource hitMarker;
 
-	/*
-	* Sounds that is called upon hitting the target.
-	*/
+	/// <summary>
+	/// Sounds that is called upon hitting the target.
+	/// </summary>
 	public static void HitMarkerSound(){
 		hitMarker.volume = ZombieApocalypse.GameStatus.sfxValue;
     
@@ -443,10 +444,11 @@ public class GunScript : MonoBehaviour {
 	public GameObject muzzelSpawn;
 	private GameObject holdFlash;
 	private GameObject holdSmoke;
-	/*
-	 * Called from Shooting();
-	 * Creates bullets and muzzle flashes and calls for Recoil.
-	 */
+
+	/// <summary>
+	/// Called from Shooting();
+	/// Creates bullets and muzzle flashes and calls for Recoil.
+	/// </summary>
 	private void ShootMethod(){
 		if(waitTillNextFire <= 0 && !reloading && pmS.maxSpeed < 5){
 
@@ -474,10 +476,7 @@ public class GunScript : MonoBehaviour {
             }
 				
 			else{
-				//if(!aiming)
 				StartCoroutine("Reload_Animation");
-				//if(emptyClip_sound_source)
-				//	emptyClip_sound_source.Play();
 			}
 
 		}
@@ -485,11 +484,12 @@ public class GunScript : MonoBehaviour {
 	}
 
 
-
-	/*
-	* Reloading, setting the reloading to animator,
-	* Waiting for 2 seconds and then seeting the reloaded clip.
-	*/
+/// <summary>/// /// /// </summary>
+	/// <summary>
+	/// Reloading, setting the reloading to animator,
+	/// Waiting for 2 seconds and then seeting the reloaded clip.
+	/// </summary>
+	
 	[Header("reload time after anima")]
 	[Tooltip("Time that passes after reloading. Depends on your reload animation length, because reloading can be interrupted via meele attack or running. So any action before this finishes will interrupt reloading.")]
 	public float reloadChangeBulletsTime;
@@ -546,10 +546,11 @@ public class GunScript : MonoBehaviour {
 		}
 	}
 
-	/*
-	 * Setting the number of bullets to the hud UI gameobject if there is one.
-	 * And drawing CrossHair from here.
-	 */
+
+	/// <summary>
+	/// Setting the number of bullets to the hud UI gameobject if there is one.
+	/// And drawing CrossHair from here.
+	/// </summary>
 	[Tooltip("HUD bullets to display bullet count on screen. Will be find under name 'HUD_bullets' in scene.")]
 	public TextMeshProUGUI HUD_bullets_left;
     public TextMeshProUGUI HUD_bullets_right;
@@ -585,9 +586,10 @@ public class GunScript : MonoBehaviour {
 
 	[Header("Crosshair properties")]
 	private Image crosshair;
-    /*
-	 * Drawing the crossHair.
-	 */
+
+	/// <summary>
+	/// Draws Crosshair.
+	/// </summary>
     void DrawCrosshair(){
 		if(!ZombieApocalypse.GameStatus.isPaused && Input.GetAxis("Fire2") == 0){//if not aiming draw
             crosshair.gameObject.SetActive(true);
@@ -600,10 +602,11 @@ public class GunScript : MonoBehaviour {
 	}
 
 	public Animator handsAnimator;
-	/*
-	* Fetching if any current animation is running.
-	* Setting the reload animation upon pressing R.
-	*/
+
+	/// <summary>
+	/// Fetching if any current animation is running.
+	/// Setting the reload animation upon pressing R.
+	/// </summary>
 	void Animations(){
 
 		if(handsAnimator){

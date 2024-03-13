@@ -8,6 +8,10 @@ public class PlayerInventory : MonoBehaviour
     public UnityEvent<PlayerInventory> OnPotionCollected;
     public SkillScript playerSkill;
     public PlayerHealth playerHealth;
+    /// <summary>
+    /// This function will tell which potion are taken and carry out the effect of the potion.
+    /// </summary>
+    /// <param name="name">String of potion name</param>
 
     public void PotionCollected(string name)
     {

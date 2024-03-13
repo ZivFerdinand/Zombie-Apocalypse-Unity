@@ -15,7 +15,9 @@ public class InterstitialAds : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSh
             : _androidAdUnitId;
     }
 
-    // Load content to the Ad Unit:
+    /// <summary>
+    /// This function will load ads.
+    /// </summary>
     public void LoadAd()
     {
         // IMPORTANT! Only load content AFTER initialization (in this example, initialization is handled in a different script).
@@ -23,7 +25,9 @@ public class InterstitialAds : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSh
         Advertisement.Load(_adUnitId, this);
     }
 
-    // Show the loaded content in the Ad Unit:
+    /// <summary>
+    /// This function will show ads.
+    /// </summary>
     public void ShowAd()
     {
         // Note that if the ad content wasn't previously loaded, this method will fail
@@ -31,18 +35,34 @@ public class InterstitialAds : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSh
         Advertisement.Show(_adUnitId, this);
     }
 
-    // Implement Load Listener and Show Listener interface methods: 
+    /// <summary>
+    /// A collection of events that will be triggered when the ad is loaded
+    /// </summary>
+    /// <param name="adUnitId">String code of ads</param>
     public void OnUnityAdsAdLoaded(string adUnitId)
     {
+        Debug.Log("Uploaded");
         // Optionally execute code if the Ad Unit successfully loads content.
     }
 
+    /// <summary>
+    /// A collection of events that will be triggered when the ad fails to load
+    /// </summary>
+    /// <param name="_adUnitId">String code of ads</param>
+    /// <param name="error">Event error</param>
+    /// <param name="message">String message</param>
     public void OnUnityAdsFailedToLoad(string _adUnitId, UnityAdsLoadError error, string message)
     {
         Debug.Log($"Error loading Ad Unit: {_adUnitId} - {error.ToString()} - {message}");
         // Optionally execute code if the Ad Unit fails to load, such as attempting to try again.
     }
 
+    /// <summary>
+    /// A collection of events that will be triggered when an ad fails
+    /// </summary>
+    /// <param name="_adUnitId">String code of ads</param>
+    /// <param name="error">Event error</param>
+    /// <param name="message">String message</param>
     public void OnUnityAdsShowFailure(string _adUnitId, UnityAdsShowError error, string message)
     {
         Debug.Log($"Error showing Ad Unit {_adUnitId}: {error.ToString()} - {message}");

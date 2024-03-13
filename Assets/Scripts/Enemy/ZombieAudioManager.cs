@@ -18,44 +18,6 @@ public class ZombieAudioManager : MonoBehaviour
         initSoundValue = soundSource.volume;
         initGrowlSoundValue = growlSoundSource.volume;
     }
-    private void initSound(ref AudioClip[] clips)
-    {
-        int n = Random.Range(0, clips.Length);
-        soundSource.volume = initSoundValue * ZombieApocalypse.GameStatus.sfxValue;
-        soundSource.clip = clips[n];
-
-        soundSource.PlayOneShot(soundSource.clip);
-
-        clips[n] = footstepSounds[0];
-        footstepSounds[0] = soundSource.clip;
-    }
-    public void LeftFoot()
-    {
-        initSound(ref footstepSounds);
-    }
-    public void LeftRunFoot()
-    {
-        initSound(ref footstepSounds);
-    }
-    public void RightRunFoot()
-    {
-        initSound(ref footstepSounds);
-    }
-    public void RightFoot()
-    {
-        initSound(ref footstepSounds);
-    }
-    public void Attack()
-    {
-        initSound(ref attackSounds);
-    }
-    public void DeadZombie()
-    {
-        growlSoundSource.Stop();
-
-        soundSource.clip = deadSound;
-        soundSource.PlayOneShot(deadSound);
-    }
     private void Update()
     {
         if (growlSoundSource.isPlaying)
@@ -69,4 +31,72 @@ public class ZombieAudioManager : MonoBehaviour
             growlSoundSource.Play();
         }
     }
+
+    /// <summary>
+    /// This function will take the audioclip that has been entered in Unity.
+    /// </summary>
+    /// <param name="clips">Audioclip for sfx sound.</param>
+    private void initSound(ref AudioClip[] clips)
+    {
+        int n = Random.Range(0, clips.Length);
+        soundSource.volume = initSoundValue * ZombieApocalypse.GameStatus.sfxValue;
+        soundSource.clip = clips[n];
+
+        soundSource.PlayOneShot(soundSource.clip);
+
+        clips[n] = footstepSounds[0];
+        footstepSounds[0] = soundSource.clip;
+    }
+
+    /// <summary>
+    /// This function will produce the sound of the left foot touching the ground when walking.
+    /// </summary>
+    public void LeftFoot()
+    {
+        initSound(ref footstepSounds);
+    }
+
+    /// <summary>
+    /// This function will produce the sound of the left foot touching the ground when running.
+    /// </summary>
+    public void LeftRunFoot()
+    {
+        initSound(ref footstepSounds);
+    }
+
+    /// <summary>
+    /// This function will produce the sound of the right foot touching the ground when running.
+    /// </summary>
+    public void RightRunFoot()
+    {
+        initSound(ref footstepSounds);
+    }
+
+    /// <summary>
+    /// This function will produce the sound of the right foot touching the ground when walking.
+    /// </summary>
+    public void RightFoot()
+    {
+        initSound(ref footstepSounds);
+    }
+
+    /// <summary>
+    /// This function will produce the attack sound when the zombie attacks.
+    /// </summary>
+    public void Attack()
+    {
+        initSound(ref attackSounds);
+    }
+
+    /// <summary>
+    /// This function will produce the sound of dead zombies.
+    /// </summary>
+    public void DeadZombie()
+    {
+        growlSoundSource.Stop();
+
+        soundSource.clip = deadSound;
+        soundSource.PlayOneShot(deadSound);
+    }
+    
 }
