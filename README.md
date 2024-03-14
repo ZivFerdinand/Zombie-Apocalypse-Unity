@@ -36,7 +36,7 @@ Developed By Karina, Shamgar, Stephen, Tristan, Ziven.
 ## Gameplay Mechanics
 - Player controls: Movement, aiming, shooting, reloading, interacting with objects.
 - Health and damage system: Player may get potions in order to heal, and receive attack damages from zombie on collision.
-- Weapons: Player may use M416 and AKM plus ice and fire skill.
+- Weapons: Player may use M416 and AKM plus dizzy and fire skill.
 - Enemies: Zombie walks randomly but as player gets nearby, they will run towards player.
 - Level design: There are only easy and hard levels, mainly the only thing differs is the amount of zombie spawn, and the attack the player has to give in order to kill the zombie.
 - Objectives: Main objective of the game is to survive as long as possible to gain the highest possible score.
